@@ -13,7 +13,6 @@ module com.dam.adp.proyectochatantoniodelgadoportero {
     requires java.xml.bind;
 
     opens com.dam.adp.proyectochatantoniodelgadoportero to javafx.fxml;
-    exports com.dam.adp.proyectochatantoniodelgadoportero;
     exports com.dam.adp.proyectochatantoniodelgadoportero.app;
     opens com.dam.adp.proyectochatantoniodelgadoportero.app to javafx.fxml;
 }
