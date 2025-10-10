@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="org.dam2.adp.proyectochatadp.controller.RegistroController"
+            prefWidth="450" prefHeight="600"
+            style="-fx-background-color: linear-gradient(to bottom, #3b82f6, #1e3a8a);">
+
+    <VBox alignment="CENTER" spacing="15" layoutX="50" layoutY="50" prefWidth="350"
+          AnchorPane.topAnchor="50" AnchorPane.bottomAnchor="50"
+          AnchorPane.leftAnchor="50" AnchorPane.rightAnchor="50"
+          style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 30;">
+
+        <Label text="Registro de Usuario" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #1e3a8a;"/>
+
+        <TextField fx:id="txtNombreUsuario" promptText="Nombre de usuario" prefWidth="250"/>
+        <PasswordField fx:id="txtContrasena" promptText="Contraseña" prefWidth="250"/>
+        <TextField fx:id="txtNombre" promptText="Nombre" prefWidth="250"/>
+        <TextField fx:id="txtApellido" promptText="Apellido" prefWidth="250"/>
+        <TextField fx:id="txtEmail" promptText="Correo electrónico" prefWidth="250"/>
+
+        <Button text="Registrar" fx:id="btnRegistrar" onAction="#registrarUsuario"
+                style="-fx-background-color: #3b82f6; -fx-text-fill: white; -fx-background-radius: 8; -fx-font-weight: bold;"/>
+
+        <Label fx:id="lblMensaje" text="" style="-fx-text-fill: red; -fx-font-size: 13px;"/>
+
+        <Hyperlink text="Volver a  la pantalla de inicio" onAction="#volverLanding"/>
+
+    </VBox>
+
+</AnchorPane>
+
