@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<usuarios>
+    <usuario>
+        <apellido>Delgado</apellido>
+        <contraseña>1234</contraseña>
+        <email>antonio@gmail.com</email>
+        <nombre>Antonio</nombre>
+        <nombreUsuario>antoniodp07</nombreUsuario>
+    </usuario>
+</usuarios>

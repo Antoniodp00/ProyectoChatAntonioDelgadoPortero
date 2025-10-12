@@ -4,8 +4,11 @@ import com.dam.adp.proyectochatantoniodelgadoportero.utils.Utilidades;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 
 public class LandingPageController {
+
 
     @FXML
     private Button btnIniciarSesion;
@@ -20,7 +23,7 @@ public class LandingPageController {
 
     @FXML
     public void abrirRegistro(ActionEvent actionEvent) {
-        Utilidades.cambiarEscena("/org/dam2/adp/proyectochatadp/registroView.fxml");
+        Utilidades.cambiarEscena("/com/dam/adp/proyectochatantoniodelgadoportero/registroView.fxml");
     }
 
 }

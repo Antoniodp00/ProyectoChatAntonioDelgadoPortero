@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.dam2.adp.proyectochatadp.controller.MainController"
+            prefWidth="800" prefHeight="600"
+            style="-fx-background-color: linear-gradient(to bottom, #3b82f6, #1e3a8a);">
+
+    <!-- Contenedor principal -->
+    <HBox AnchorPane.topAnchor="20" AnchorPane.bottomAnchor="20"
+          AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" spacing="15">
+
+        <!-- Menu lateral -->
+        <VBox fx:id="menuLateral" spacing="10"
+              prefWidth="200" style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 15;">
+
+            <Label text="Usuarios" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1e3a8a;"/>
+
+            <!-- Lista de usuarios -->
+            <ListView fx:id="listaUsuarios" prefHeight="400" VBox.vgrow="ALWAYS" />
+
+            <!-- Botón cerrar sesión -->
+            <Button text="Cerrar sesión" fx:id="btnCerrarSesion" onAction="#cerrarSesion"
+                    style="-fx-background-color: #ef4444; -fx-text-fill: white; -fx-background-radius: 8; -fx-font-weight: bold;"/>
+
+        </VBox>
+
+        <!-- Panel de chat -->
+        <VBox fx:id="panelChat" spacing="12" alignment="TOP_CENTER" HBox.hgrow="ALWAYS"
+              style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 15;" prefWidth="580">
+
+            <!-- Encabezado del chat con acciones -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label fx:id="lblUsuarioChat" text="Selecciona un usuario para chatear"
+                       style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1e3a8a;"/>
+                <Pane HBox.hgrow="ALWAYS"/>
+                <!-- Botón para generar resumen (sin onAction para no requerir controlador aún) -->
+                <Button fx:id="btnGenerarResumen" text="Generar resumen" onAction="#generarResumen">
+                    <tooltip>
+                        <Tooltip text="Generar estadísticas de la conversación (Streams)"/>
+                    </tooltip>
+                </Button>
+            </HBox>
+
+            <!-- Zona de resumen/estadísticas -->
+            <TitledPane text="Resumen de la conversación (Streams)" expanded="false">
+                <GridPane hgap="10" vgap="6">
+                    <padding>
+                        <Insets topRightBottomLeft="10"/>
+                    </padding>
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="40"/>
+                        <ColumnConstraints percentWidth="60"/>
+                    </columnConstraints>
+                    <children>
+                        <Label text="Total mensajes:"/>
+                        <Label fx:id="lblTotalMensajes" GridPane.columnIndex="1" text="-"/>
+
+                        <Label text="Mensajes por usuario:" GridPane.rowIndex="1"/>
+                        <Label fx:id="lblMensajesPorUsuario" GridPane.rowIndex="1" GridPane.columnIndex="1" text="-"/>
+
+                        <Label text="Palabras más comunes:" GridPane.rowIndex="2"/>
+                        <Label fx:id="lblPalabrasComunes" GridPane.rowIndex="2" GridPane.columnIndex="1" text="-"/>
+                    </children>
+                </GridPane>
+            </TitledPane>
+
+            <!-- Área de chat -->
+            <TextArea fx:id="txtChat" prefHeight="340" editable="false" VBox.vgrow="ALWAYS"
+                      style="-fx-font-size: 14px; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #cbd5e1;"/>
+
+            <!-- Barra de composición de mensaje -->
+            <VBox spacing="8" alignment="CENTER_LEFT" prefWidth="Infinity">
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <TextField fx:id="txtMensaje" promptText="Escribe un mensaje..." HBox.hgrow="ALWAYS"
+                               style="-fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #cbd5e1;"/>
+                    <!-- Adjuntos -->
+                    <Button fx:id="btnAdjuntar" text="Adjuntar archivo">
+                        <tooltip>
+                            <Tooltip text="Añadir imagen/PDF u otros (validación pendiente)"/>
+                        </tooltip>
+                    </Button>
+                    <Button text="Enviar" fx:id="btnEnviar" onAction="#enviarMensaje"
+                            style="-fx-background-color: #3b82f6; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8;"/>
+                </HBox>
+
+                <!-- Lista de adjuntos del mensaje actual o seleccionados -->
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Adjuntos:"/>
+                    <ListView fx:id="listaAdjuntos" prefHeight="70" prefWidth="350"/>
+                    <Button fx:id="btnQuitarAdjunto" text="Quitar"/>
+                    <Button fx:id="btnAbrirAdjunto" text="Abrir"/>
+                    <Button fx:id="btnExportarAdjunto" text="Exportar"/>
+                </HBox>
+            </VBox>
+
+            <Separator/>
+
+            <!-- Acciones de exportación -->
+            <HBox spacing="10" alignment="CENTER_RIGHT">
+                <CheckBox fx:id="chkSoloAdjuntos" text="Filtrar mensajes con adjuntos"/>
+                <Pane HBox.hgrow="ALWAYS"/>
+                <Button fx:id="btnExportarTxt" text="Exportar TXT">
+                    <tooltip>
+                        <Tooltip text="Exportar conversación a texto plano"/>
+                    </tooltip>
+                </Button>
+                <Button fx:id="btnExportarCsv" text="Exportar CSV">
+                    <tooltip>
+                        <Tooltip text="Exportar conversación a CSV"/>
+                    </tooltip>
+                </Button>
+                <Button fx:id="btnExportarZip" text="ZIP (conv+adj)">
+                    <tooltip>
+                        <Tooltip text="Empaquetar conversación y adjuntos en ZIP"/>
+                    </tooltip>
+                </Button>
+            </HBox>
+
+            <!-- Barra de estado simple -->
+            <Label fx:id="lblEstado" textFill="#64748b" text="Listo"/>
+        </VBox>
+
+    </HBox>
+
+</AnchorPane>
+

@@ -47,6 +47,12 @@ public class XMLManager {
     public static <T> T readXML(T objeto, String fileName) {
         File file = new File(fileName);
 
+        // 🔹 Crear directorios intermedios si no existen
+        File parentDir = file.getParentFile();
+        if (parentDir != null && !parentDir.exists()) {
+            parentDir.mkdirs(); // crea todas las carpetas necesarias
+        }
+
         if (!file.exists()) {
             try {
                 file.createNewFile();
@@ -56,7 +62,7 @@ public class XMLManager {
             }
         }
 
-        T result = objeto; // <-- Inicializamos con el objeto vacío
+        T result = objeto;
         try {
             JAXBContext context = JAXBContext.newInstance(objeto.getClass());
             Unmarshaller unmarshaller = context.createUnmarshaller();
@@ -67,5 +73,6 @@ public class XMLManager {
 
         return result;
     }
+
 
 }
