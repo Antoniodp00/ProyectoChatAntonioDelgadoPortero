@@ -14,6 +14,7 @@ public class Prueba {
         Usuario u2 = new Usuario("antoniodp00","1234","antonio","delgado","antonio@gmail.com");
 
         MensajeDAO.enviarMensaje(u1.getNombreUsuario(),u2.getNombreUsuario(),"Hola");
+
     }
 
 
