@@ -4,7 +4,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.geometry.*?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller=""
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.dam.adp.proyectochatantoniodelgadoportero.controller.LandingPageController"
             prefWidth="450" prefHeight="600"
             style="-fx-background-color: linear-gradient(to bottom, #3b82f6, #1e3a8a);">
 
