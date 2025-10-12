@@ -63,6 +63,6 @@ public class Usuario {
 
     @Override
     public String toString() {
-        return "Usuario: "+ this.getNombreUsuario() + " | " + this.getEmail();
+        return this.getNombreUsuario();
     }
 }
