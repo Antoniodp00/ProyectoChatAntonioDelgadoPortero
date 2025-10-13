@@ -6,7 +6,7 @@
 
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="org.dam2.adp.proyectochatadp.controller.MainController"
+            fx:controller="com.dam.adp.proyectochatantoniodelgadoportero.controller.MainController"
             prefWidth="800" prefHeight="600"
             style="-fx-background-color: linear-gradient(to bottom, #3b82f6, #1e3a8a);">
 

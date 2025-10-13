@@ -7,4 +7,25 @@
         <fecha>2025-10-12T14:16:14.1377661</fecha>
         <adjuntoTamano>0</adjuntoTamano>
     </mensaje>
+    <mensaje>
+        <remitente>antoniodp07</remitente>
+        <destinatario>silvia</destinatario>
+        <mensaje>Hola</mensaje>
+        <fecha>2025-10-12T14:47:23.0691809</fecha>
+        <adjuntoTamano>0</adjuntoTamano>
+    </mensaje>
+    <mensaje>
+        <remitente>antoniodp07</remitente>
+        <destinatario>silvia</destinatario>
+        <mensaje>Buenas</mensaje>
+        <fecha>2025-10-12T14:48:24.5083916</fecha>
+        <adjuntoTamano>0</adjuntoTamano>
+    </mensaje>
+    <mensaje>
+        <remitente>silvia</remitente>
+        <destinatario>antoniodp07</destinatario>
+        <mensaje>Holaaa</mensaje>
+        <fecha>2025-10-12T14:48:49.1157046</fecha>
+        <adjuntoTamano>0</adjuntoTamano>
+    </mensaje>
 </mensajes>

@@ -16,8 +16,4 @@ public class Prueba {
         MensajeDAO.enviarMensaje(u1.getNombreUsuario(),u2.getNombreUsuario(),"Hola");
 
     }
-
-
-
-
 }
