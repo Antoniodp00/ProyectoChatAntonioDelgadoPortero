@@ -6,6 +6,7 @@ import com.dam.adp.proyectochatantoniodelgadoportero.model.Mensaje;
 import com.dam.adp.proyectochatantoniodelgadoportero.model.Mensajes;
 import com.dam.adp.proyectochatantoniodelgadoportero.model.Sesion;
 import com.dam.adp.proyectochatantoniodelgadoportero.model.Usuario;
+import com.dam.adp.proyectochatantoniodelgadoportero.utils.Utilidades;
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,6 +14,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+
 
 public class MainController {
 
@@ -42,7 +48,8 @@ public class MainController {
     private Usuario usuarioLogueado;
     private Usuario usuarioSeleccionado;
 
-   @FXML
+
+    @FXML
     public void initialize(){
 
        usuarioLogueado = Sesion.getInstancia().getUsuario();
@@ -72,13 +79,27 @@ public class MainController {
         Mensajes mensajes = MensajeDAO.listarMensajesEntre(usuarioLogueado.getNombreUsuario(), usuarioSeleccionado.getNombreUsuario());
 
         for (Mensaje mensaje : mensajes.getMensajeList()){
-            txtChat.appendText(mensaje.getRemitente()+": "+mensaje.getMensaje() + "\n");
+
+            String remitente = mensaje.getRemitente();
+            String contenido = mensaje.getMensaje();
+            String fecha = (mensaje.getFecha() != null)
+                    ? mensaje.getFecha().format(DateTimeFormatter.ofPattern("HH:mm"))
+                    : "--:--";
+
+            String lineaChat = String.format("[%s] %s: %s\n", fecha, remitente, contenido);
+
+            txtChat.appendText(lineaChat);
         }
+        //Scroll automatico
+        txtChat.selectPositionCaret(txtChat.getLength());
+        txtChat.deselect();
     }
 
 
 
     public void cerrarSesion(ActionEvent actionEvent) {
+        Sesion.getInstancia().cerrarSesion();
+        Utilidades.cambiarEscena("/com/dam/adp/proyectochatantoniodelgadoportero/landingPageView.fxml");
     }
 
     public void generarResumen(ActionEvent actionEvent) {
