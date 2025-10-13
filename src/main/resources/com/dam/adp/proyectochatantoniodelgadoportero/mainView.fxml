@@ -104,12 +104,12 @@
             <HBox spacing="10" alignment="CENTER_RIGHT">
                 <CheckBox fx:id="chkSoloAdjuntos" text="Filtrar mensajes con adjuntos"/>
                 <Pane HBox.hgrow="ALWAYS"/>
-                <Button fx:id="btnExportarTxt" text="Exportar TXT">
+                <Button fx:id="btnExportarTxt" text="Exportar TXT" onAction="#exportarTxt">
                     <tooltip>
                         <Tooltip text="Exportar conversación a texto plano"/>
                     </tooltip>
                 </Button>
-                <Button fx:id="btnExportarCsv" text="Exportar CSV">
+                <Button fx:id="btnExportarCsv" text="Exportar CSV" onAction="#exportarCsv">
                     <tooltip>
                         <Tooltip text="Exportar conversación a CSV"/>
                     </tooltip>
