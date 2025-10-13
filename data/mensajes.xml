@@ -84,4 +84,18 @@
         <fecha>2025-10-13T12:15:35</fecha>
         <adjuntoTamano>0</adjuntoTamano>
     </mensaje>
+    <mensaje>
+        <remitente>silvia</remitente>
+        <destinatario>antoniodp07</destinatario>
+        <mensaje>Hola</mensaje>
+        <fecha>2025-10-13T12:43:18</fecha>
+        <adjuntoTamano>0</adjuntoTamano>
+    </mensaje>
+    <mensaje>
+        <remitente>silvia</remitente>
+        <destinatario>antoniodp07</destinatario>
+        <mensaje>Como estas</mensaje>
+        <fecha>2025-10-13T12:43:26</fecha>
+        <adjuntoTamano>0</adjuntoTamano>
+    </mensaje>
 </mensajes>
