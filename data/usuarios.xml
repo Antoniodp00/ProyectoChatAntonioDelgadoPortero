@@ -7,4 +7,11 @@
         <nombre>Antonio</nombre>
         <nombreUsuario>antoniodp07</nombreUsuario>
     </usuario>
+    <usuario>
+        <apellido>Velasco</apellido>
+        <contraseña>1234</contraseña>
+        <email>silvia@gmail.com</email>
+        <nombre>Silvia</nombre>
+        <nombreUsuario>silvia</nombreUsuario>
+    </usuario>
 </usuarios>

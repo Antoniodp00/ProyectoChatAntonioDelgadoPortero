@@ -18,7 +18,7 @@ public class LandingPageController {
 
     @FXML
     public void abrirLogin(ActionEvent actionEvent) {
-        Utilidades.cambiarEscena("/org/dam2/adp/proyectochatadp/inicioSesionView.fxml");
+        Utilidades.cambiarEscena("/com/dam/adp/proyectochatantoniodelgadoportero/inicioSesionView.fxml");
     }
 
     @FXML

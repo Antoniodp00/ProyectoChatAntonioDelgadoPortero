@@ -66,4 +66,33 @@ public class MensajeDAO {
             throw new RuntimeException("No se pudo guardar el XML de mensajes", e);
         }
     }
+
+
+    /**
+     * Devuelve todos los mensajes entre dos usuarios.
+     *
+     * @param usuario1 primer usuario
+     * @param usuario2 segundo usuario
+     * @return lista de mensajes filtrados
+     */
+    public static Mensajes listarMensajesEntre(String usuario1, String usuario2) {
+        Mensajes mensajesFiltrados = new Mensajes();
+        Mensajes mensajes = cargarMensajes();
+
+        if (mensajes.getMensajeList().isEmpty()){
+            return mensajesFiltrados;
+        }
+
+        for (Mensaje mensaje : mensajes.getMensajeList()) {
+            boolean esEntreUsuarios = (mensaje.getRemitente().trim().equalsIgnoreCase(usuario1.trim()) &&
+                    mensaje.getDestinatario().trim().equalsIgnoreCase(usuario2.trim())) ||
+                    (mensaje.getRemitente().trim().equalsIgnoreCase(usuario2.trim()) &&
+                            mensaje.getDestinatario().trim().equalsIgnoreCase(usuario1.trim()));
+
+            if (esEntreUsuarios){
+                mensajesFiltrados.getMensajeList().add(mensaje);
+            }
+        }
+        return mensajesFiltrados;
+    }
 }
