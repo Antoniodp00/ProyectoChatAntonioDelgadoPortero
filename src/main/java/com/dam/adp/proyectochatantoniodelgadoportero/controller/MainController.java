@@ -6,6 +6,7 @@ import com.dam.adp.proyectochatantoniodelgadoportero.model.Mensaje;
 import com.dam.adp.proyectochatantoniodelgadoportero.model.Mensajes;
 import com.dam.adp.proyectochatantoniodelgadoportero.model.Sesion;
 import com.dam.adp.proyectochatantoniodelgadoportero.model.Usuario;
+import com.dam.adp.proyectochatantoniodelgadoportero.utils.StreamUtils;
 import com.dam.adp.proyectochatantoniodelgadoportero.utils.Utilidades;
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;
@@ -17,7 +18,9 @@ import javafx.scene.layout.VBox;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 
 public class MainController {
@@ -50,51 +53,58 @@ public class MainController {
 
 
     @FXML
-    public void initialize(){
+    public void initialize() {
 
-       usuarioLogueado = Sesion.getInstancia().getUsuario();
+        usuarioLogueado = Sesion.getInstancia().getUsuario();
 
-       ObservableList<Usuario> usuariosObservableList = FXCollections.observableArrayList(UsuarioDAO.leerUsuarios().getLista());
+        ObservableList<Usuario> usuariosObservableList = FXCollections.observableArrayList(UsuarioDAO.leerUsuarios().getLista());
 
-       usuariosObservableList.removeIf(usuario -> usuario.getNombre().equals(usuarioLogueado.getNombre()));
+        usuariosObservableList.removeIf(usuario -> usuario.getNombre().equals(usuarioLogueado.getNombre()));
 
-       listaUsuarios.setItems(usuariosObservableList);
+        listaUsuarios.setItems(usuariosObservableList);
 
 
-       //Seleccionar un usuario de la lista
-       listaUsuarios.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-           if (newValue != null) {
-               usuarioSeleccionado = (Usuario) newValue;
-               lblUsuarioChat.setText(usuarioSeleccionado.getNombreUsuario());
-               mostrarMensajes();
-
-           }
-       });
+        //Seleccionar un usuario de la lista
+        listaUsuarios.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                usuarioSeleccionado = (Usuario) newValue;
+                lblUsuarioChat.setText(usuarioSeleccionado.getNombreUsuario());
+                mostrarMensajes();
+                cargarEstadisticas();
+            }
+        });
     }
 
-    public void mostrarMensajes(){
-       if (usuarioSeleccionado == null)return;
+    public void mostrarMensajes() {
+        if (usuarioSeleccionado == null) return;
 
-       txtChat.clear();
+        txtChat.clear();
         Mensajes mensajes = MensajeDAO.listarMensajesEntre(usuarioLogueado.getNombreUsuario(), usuarioSeleccionado.getNombreUsuario());
 
-        for (Mensaje mensaje : mensajes.getMensajeList()){
+        for (Mensaje mensaje : mensajes.getMensajeList()) {
 
-            String remitente = mensaje.getRemitente();
+            String nombreRemitente = mensaje.getRemitente();
+            String remitenteFormateado = nombreRemitente;
+
+            // Compara si el remitente del mensaje es el usuario actual logueado
+            if (nombreRemitente.equals(usuarioLogueado.getNombreUsuario())) {
+                remitenteFormateado = "Tú"; // Cambia el nombre a "Tú"
+            }
+
             String contenido = mensaje.getMensaje();
             String fecha = (mensaje.getFecha() != null)
                     ? mensaje.getFecha().format(DateTimeFormatter.ofPattern("HH:mm"))
                     : "--:--";
 
-            String lineaChat = String.format("[%s] %s: %s\n", fecha, remitente, contenido);
+            // Uso de la variable formateada
+            String lineaChat = String.format("[%s] %s: %s\n", fecha, remitenteFormateado, contenido);
 
             txtChat.appendText(lineaChat);
         }
-        //Scroll automatico
+        // Scroll automatico
         txtChat.selectPositionCaret(txtChat.getLength());
         txtChat.deselect();
     }
-
 
 
     public void cerrarSesion(ActionEvent actionEvent) {
@@ -102,18 +112,44 @@ public class MainController {
         Utilidades.cambiarEscena("/com/dam/adp/proyectochatantoniodelgadoportero/landingPageView.fxml");
     }
 
+    @FXML
+    public void enviarMensaje(ActionEvent actionEvent) {
+        if (usuarioSeleccionado == null) return;
+
+        String mensaje = txtMensaje.getText().trim();
+
+        MensajeDAO.enviarMensaje(usuarioLogueado.getNombreUsuario(), usuarioSeleccionado.getNombreUsuario(), mensaje);
+
+        mostrarMensajes();
+        cargarEstadisticas();
+        txtMensaje.clear();
+
+    }
+
     public void generarResumen(ActionEvent actionEvent) {
     }
-@FXML
-    public void enviarMensaje(ActionEvent actionEvent) {
-       if(usuarioSeleccionado == null)return;
 
-       String mensaje = txtMensaje.getText().trim();
+    private void cargarEstadisticas() {
+        if (usuarioSeleccionado == null) {
+            lblTotalMensajes.setText("-");
+            lblMensajesPorUsuario.setText("-");
+            lblPalabrasComunes.setText("-");
+            return;
+        }
 
-       MensajeDAO.enviarMensaje(usuarioLogueado.getNombreUsuario(), usuarioSeleccionado.getNombreUsuario(), mensaje);
+        Mensajes mensajes = MensajeDAO.listarMensajesEntre(usuarioLogueado.getNombreUsuario(), usuarioSeleccionado.getNombreUsuario());
 
-       mostrarMensajes();
-       txtMensaje.clear();
+        //Total de mensajes
+        int totalMensajes = StreamUtils.contarMensajes(mensajes.getMensajeList());
+        lblTotalMensajes.setText(String.valueOf(totalMensajes));
 
+
+        //Mensajes por usuario
+        Map<String, Long> porUsuario = StreamUtils.contarMensajesPorUsuario(mensajes.getMensajeList());
+        lblMensajesPorUsuario.setText(  StreamUtils.formatearConteoUsuario(porUsuario));
+
+        //Palabras mas comunes
+        Map<String, Long> topPalabras = StreamUtils.palabraMasComun(mensajes.getMensajeList(), 5);
+        lblPalabrasComunes.setText(StreamUtils.formatearTopPalabras(topPalabras));
     }
 }
