@@ -21,4 +21,11 @@
         <nombre>juan</nombre>
         <nombreUsuario>junaito</nombreUsuario>
     </usuario>
+    <usuario>
+        <apellido>Garcia</apellido>
+        <contraseña>$2a$12$rE7BdcTv8gV.aRy8c4Ob2u378ehQb5P.CVCy9s.ZbVBC25RZQHUT6</contraseña>
+        <email>fran@gmail.com</email>
+        <nombre>Francisco</nombre>
+        <nombreUsuario>Fran</nombreUsuario>
+    </usuario>
 </usuarios>

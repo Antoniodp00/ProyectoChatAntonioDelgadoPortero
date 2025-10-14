@@ -161,4 +161,11 @@
         <fecha>2025-10-14T08:41:05</fecha>
         <adjuntoTamano>0</adjuntoTamano>
     </mensaje>
+    <mensaje>
+        <remitente>Fran</remitente>
+        <destinatario>antoniodp07</destinatario>
+        <mensaje>Hola</mensaje>
+        <fecha>2025-10-14T17:46:18</fecha>
+        <adjuntoTamano>0</adjuntoTamano>
+    </mensaje>
 </mensajes>

@@ -11,6 +11,7 @@ module com.dam.adp.proyectochatantoniodelgadoportero {
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
     requires jbcrypt;
+    requires java.desktop;
 
     // JavaFX
     opens com.dam.adp.proyectochatantoniodelgadoportero to javafx.fxml;

@@ -31,7 +31,6 @@ public class Mensajes {
         if (mensajeList.isEmpty()) {
             return "No hay mensajes guardados.";
         }
-
         StringBuilder sb = new StringBuilder();
         sb.append("Lista de mensajes:\n");
         sb.append("-----------------------------\n");
