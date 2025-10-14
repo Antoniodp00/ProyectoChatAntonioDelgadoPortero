@@ -8,8 +8,7 @@ import com.dam.adp.proyectochatantoniodelgadoportero.model.Sesion;
 import com.dam.adp.proyectochatantoniodelgadoportero.model.Usuario;
 import com.dam.adp.proyectochatantoniodelgadoportero.utils.FileManager;
 import com.dam.adp.proyectochatantoniodelgadoportero.utils.StreamUtils;
-import com.dam.adp.proyectochatantoniodelgadoportero.utils.Utilidades;
-import javafx.beans.Observable;
+import com.dam.adp.proyectochatantoniodelgadoportero.utils.Utils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -25,8 +24,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 
 public class MainController {
@@ -125,7 +122,7 @@ public class MainController {
 
     public void cerrarSesion(ActionEvent actionEvent) {
         Sesion.getInstancia().cerrarSesion();
-        Utilidades.cambiarEscena("/com/dam/adp/proyectochatantoniodelgadoportero/landingPageView.fxml");
+        Utils.cambiarEscena("/com/dam/adp/proyectochatantoniodelgadoportero/landingPageView.fxml");
     }
 
     @FXML

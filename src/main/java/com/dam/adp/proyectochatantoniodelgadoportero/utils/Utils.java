@@ -12,7 +12,7 @@ import javafx.stage.Window;
 
 import java.io.IOException;
 
-public class Utilidades {
+public class Utils {
     public static boolean validarEmail(String email){
         if (!email.matches("^[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,6}$")) {
             System.out.println("El formato del correo no es válido.");
@@ -20,17 +20,6 @@ public class Utilidades {
             return false;
         }
         return true;
-    }
-
-    public static boolean existeUsuario(String nombreUsuario){
-        ListaUsuarios listaUsuarios = UsuarioDAO.leerUsuarios();
-        Boolean existe = false;
-        for (Usuario u : listaUsuarios.getLista()){
-            if (u.getNombre().equals(nombreUsuario)){
-                existe = true;
-            }
-        }
-        return existe;
     }
 
     /**
@@ -41,7 +30,7 @@ public class Utilidades {
      */
     public static void cambiarEscena(String fxmlPath) {
         try {
-            FXMLLoader loader = new FXMLLoader(Utilidades.class.getResource(fxmlPath));
+            FXMLLoader loader = new FXMLLoader(Utils.class.getResource(fxmlPath));
             Parent root = loader.load();
 
             Stage stage = (Stage) Stage.getWindows().filtered(Window::isShowing).getFirst();

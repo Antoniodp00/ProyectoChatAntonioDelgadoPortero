@@ -2,7 +2,8 @@ package com.dam.adp.proyectochatantoniodelgadoportero.controller;
 
 import com.dam.adp.proyectochatantoniodelgadoportero.DAO.UsuarioDAO;
 import com.dam.adp.proyectochatantoniodelgadoportero.model.Usuario;
-import com.dam.adp.proyectochatantoniodelgadoportero.utils.Utilidades;
+import com.dam.adp.proyectochatantoniodelgadoportero.utils.PasswordManager;
+import com.dam.adp.proyectochatantoniodelgadoportero.utils.Utils;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -21,6 +22,7 @@ public class RegistroController {
     public void registrarUsuario(ActionEvent actionEvent) {
         String nombreUsuario = txtNombreUsuario.getText().trim();
         String contrasena = txtContrasena.getText().trim();
+        String contraseñaHasheada = PasswordManager.hashPassword(contrasena);
         String nombre = txtNombre.getText().trim();
         String apellido = txtApellido.getText().trim();
         String email = txtEmail.getText().trim();
@@ -31,13 +33,13 @@ public class RegistroController {
             return;
         }
 
-        if (!Utilidades.validarEmail(email)) {
+        if (!Utils.validarEmail(email)) {
             lblMensaje.setText("El email no es válido.");
             lblMensaje.setStyle("-fx-text-fill: red;");
             return;
         }
 
-        Usuario usuario = new Usuario(nombreUsuario, contrasena, nombre, apellido, email);
+        Usuario usuario = new Usuario(nombreUsuario, contraseñaHasheada, nombre, apellido, email);
 
         if (UsuarioDAO.añadirUsuario(usuario)) {
             lblMensaje.setText("Usuario registrado correctamente.");
@@ -58,6 +60,6 @@ public class RegistroController {
     }
 
     public void volverLanding(ActionEvent actionEvent) {
-        Utilidades.cambiarEscena("/com/dam/adp/proyectochatantoniodelgadoportero/landingPageView.fxml");
+        Utils.cambiarEscena("/com/dam/adp/proyectochatantoniodelgadoportero/landingPageView.fxml");
     }
 }

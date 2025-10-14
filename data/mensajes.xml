@@ -140,4 +140,25 @@
         <fecha>2025-10-13T13:02:24</fecha>
         <adjuntoTamano>0</adjuntoTamano>
     </mensaje>
+    <mensaje>
+        <remitente>junaito</remitente>
+        <destinatario>antoniodp07</destinatario>
+        <mensaje>Hola</mensaje>
+        <fecha>2025-10-14T08:40:42</fecha>
+        <adjuntoTamano>0</adjuntoTamano>
+    </mensaje>
+    <mensaje>
+        <remitente>junaito</remitente>
+        <destinatario>silvia</destinatario>
+        <mensaje>BUenas</mensaje>
+        <fecha>2025-10-14T08:40:47</fecha>
+        <adjuntoTamano>0</adjuntoTamano>
+    </mensaje>
+    <mensaje>
+        <remitente>antoniodp07</remitente>
+        <destinatario>junaito</destinatario>
+        <mensaje>Que tal</mensaje>
+        <fecha>2025-10-14T08:41:05</fecha>
+        <adjuntoTamano>0</adjuntoTamano>
+    </mensaje>
 </mensajes>

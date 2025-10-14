@@ -14,4 +14,11 @@
         <nombre>Silvia</nombre>
         <nombreUsuario>silvia</nombreUsuario>
     </usuario>
+    <usuario>
+        <apellido>perez</apellido>
+        <contraseña>1234</contraseña>
+        <email>juan@gmail.com</email>
+        <nombre>juan</nombre>
+        <nombreUsuario>junaito</nombreUsuario>
+    </usuario>
 </usuarios>
