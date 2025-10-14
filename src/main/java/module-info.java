@@ -10,6 +10,7 @@ module com.dam.adp.proyectochatantoniodelgadoportero {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
+    requires jbcrypt;
 
     // JavaFX
     opens com.dam.adp.proyectochatantoniodelgadoportero to javafx.fxml;

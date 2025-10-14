@@ -23,7 +23,6 @@ public class StreamUtils {
      * @return El número total de mensajes, o 0 si la lista es null.
      */
     public static int contarMensajes(List<Mensaje> mensajes) {
-        // Simple verificación de nulidad. Si la lista es null, devuelve 0; de lo contrario, su tamaño.
         return mensajes == null ? 0 : mensajes.size();
     }
 

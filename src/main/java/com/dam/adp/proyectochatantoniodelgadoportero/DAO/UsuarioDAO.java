@@ -3,6 +3,7 @@ package com.dam.adp.proyectochatantoniodelgadoportero.DAO;
 
 import com.dam.adp.proyectochatantoniodelgadoportero.model.ListaUsuarios;
 import com.dam.adp.proyectochatantoniodelgadoportero.model.Usuario;
+import com.dam.adp.proyectochatantoniodelgadoportero.utils.PasswordManager;
 import com.dam.adp.proyectochatantoniodelgadoportero.utils.XMLManager;
 
 import java.nio.file.Path;
@@ -89,7 +90,7 @@ public class UsuarioDAO {
      */
     public static Usuario validarCredenciales(String nombreUsuario, String password) {
         Usuario usuario = cargarUsuario(nombreUsuario);
-        if (usuario != null && usuario.getContraseña().equals(password)) { // compara plain text
+        if (usuario != null && PasswordManager.checkPassword(password, usuario.getContraseña())) {
             return usuario;
         }
         return null;

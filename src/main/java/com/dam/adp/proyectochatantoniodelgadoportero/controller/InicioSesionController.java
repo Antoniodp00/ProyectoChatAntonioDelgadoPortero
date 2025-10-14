@@ -3,7 +3,7 @@ package com.dam.adp.proyectochatantoniodelgadoportero.controller;
 import com.dam.adp.proyectochatantoniodelgadoportero.DAO.UsuarioDAO;
 import com.dam.adp.proyectochatantoniodelgadoportero.model.Sesion;
 import com.dam.adp.proyectochatantoniodelgadoportero.model.Usuario;
-import com.dam.adp.proyectochatantoniodelgadoportero.utils.Utilidades;
+import com.dam.adp.proyectochatantoniodelgadoportero.utils.Utils;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -33,7 +33,7 @@ public class InicioSesionController {
 
             Sesion.getInstancia().iniciarSesion(usuario);
 
-            Utilidades.cambiarEscena("/com/dam/adp/proyectochatantoniodelgadoportero/mainView.fxml");
+            Utils.cambiarEscena("/com/dam/adp/proyectochatantoniodelgadoportero/mainView.fxml");
         }else {
             lblMensaje.setText("Credenciales incorrectas.");
             lblMensaje.setStyle("-fx-text-fill: red;");
@@ -42,6 +42,6 @@ public class InicioSesionController {
     }
 
     public void volverLanding(ActionEvent actionEvent) {
-        Utilidades.cambiarEscena("/com/dam/adp/proyectochatantoniodelgadoportero/landingPageView.fxml");
+        Utils.cambiarEscena("/com/dam/adp/proyectochatantoniodelgadoportero/landingPageView.fxml");
     }
 }
