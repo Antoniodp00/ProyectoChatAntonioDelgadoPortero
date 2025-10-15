@@ -13,6 +13,11 @@ import javafx.stage.Window;
 import java.io.IOException;
 
 public class Utils {
+    /**
+     * Valida el formato de un correo electrónico sencillo mediante expresión regular.
+     * @param email cadena a validar.
+     * @return true si el email cumple el patrón, false en caso contrario.
+     */
     public static boolean validarEmail(String email){
         if (!email.matches("^[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,6}$")) {
             System.out.println("El formato del correo no es válido.");
@@ -26,7 +31,6 @@ public class Utils {
      * Método auxiliar para cambiar de escena en la ventana actual.
      *
      * @param fxmlPath Ruta del archivo FXML a cargar.
-
      */
     public static void cambiarEscena(String fxmlPath) {
         try {

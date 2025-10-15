@@ -16,6 +16,10 @@ public class InicioSesionController {
     public Button btnLogin;
     public Label lblMensaje;
 
+    /**
+     * Intenta iniciar sesión con las credenciales introducidas y navega a la vista principal si son válidas.
+     * @param actionEvent evento de acción del botón Iniciar sesión.
+     */
     public void iniciarSesion(ActionEvent actionEvent) {
         String nombreUsuario = txtNombreUsuario.getText().trim();
         String contrasena = txtContrasena.getText().trim();
@@ -41,6 +45,10 @@ public class InicioSesionController {
 
     }
 
+    /**
+     * Vuelve a la pantalla de bienvenida (Landing Page).
+     * @param actionEvent evento del botón Volver.
+     */
     public void volverLanding(ActionEvent actionEvent) {
         Utils.cambiarEscena("/com/dam/adp/proyectochatantoniodelgadoportero/landingPageView.fxml");
     }

@@ -20,6 +20,9 @@ public class FileManager {
 
     private FileManager() {}
 
+    /**
+     * Crea (si no existen) las carpetas internas de trabajo como 'media' y 'exportaciones'.
+     */
     public static void asegurarDirectorios() {
         new File(RUTAMEDIA).mkdirs();
         new File(EXPORTACIONES).mkdirs();
@@ -113,7 +116,13 @@ public class FileManager {
         }
     }
 
-    public static boolean guardarArchivo(File origen, String nombreArchivo) {
+    /**
+         * Guarda una copia del archivo de origen dentro de la carpeta interna 'media' con el nombre indicado.
+         * @param origen archivo a copiar.
+         * @param nombreArchivo nombre de archivo destino (normalmente generado de forma única).
+         * @return true si se copia con éxito; false en caso de error.
+         */
+        public static boolean guardarArchivo(File origen, String nombreArchivo) {
         asegurarDirectorios();
         File destino = new File(RUTAMEDIA + nombreArchivo);
         try (InputStream entrada = new BufferedInputStream(new FileInputStream(origen));
@@ -126,7 +135,14 @@ public class FileManager {
         } 
     }
 
-    public static boolean validarArchivo(File archivo, long tamañoMaximo, List<String> extensionesPermitidas) {
+    /**
+         * Valida un archivo comprobando su existencia, tamaño máximo y extensión permitida.
+         * @param archivo archivo a validar.
+         * @param tamañoMaximo tamaño máximo en bytes.
+         * @param extensionesPermitidas lista de extensiones permitidas (con punto), puede ser nula/vacía.
+         * @return true si el archivo cumple las condiciones; false en caso contrario.
+         */
+        public static boolean validarArchivo(File archivo, long tamañoMaximo, List<String> extensionesPermitidas) {
         if (archivo == null || !archivo.exists()) return false;
         if (archivo.length() > tamañoMaximo) return false;
 
@@ -138,7 +154,12 @@ public class FileManager {
                 extensionesPermitidas.stream().anyMatch(nombre::endsWith);
     }
 
-    public static String generarNombreUnico(String nombreOriginal) {
+    /**
+         * Genera un nombre de archivo único preservando la extensión original.
+         * @param nombreOriginal nombre original del archivo (puede incluir extensión).
+         * @return nombre único combinando base + UUID + extensión.
+         */
+        public static String generarNombreUnico(String nombreOriginal) {
         String ext = "";
 
         int idx = nombreOriginal.lastIndexOf('.');
@@ -155,7 +176,12 @@ public class FileManager {
         return nombreOriginal + "_" + UUID.randomUUID() + ext;
     }
 
-    public static String detectarMimeType(File archivo) {
+    /**
+         * Intenta detectar el tipo MIME del archivo usando NIO.
+         * @param archivo archivo a analizar.
+         * @return cadena MIME (ej. image/jpeg) o null si no se puede determinar.
+         */
+        public static String detectarMimeType(File archivo) {
         try {
             // Usa la API de Java NIO para intentar determinar el tipo de contenido/formato del archivo
             // basado en el sistema operativo (ej. "image/jpeg", "application/pdf").
@@ -165,7 +191,12 @@ public class FileManager {
         }
     }
 
-    public static boolean abrirArchivo(File archivo) {
+    /**
+         * Solicita al sistema operativo abrir el archivo con la aplicación predeterminada.
+         * @param archivo archivo a abrir.
+         * @return true si se lanzó correctamente; false si falla.
+         */
+        public static boolean abrirArchivo(File archivo) {
         try {
             // Verifica si el archivo existe y si la funcionalidad de escritorio está disponible.
             if (archivo != null && archivo.exists() && Desktop.isDesktopSupported()) {
@@ -179,7 +210,13 @@ public class FileManager {
         return false;
     }
 
-    public static boolean exportarArchivo(File origen, File destinoDir) {
+    /**
+         * Copia un archivo a un directorio de destino elegido por el usuario.
+         * @param origen archivo a exportar (normalmente en 'media').
+         * @param destinoDir carpeta de destino.
+         * @return true si la exportación se completa; false si falla.
+         */
+        public static boolean exportarArchivo(File origen, File destinoDir) {
         if (origen == null || !origen.exists() || destinoDir == null) return false;
 
         //Crea el directorio de destino si no existe (el usuario lo selecciona).
@@ -199,7 +236,12 @@ public class FileManager {
         }
     }
 
-    public static Path getMediaPath(String relative) {
+    /**
+         * Construye una ruta Path dentro de la carpeta interna 'media'.
+         * @param relative nombre de archivo o ruta relativa bajo 'media'.
+         * @return Path absoluto relativo a la aplicación.
+         */
+        public static Path getMediaPath(String relative) {
         //Si la ruta relativa es nula o vacía, devuelve solo la ruta base de 'media'.
         if (relative == null || relative.isBlank()) {
             return Paths.get(RUTAMEDIA);
@@ -208,5 +250,11 @@ public class FileManager {
         return Paths.get(RUTAMEDIA + relative);
     }
 
-    public static void crearArchivoZip(String rutaZip, List<File> archivos) {/* ... */ }
+    /**
+         * Crea un archivo ZIP con los ficheros indicados.
+         * (Pendiente de implementación)
+         * @param rutaZip ruta de salida del ZIP.
+         * @param archivos lista de archivos a comprimir.
+         */
+        public static void crearArchivoZip(String rutaZip, List<File> archivos) {/* ... */ }
 }

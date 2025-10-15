@@ -8,7 +8,10 @@ public class Sesion {
     // Constructor privado: evita que se creen instancias desde fuera
     private Sesion() {}
 
-    // Método para obtener la instancia única
+    /**
+     * Obtiene la instancia única (patrón Singleton) de la sesión.
+     * @return instancia global de Sesion.
+     */
     public static Sesion getInstancia() {
         if (instancia == null) {
             instancia = new Sesion();
@@ -16,22 +19,33 @@ public class Sesion {
         return instancia;
     }
 
-    // Guardar el usuario logueado
+    /**
+     * Establece el usuario actual como logueado en la sesión.
+     * @param usuario usuario autenticado.
+     */
     public void iniciarSesion(Usuario usuario) {
         this.usuarioLogueado = usuario;
     }
 
-    // Cerrar sesión
+    /**
+     * Cierra la sesión actual (borra el usuario logueado).
+     */
     public void cerrarSesion() {
         this.usuarioLogueado = null;
     }
 
-    // Obtener el usuario actual
+    /**
+     * Devuelve el usuario actualmente logueado.
+     * @return usuario de la sesión o null si no hay.
+     */
     public Usuario getUsuario() {
         return usuarioLogueado;
     }
 
-    // Saber si hay alguien logueado
+    /**
+     * Indica si existe un usuario con sesión activa.
+     * @return true si hay usuario logueado; false en caso contrario.
+     */
     public boolean haySesionActiva() {
         return usuarioLogueado != null;
     }

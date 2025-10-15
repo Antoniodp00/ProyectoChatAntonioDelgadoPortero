@@ -168,4 +168,56 @@
         <fecha>2025-10-14T17:46:18</fecha>
         <adjuntoTamano>0</adjuntoTamano>
     </mensaje>
+    <mensaje>
+        <remitente>antoniodp07</remitente>
+        <destinatario>Fran</destinatario>
+        <mensaje></mensaje>
+        <fecha>2025-10-15T13:43:39</fecha>
+        <adjuntoTamano>0</adjuntoTamano>
+    </mensaje>
+    <mensaje>
+        <remitente>antoniodp07</remitente>
+        <destinatario>Fran</destinatario>
+        <mensaje>hola</mensaje>
+        <fecha>2025-10-15T13:43:53</fecha>
+        <adjuntoTamano>0</adjuntoTamano>
+    </mensaje>
+    <mensaje>
+        <remitente>antoniodp07</remitente>
+        <destinatario>Fran</destinatario>
+        <mensaje>Fran: Holaantoniodp07: antoniodp07: hola</mensaje>
+        <fecha>2025-10-15T13:44:46</fecha>
+        <adjuntoTamano>0</adjuntoTamano>
+    </mensaje>
+    <mensaje>
+        <remitente>antoniodp07</remitente>
+        <destinatario>Fran</destinatario>
+        <mensaje>Mira</mensaje>
+        <fecha>2025-10-15T13:50:32</fecha>
+        <adjuntoTamano>0</adjuntoTamano>
+    </mensaje>
+    <mensaje>
+        <remitente>antoniodp07</remitente>
+        <destinatario>Fran</destinatario>
+        <mensaje>MIra</mensaje>
+        <fecha>2025-10-15T13:50:39</fecha>
+        <adjuntoTamano>0</adjuntoTamano>
+    </mensaje>
+    <mensaje>
+        <remitente>antoniodp07</remitente>
+        <destinatario>Fran</destinatario>
+        <mensaje>HOla</mensaje>
+        <fecha>2025-10-15T13:54:29</fecha>
+        <adjuntoTamano>0</adjuntoTamano>
+    </mensaje>
+    <mensaje>
+        <remitente>antoniodp07</remitente>
+        <destinatario>Fran</destinatario>
+        <mensaje>mira</mensaje>
+        <fecha>2025-10-15T14:01:16</fecha>
+        <adjuntoNombre>Diagrama de Clase.jpg</adjuntoNombre>
+        <adjuntoRuta>Diagrama de Clase_14e0ccbb-2f1b-48e1-a08c-32eb816f3357.jpg</adjuntoRuta>
+        <adjuntoTamano>254457</adjuntoTamano>
+        <adjuntoTipo>image/jpeg</adjuntoTipo>
+    </mensaje>
 </mensajes>
