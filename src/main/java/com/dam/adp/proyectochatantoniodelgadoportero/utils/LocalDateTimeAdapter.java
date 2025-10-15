@@ -7,12 +7,20 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
+/**
+ * Adaptador JAXB para serializar y deserializar LocalDateTime a/desde String.
+ */
 public class LocalDateTimeAdapter extends XmlAdapter<String, LocalDateTime> {
 
     private static final DateTimeFormatter STORAGE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 
     private static final DateTimeFormatter LEGACY_TIME_ONLY = DateTimeFormatter.ofPattern("HH:mm");
 
+    /**
+     * Convierte un String a LocalDateTime, soportando varios formatos.
+     * @param v cadena de fecha/hora.
+     * @return LocalDateTime equivalente o null si no es válido.
+     */
     @Override
     public LocalDateTime unmarshal(String v) {
         if (v == null || v.trim().isEmpty()) return null;
@@ -33,6 +41,11 @@ public class LocalDateTimeAdapter extends XmlAdapter<String, LocalDateTime> {
         return null;
     }
 
+    /**
+     * Convierte un LocalDateTime a su representación String para almacenamiento XML.
+     * @param v fecha/hora a formatear.
+     * @return cadena formateada o null si v es null.
+     */
     @Override
     public String marshal(LocalDateTime v) {
         return v == null ? null : v.format(STORAGE_FORMAT);

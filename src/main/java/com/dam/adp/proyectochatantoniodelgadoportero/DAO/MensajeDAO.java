@@ -2,6 +2,7 @@ package com.dam.adp.proyectochatantoniodelgadoportero.DAO;
 
 import com.dam.adp.proyectochatantoniodelgadoportero.model.Mensaje;
 import com.dam.adp.proyectochatantoniodelgadoportero.model.Mensajes;
+import com.dam.adp.proyectochatantoniodelgadoportero.utils.FileManager;
 import com.dam.adp.proyectochatantoniodelgadoportero.utils.XMLManager;
 
 import java.io.File;
@@ -13,7 +14,6 @@ import java.util.List;
 
 public class MensajeDAO {
 
-    // Ruta relativa al proyecto
     private static final Path RUTA_XML = Paths.get("data", "mensajes.xml");
 
     /**
@@ -42,6 +42,45 @@ public class MensajeDAO {
 
 
     /**
+     * Envía un mensaje con un archivo adjunto. Si la validación o guardado del archivo falla,
+     * el mensaje se envía igualmente SIN adjunto (se mantiene el mensaje).
+     */
+    public static void enviarMensajeConAdjunto(String remitente, String destinatario, String contenido, File archivo) {
+        try {
+            Mensajes mensajes = cargarMensajes();
+            Mensaje nuevo = new Mensaje(remitente, destinatario, contenido, LocalDateTime.now());
+
+            if (archivo != null) {
+                long max = 10L * 1024 * 1024; // 10 MB
+                List<String> permitidas = Arrays.asList(".png", ".jpg", ".jpeg", ".gif", ".pdf", ".txt", ".docx", ".xlsx");
+                boolean validado = FileManager.validarArchivo(archivo, max, permitidas);
+                if (validado) {
+                    String nombreDestino = FileManager.generarNombreUnico(archivo.getName());
+                    if (FileManager.guardarArchivo(archivo, nombreDestino)) {
+                        nuevo.setAdjuntoNombre(archivo.getName());
+                        nuevo.setAdjuntoRuta(nombreDestino); // ruta relativa bajo media/
+                        nuevo.setAdjuntoTamano(archivo.length());
+                        String mime = FileManager.detectarMimeType(archivo);
+                        nuevo.setAdjuntoTipo(mime != null ? mime : obtenerExtension(archivo.getName()));
+                    }
+                }
+            }
+            mensajes.getMensajeList().add(nuevo);
+            guardarMensajes(mensajes);
+        } catch (Exception e) {
+            System.err.println("Error al enviar mensaje con adjunto: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("No se pudo enviar el mensaje", e);
+        }
+    }
+
+    private static String obtenerExtension(String nombre) {
+        int i = nombre.lastIndexOf('.');
+        return i >= 0 ? nombre.substring(i + 1) : "";
+    }
+
+
+    /**
      * Carga los mensajes desde el XML.
      *
      * @return objeto Mensajes, vacío si el XML no existe o está vacío
@@ -61,7 +100,6 @@ public class MensajeDAO {
         try {
             XMLManager.writeXML(mensajes, RUTA_XML.toString());
         } catch (Exception e) {
-            System.err.println("Error al guardar mensajes en XML: " + e.getMessage());
             e.printStackTrace();
             throw new RuntimeException("No se pudo guardar el XML de mensajes", e);
         }
@@ -79,18 +117,22 @@ public class MensajeDAO {
         Mensajes mensajesFiltrados = new Mensajes();
         Mensajes mensajes = cargarMensajes();
 
-        if (mensajes.getMensajeList().isEmpty()){
+        if (mensajes.getMensajeList().isEmpty()) {
             return mensajesFiltrados;
         }
 
-        for (Mensaje mensaje : mensajes.getMensajeList()) {
-            boolean esEntreUsuarios = (mensaje.getRemitente().trim().equalsIgnoreCase(usuario1.trim()) &&
-                    mensaje.getDestinatario().trim().equalsIgnoreCase(usuario2.trim())) ||
-                    (mensaje.getRemitente().trim().equalsIgnoreCase(usuario2.trim()) &&
-                            mensaje.getDestinatario().trim().equalsIgnoreCase(usuario1.trim()));
+            String u1 = usuario1 == null ? "" : usuario1.trim().toLowerCase();
+            String u2 = usuario2 == null ? "" : usuario2.trim().toLowerCase();
 
-            if (esEntreUsuarios){
-                mensajesFiltrados.getMensajeList().add(mensaje);
+        for (Mensaje mensaje : mensajes.getMensajeList()) {
+            if (mensaje == null) continue;
+            String r = mensaje.getRemitente() == null ? "" : mensaje.getRemitente().trim().toLowerCase();
+            String d = mensaje.getDestinatario() == null ? "" : mensaje.getDestinatario().trim().toLowerCase();
+
+            boolean esEntreUsuarios = (r.equals(u1) && d.equals(u2)) || (r.equals(u2) && d.equals(u1));
+
+            if (esEntreUsuarios) {
+                mensajesFiltrados.addMensaje(mensaje);
             }
         }
         return mensajesFiltrados;

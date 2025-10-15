@@ -14,14 +14,26 @@ public class Mensajes {
     @XmlElement(name = "mensaje")
     private List<Mensaje> mensajeList = new ArrayList<>();
 
+    /**
+     * Devuelve la lista interna de mensajes.
+     * @return lista de mensajes.
+     */
     public List<Mensaje> getMensajeList() {
         return mensajeList;
     }
 
+    /**
+     * Establece la lista completa de mensajes.
+     * @param mensajeList lista a asignar.
+     */
     public void setMensajeList(List<Mensaje> mensajeList) {
         this.mensajeList = mensajeList;
     }
 
+    /**
+     * Añade un mensaje a la lista interna.
+     * @param mensaje objeto Mensaje a agregar.
+     */
     public void addMensaje(Mensaje mensaje) {
         mensajeList.add(mensaje);
     }
@@ -31,7 +43,6 @@ public class Mensajes {
         if (mensajeList.isEmpty()) {
             return "No hay mensajes guardados.";
         }
-
         StringBuilder sb = new StringBuilder();
         sb.append("Lista de mensajes:\n");
         sb.append("-----------------------------\n");

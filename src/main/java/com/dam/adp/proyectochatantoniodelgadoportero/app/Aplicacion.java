@@ -7,7 +7,15 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * Clase principal de la aplicación JavaFX que carga la vista inicial.
+ */
 public class Aplicacion extends Application {
+    /**
+     * Inicializa y muestra la ventana principal.
+     * @param stage escenario principal proporcionado por JavaFX.
+     * @throws IOException si ocurre un error al cargar el FXML.
+     */
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(

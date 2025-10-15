@@ -14,11 +14,19 @@ public class LandingPageController {
     @FXML
     private Button btnRegistrarse;
 
+    /**
+     * Abre la vista de inicio de sesión.
+     * @param actionEvent evento del botón Iniciar sesión.
+     */
     @FXML
     public void abrirLogin(ActionEvent actionEvent) {
         Utils.cambiarEscena("/com/dam/adp/proyectochatantoniodelgadoportero/inicioSesionView.fxml");
     }
 
+    /**
+     * Abre la vista de registro de usuario.
+     * @param actionEvent evento del botón Registrarse.
+     */
     @FXML
     public void abrirRegistro(ActionEvent actionEvent) {
         Utils.cambiarEscena("/com/dam/adp/proyectochatantoniodelgadoportero/registroView.fxml");

@@ -19,6 +19,10 @@ public class RegistroController {
     public Button btnRegistrar;
     public Label lblMensaje;
 
+    /**
+     * Registra un nuevo usuario validando los campos y almacenando sus datos.
+     * @param actionEvent evento del botón Registrar.
+     */
     public void registrarUsuario(ActionEvent actionEvent) {
         String nombreUsuario = txtNombreUsuario.getText().trim();
         String contrasena = txtContrasena.getText().trim();
@@ -51,6 +55,9 @@ public class RegistroController {
         }
     }
 
+    /**
+     * Limpia los campos del formulario de registro.
+     */
     private void limpiarCampos() {
         txtNombreUsuario.clear();
         txtContrasena.clear();
@@ -59,6 +66,10 @@ public class RegistroController {
         txtEmail.clear();
     }
 
+    /**
+     * Vuelve a la pantalla de inicio (Landing).
+     * @param actionEvent evento del botón Volver.
+     */
     public void volverLanding(ActionEvent actionEvent) {
         Utils.cambiarEscena("/com/dam/adp/proyectochatantoniodelgadoportero/landingPageView.fxml");
     }

@@ -1,24 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <usuarios>
     <usuario>
+        <apellido>Garcia</apellido>
+        <contraseña>$2a$12$rE7BdcTv8gV.aRy8c4Ob2u378ehQb5P.CVCy9s.ZbVBC25RZQHUT6</contraseña>
+        <email>fran@gmail.com</email>
+        <nombre>Francisco</nombre>
+        <nombreUsuario>Fran</nombreUsuario>
+    </usuario>
+    <usuario>
         <apellido>Delgado</apellido>
-        <contraseña>1234</contraseña>
+        <contraseña>$2a$12$orYo/6cPv4dBHB52o/8Y8OrgiFD6BKkRc0/T64aFYV6Gar5qvgm9S</contraseña>
         <email>antonio@gmail.com</email>
         <nombre>Antonio</nombre>
         <nombreUsuario>antoniodp07</nombreUsuario>
-    </usuario>
-    <usuario>
-        <apellido>Velasco</apellido>
-        <contraseña>1234</contraseña>
-        <email>silvia@gmail.com</email>
-        <nombre>Silvia</nombre>
-        <nombreUsuario>silvia</nombreUsuario>
-    </usuario>
-    <usuario>
-        <apellido>perez</apellido>
-        <contraseña>1234</contraseña>
-        <email>juan@gmail.com</email>
-        <nombre>juan</nombre>
-        <nombreUsuario>junaito</nombreUsuario>
     </usuario>
 </usuarios>

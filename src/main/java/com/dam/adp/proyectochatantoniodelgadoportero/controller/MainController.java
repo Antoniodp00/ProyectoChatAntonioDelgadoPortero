@@ -15,48 +15,60 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 
 public class MainController {
 
-    public VBox menuLateral;
-    public ListView listaUsuarios;
-    public Button btnCerrarSesion;
-    public VBox panelChat;
-    public Label lblUsuarioChat;
-    public Button btnGenerarResumen;
-    public Label lblTotalMensajes;
-    public Label lblMensajesPorUsuario;
-    public Label lblPalabrasComunes;
-    public TextArea txtChat;
-    public TextField txtMensaje;
-    public Button btnAdjuntar;
-    public Button btnEnviar;
-    public ListView listaAdjuntos;
+    public ListView<String> listaAdjuntos;
     public Button btnQuitarAdjunto;
     public Button btnAbrirAdjunto;
     public Button btnExportarAdjunto;
-    public CheckBox chkSoloAdjuntos;
-    public Button btnExportarTxt;
-    public Button btnExportarCsv;
-    public Button btnExportarZip;
     public Label lblEstado;
+    public Button btnExportarZip;
+    public Button btnExportarCsv;
+    public Button btnExportarTxt;
+    public CheckBox chkSoloAdjuntos;
+    public Button btnAdjuntar;
+    public Label lblPalabrasComunes;
+    public Label lblMensajesPorUsuario;
+    public Label lblTotalMensajes;
+    public Button btnGenerarResumen;
+    public Button btnCerrarSesion;
+    public VBox menuLateral;
+    @FXML
+    private ListView<Usuario> listaUsuarios;
+    @FXML
+    private Label lblUsuarioChat;
+    @FXML
+    private TextArea txtChat;
+    @FXML
+    private TextField txtMensaje;
+    @FXML
+    private Button btnEnviar;
 
     private Usuario usuarioLogueado;
     private Usuario usuarioSeleccionado;
+    private File adjuntoSeleccionado;
 
     private Stage stage;
 
 
+    /**
+     * Inicializa la vista principal: carga usuarios, configura listeners y botones.
+     */
     @FXML
     public void initialize() {
 
@@ -68,18 +80,28 @@ public class MainController {
 
         listaUsuarios.setItems(usuariosObservableList);
 
-
         //Seleccionar un usuario de la lista
         listaUsuarios.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                usuarioSeleccionado = (Usuario) newValue;
-                lblUsuarioChat.setText(usuarioSeleccionado.getNombreUsuario());
+                usuarioSeleccionado = newValue;
+                lblUsuarioChat.setText("Chat con: " + usuarioSeleccionado.getNombreUsuario());
                 mostrarMensajes();
                 cargarEstadisticas();
             }
         });
+
+        btnAdjuntar.setOnAction(e -> seleccionarAdjunto());
+        btnQuitarAdjunto.setOnAction(e -> quitarAdjunto());
+        btnAbrirAdjunto.setOnAction(e -> abrirAdjunto());
+        btnExportarAdjunto.setOnAction(e -> exportarAdjunto());
+        chkSoloAdjuntos.setOnAction(e -> mostrarMensajes());
     }
 
+    /**
+     * Obtiene y memoriza el Stage actual asociado a la vista.
+     * Se usa para abrir diálogos (FileChooser/DirectoryChooser) desde este controlador.
+     * @return Stage de la ventana actual, o null si aún no está disponible.
+     */
     private Stage getStage() {
 
         if (stage == null && lblEstado != null) {
@@ -88,31 +110,46 @@ public class MainController {
         return stage;
     }
 
-    public void mostrarMensajes() {
-        if (usuarioSeleccionado == null) return;
+    /**
+     * Muestra los mensajes de la conversación con el usuario seleccionado.
+     * Si está activado "Solo adjuntos", filtra para mostrar únicamente mensajes que contengan adjuntos.
+     * También rellena la lista lateral de adjuntos detectados en la conversación.
+     */
+    private void mostrarMensajes() {
+         if (usuarioSeleccionado == null) return;
 
         txtChat.clear();
         Mensajes mensajes = MensajeDAO.listarMensajesEntre(usuarioLogueado.getNombreUsuario(), usuarioSeleccionado.getNombreUsuario());
 
-        for (Mensaje mensaje : mensajes.getMensajeList()) {
+        boolean soloAdjuntos = chkSoloAdjuntos != null && chkSoloAdjuntos.isSelected();
+        List<String> adjuntosConversacion = new ArrayList<>();
+        for (Mensaje mensaje : mensajes.getMensajeList()){
+            boolean tieneAdjunto = 
+                    (mensaje.getAdjuntoRuta() != null && !mensaje.getAdjuntoRuta().isEmpty()) ||
+                    (mensaje.getAdjuntoTamano() > 0);
+            if (soloAdjuntos && !tieneAdjunto) continue;
 
-            String nombreRemitente = mensaje.getRemitente();
-            String remitenteFormateado = nombreRemitente;
+            StringBuilder linea =  new StringBuilder();
+            linea.append(mensaje.getRemitente()).append(": ").append(mensaje.getMensaje());
+            if (tieneAdjunto){
+                File f = mensaje.getAdjuntoRuta() != null ? FileManager.getMediaPath(mensaje.getAdjuntoRuta()).toFile() : null;
+                boolean existe = f != null && f.exists();
+                String nombreAdj = mensaje.getAdjuntoNombre() != null && !mensaje.getAdjuntoNombre().isEmpty()
+                        ? mensaje.getAdjuntoNombre()
+                        : (mensaje.getAdjuntoRuta() != null ? mensaje.getAdjuntoRuta() : "adjunto");
+                linea.append(" [Adjunto: ").append(nombreAdj);
+                if (!existe) linea.append(" - NO ENCONTRADO");
+                linea.append("]");
 
-            // Compara si el remitente del mensaje es el usuario actual logueado
-            if (nombreRemitente.equals(usuarioLogueado.getNombreUsuario())) {
-                remitenteFormateado = "Tú"; // Cambia el nombre a "Tú"
+                // acumular adjuntos para la lista
+                adjuntosConversacion.add(nombreAdj);
             }
-
-            String contenido = mensaje.getMensaje();
-            String fecha = (mensaje.getFecha() != null)
-                    ? mensaje.getFecha().format(DateTimeFormatter.ofPattern("HH:mm"))
-                    : "--:--";
-
-            // Uso de la variable formateada
-            String lineaChat = String.format("[%s] %s: %s\n", fecha, remitenteFormateado, contenido);
-
-            txtChat.appendText(lineaChat);
+            linea.append("\n");
+            txtChat.appendText(linea.toString());
+        }
+        // Actualizar lista de adjuntos de la conversación
+        if (listaAdjuntos != null){
+            listaAdjuntos.getItems().setAll(adjuntosConversacion);
         }
         // Scroll automatico
         txtChat.selectPositionCaret(txtChat.getLength());
@@ -120,25 +157,46 @@ public class MainController {
     }
 
 
+    /**
+     * Cierra la sesión actual y vuelve a la pantalla de inicio.
+     * @param actionEvent evento del botón Cerrar sesión.
+     */
     public void cerrarSesion(ActionEvent actionEvent) {
         Sesion.getInstancia().cerrarSesion();
         Utils.cambiarEscena("/com/dam/adp/proyectochatantoniodelgadoportero/landingPageView.fxml");
     }
 
     @FXML
+    /**
+     * Envía un mensaje (con o sin adjunto) al usuario seleccionado y actualiza la vista.
+     * @param actionEvent evento del botón Enviar.
+     */
     public void enviarMensaje(ActionEvent actionEvent) {
         if (usuarioSeleccionado == null) return;
 
         String mensaje = txtMensaje.getText().trim();
+        if (mensaje.isEmpty()) return;
 
-        MensajeDAO.enviarMensaje(usuarioLogueado.getNombreUsuario(), usuarioSeleccionado.getNombreUsuario(), mensaje);
-
+        if (adjuntoSeleccionado != null){
+            MensajeDAO.enviarMensajeConAdjunto(usuarioLogueado.getNombreUsuario(),usuarioSeleccionado.getNombreUsuario(),mensaje,adjuntoSeleccionado);
+        }else {
+            MensajeDAO.enviarMensaje(usuarioLogueado.getNombreUsuario(), usuarioSeleccionado.getNombreUsuario(), mensaje);
+        }
         mostrarMensajes();
         cargarEstadisticas();
+        // Limpiar campos después de enviar
         txtMensaje.clear();
-
+        adjuntoSeleccionado = null;
+        if (listaAdjuntos != null) {
+            listaAdjuntos.getItems().clear();
+        }
+        lblEstado.setText("Mensaje enviado");
     }
 
+    /**
+     * Calcula y muestra las estadísticas de la conversación actual en las etiquetas del panel lateral.
+     * Incluye: total de mensajes, mensajes por usuario y top de palabras más comunes.
+     */
     private void cargarEstadisticas() {
         if (usuarioSeleccionado == null) {
             lblTotalMensajes.setText("-");
@@ -164,6 +222,10 @@ public class MainController {
     }
 
     @FXML
+    /**
+     * Exporta la conversación actual a un archivo de texto (.txt).
+     * @param actionEvent evento del botón Exportar TXT.
+     */
     public void exportarTxt(ActionEvent actionEvent) {
         if (usuarioSeleccionado == null) {
             lblEstado.setText("Error: No hay usuario seleccionado.");
@@ -206,6 +268,10 @@ public class MainController {
     }
 
     @FXML
+    /**
+     * Exporta la conversación actual a un archivo CSV (.csv).
+     * @param actionEvent evento del botón Exportar CSV.
+     */
     public void exportarCsv(ActionEvent actionEvent) {
         if (usuarioSeleccionado == null) {
             lblEstado.setText("Error: No hay usuario seleccionado.");
@@ -244,6 +310,10 @@ public class MainController {
     }
 
     @FXML
+    /**
+     * Genera un resumen con estadísticas de la conversación y permite guardarlo como TXT.
+     * @param actionEvent evento del botón Generar Resumen.
+     */
     public void generarResumen(ActionEvent actionEvent) {
         if (usuarioSeleccionado == null) {
             lblEstado.setText("Error: No hay usuario seleccionado.");
@@ -319,4 +389,115 @@ public class MainController {
         return estadisticasGeneradas;
     }
 
+    /**
+     * Abre un selector de archivos para elegir un adjunto a enviar, valida tamaño y extensión,
+     * y muestra la selección de forma temporal en la lista de adjuntos hasta que se envíe el mensaje.
+     */
+    private void seleccionarAdjunto(){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Seleccionar Archivo Adjunto");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Permitidos", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.pdf", "*.txt", "*.docx", "*.xlsx"),
+                new FileChooser.ExtensionFilter("Todos los archivos", "*.*")
+        );
+        File archivoElegido = fileChooser.showOpenDialog(btnAdjuntar.getScene().getWindow());
+        if (archivoElegido == null) return;
+
+        long tamañoMaximo = 10L * 1024 * 1024; //Esta operación calcula el número total de bytes en 10 Megabytes: 10×1024×1024=10.485.760 bytes.
+        List<String> extensionesPermitidos = Arrays.asList(".png", ".jpg", ".jpeg", ".gif", ".pdf", ".txt", ".docx", ".xlsx");
+        if (!FileManager.validarArchivo(archivoElegido, tamañoMaximo, extensionesPermitidos)){
+            lblEstado.setText("Error: Archivo Adjunto no valido");
+            lblEstado.setStyle("-fx-text-fill: red;");
+            return;
+        }
+        // Guardar selección en el estado del controlador
+        adjuntoSeleccionado = archivoElegido;
+        // Mostrar en la lista de adjuntos (selección temporal antes de enviar)
+        listaAdjuntos.getItems().setAll(archivoElegido.getName());
+        lblEstado.setText("Archivo Adjunto: " + archivoElegido.getName());
+    }
+
+    /**
+     * Elimina la selección de adjunto actual antes de enviar el mensaje
+     * y limpia la lista visual de adjuntos.
+     */
+    private void quitarAdjunto(){
+        adjuntoSeleccionado = null;
+        listaAdjuntos.getItems().clear();
+        lblEstado.setText("Adjunto quitado.");
+    }
+
+    /**
+     * Intenta abrir el archivo adjunto actualmente seleccionado usando la aplicación predeterminada del sistema.
+     * Muestra un mensaje de estado si no hay adjunto seleccionado o si ocurre un error al abrirlo.
+     */
+    private void abrirAdjunto(){
+        if (adjuntoSeleccionado != null){
+            boolean exitoso = FileManager.abrirArchivo(adjuntoSeleccionado);
+            if (!exitoso){
+                lblEstado.setText("No se pudo abrir el adjunto seleccionado.");
+            }
+        }else {
+            lblEstado.setText("No hay adjunto seleccionado.");
+        }
+    }
+
+
+    @FXML
+    /**
+     * Permite al usuario exportar el archivo adjunto seleccionado a una CARPETA de destino,
+     * utilizando FileManager.exportarArchivo(origen, destinoDir).
+     */
+    private void exportarAdjunto(){
+        String seleccionado = listaAdjuntos != null ? listaAdjuntos.getSelectionModel().getSelectedItem() : null;
+
+        if (seleccionado == null){
+            lblEstado.setText("Error: Selecciona un adjunto de la lista.");
+            lblEstado.setStyle("-fx-text-fill: red;");
+            return;
+        }
+
+        // Intentar localizar el archivo adjunto dentro de la conversación (en media/)
+        File archivoOrigen = null;
+        Mensajes mensajes = MensajeDAO.listarMensajesEntre(usuarioLogueado.getNombreUsuario(), usuarioSeleccionado.getNombreUsuario());
+        for (Mensaje m : mensajes.getMensajeList()){
+            if (m.getAdjuntoNombre() != null && m.getAdjuntoNombre().equals(seleccionado) && m.getAdjuntoRuta() != null){
+                File posible = FileManager.getMediaPath(m.getAdjuntoRuta()).toFile();
+                if (posible.exists()){
+                    archivoOrigen = posible;
+                    break;
+                }
+            }
+        }
+        // Si no está en media, tal vez es un adjunto aún no enviado: usar archivo local seleccionado
+        if (archivoOrigen == null && adjuntoSeleccionado != null && seleccionado.equals(adjuntoSeleccionado.getName())){
+            archivoOrigen = adjuntoSeleccionado;
+        }
+
+        if (archivoOrigen == null || !archivoOrigen.exists()){
+            lblEstado.setText("Error: Archivo de origen no encontrado.");
+            lblEstado.setStyle("-fx-text-fill: red;");
+            return;
+        }
+
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle("Seleccionar Carpeta de Destino para Exportar Adjunto");
+
+        File destino = directoryChooser.showDialog(getStage());
+
+        if (destino != null){
+            boolean exito = FileManager.exportarArchivo(archivoOrigen,destino);
+
+            if (exito){
+                lblEstado.setText("Adjunto exportado con éxito a: " + destino.getAbsolutePath());
+                lblEstado.setStyle("-fx-text-fill: green;");
+            }else  {
+                lblEstado.setText("Error al exportar adjunto.");
+                lblEstado.setStyle("-fx-text-fill: red;");
+            }
+        }else {
+            lblEstado.setText("Exportación cancelada.");
+            lblEstado.setStyle("-fx-text-fill: gray;");
+        }
+    }
     }
