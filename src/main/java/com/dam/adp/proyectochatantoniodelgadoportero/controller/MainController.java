@@ -20,8 +20,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -95,6 +93,7 @@ public class MainController {
         btnAbrirAdjunto.setOnAction(e -> abrirAdjunto());
         btnExportarAdjunto.setOnAction(e -> exportarAdjunto());
         chkSoloAdjuntos.setOnAction(e -> mostrarMensajes());
+        btnExportarZip.setOnAction(e -> exportarZip);
     }
 
     /**
@@ -132,7 +131,7 @@ public class MainController {
             StringBuilder linea =  new StringBuilder();
             linea.append(mensaje.getRemitente()).append(": ").append(mensaje.getMensaje());
             if (tieneAdjunto){
-                File f = mensaje.getAdjuntoRuta() != null ? FileManager.getMediaPath(mensaje.getAdjuntoRuta()).toFile() : null;
+                File f = mensaje.getAdjuntoRuta() != null ? new File(FileManager.getRutaMedia(mensaje.getAdjuntoRuta())) : null;
                 boolean existe = f != null && f.exists();
                 String nombreAdj = mensaje.getAdjuntoNombre() != null && !mensaje.getAdjuntoNombre().isEmpty()
                         ? mensaje.getAdjuntoNombre()
@@ -462,7 +461,7 @@ public class MainController {
         Mensajes mensajes = MensajeDAO.listarMensajesEntre(usuarioLogueado.getNombreUsuario(), usuarioSeleccionado.getNombreUsuario());
         for (Mensaje m : mensajes.getMensajeList()){
             if (m.getAdjuntoNombre() != null && m.getAdjuntoNombre().equals(seleccionado) && m.getAdjuntoRuta() != null){
-                File posible = FileManager.getMediaPath(m.getAdjuntoRuta()).toFile();
+                File posible = new File(FileManager.getRutaMedia(m.getAdjuntoRuta()));
                 if (posible.exists()){
                     archivoOrigen = posible;
                     break;
@@ -499,5 +498,9 @@ public class MainController {
             lblEstado.setText("Exportación cancelada.");
             lblEstado.setStyle("-fx-text-fill: gray;");
         }
+    }
+
+    private void exportarZip(){
+
     }
     }

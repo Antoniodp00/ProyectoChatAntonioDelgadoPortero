@@ -220,4 +220,14 @@
         <adjuntoTamano>254457</adjuntoTamano>
         <adjuntoTipo>image/jpeg</adjuntoTipo>
     </mensaje>
+    <mensaje>
+        <remitente>antoniodp07</remitente>
+        <destinatario>Fran</destinatario>
+        <mensaje>MIra</mensaje>
+        <fecha>2025-10-16T08:46:10</fecha>
+        <adjuntoNombre>Vinicius Junior - FootyRenders.png</adjuntoNombre>
+        <adjuntoRuta>Vinicius Junior - FootyRenders_ced4ec9b-8973-4bbf-bf35-8ae1f1a1b684.png</adjuntoRuta>
+        <adjuntoTamano>985841</adjuntoTamano>
+        <adjuntoTipo>image/png</adjuntoTipo>
+    </mensaje>
 </mensajes>

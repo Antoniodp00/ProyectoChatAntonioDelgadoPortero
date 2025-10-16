@@ -4,18 +4,18 @@ import com.dam.adp.proyectochatantoniodelgadoportero.model.Mensaje;
 
 import java.awt.*;
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.net.URLConnection;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 public class FileManager {
 
     private static final String RUTAMEDIA = "media" + File.separator;
-    private static final String EXPORTACIONES = "exportaciones" + File.separator;
+    //private static final String EXPORTACIONES = "exportaciones" + File.separator;
     private static final DateTimeFormatter EXPORT_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     private FileManager() {}
@@ -25,7 +25,6 @@ public class FileManager {
      */
     public static void asegurarDirectorios() {
         new File(RUTAMEDIA).mkdirs();
-        new File(EXPORTACIONES).mkdirs();
     }
 
     /**
@@ -177,19 +176,28 @@ public class FileManager {
     }
 
     /**
-         * Intenta detectar el tipo MIME del archivo usando NIO.
-         * @param archivo archivo a analizar.
-         * @return cadena MIME (ej. image/jpeg) o null si no se puede determinar.
-         */
-        public static String detectarMimeType(File archivo) {
-        try {
-            // Usa la API de Java NIO para intentar determinar el tipo de contenido/formato del archivo
-            // basado en el sistema operativo (ej. "image/jpeg", "application/pdf").
-            return Files.probeContentType(archivo.toPath());
+     * Detecta el tipo MIME de un archivo leyendo su contenido (magic bytes).
+     * Este método no depende de la extensión o la ruta del archivo.
+     *
+     * @param archivo El archivo del cual se quiere detectar el tipo MIME.
+     * @return Un String con el tipo MIME (ej. "image/png", "application/pdf") o null si no se puede determinar.
+     */
+    public static String detectarMimeType(File archivo) {
+        if (archivo == null || !archivo.exists()) {
+            return null;
+        }
+
+        try (InputStream is = new FileInputStream(archivo)) {
+            // URLConnection.guessContentTypeFromStream es el método clave aquí.
+            // Lee los primeros bytes del flujo para identificar el tipo de archivo.
+            return URLConnection.guessContentTypeFromStream(is);
         } catch (IOException e) {
+            // Manejar la excepción, por ejemplo, registrarla en un log.
+            e.printStackTrace();
             return null;
         }
     }
+
 
     /**
          * Solicita al sistema operativo abrir el archivo con la aplicación predeterminada.
@@ -237,24 +245,50 @@ public class FileManager {
     }
 
     /**
-         * Construye una ruta Path dentro de la carpeta interna 'media'.
-         * @param relative nombre de archivo o ruta relativa bajo 'media'.
-         * @return Path absoluto relativo a la aplicación.
-         */
-        public static Path getMediaPath(String relative) {
-        //Si la ruta relativa es nula o vacía, devuelve solo la ruta base de 'media'.
+     * Construye una ruta como String dentro de la carpeta interna 'media'.
+     * @param relative nombre de archivo o ruta relativa bajo 'media'.
+     * @return String con la ruta completa relativa a la aplicación.
+     */
+    public static String getRutaMedia(String relative) {
+        // Es una buena práctica usar File.separator para que la ruta sea válida
+        // en cualquier sistema operativo ('\' en Windows, '/' en Mac/Linux).
+        final String RUTAMEDIA = "media" + File.separator;
+
+        // Si la ruta relativa es nula o está en blanco, devuelve solo la ruta base.
         if (relative == null || relative.isBlank()) {
-            return Paths.get(RUTAMEDIA);
+            return RUTAMEDIA;
         }
-        //Combina la ruta base de 'media' con el nombre de archivo/ruta relativa proporcionada.
-        return Paths.get(RUTAMEDIA + relative);
+
+        // Concatena la ruta base con el nombre de archivo/ruta relativa.
+        return RUTAMEDIA + relative;
     }
 
     /**
-         * Crea un archivo ZIP con los ficheros indicados.
-         * (Pendiente de implementación)
-         * @param rutaZip ruta de salida del ZIP.
-         * @param archivos lista de archivos a comprimir.
-         */
-        public static void crearArchivoZip(String rutaZip, List<File> archivos) {/* ... */ }
+     * Comprime una lista de archivos en un único archivo ZIP.
+     *
+     * @param rutaZip La ruta completa del archivo ZIP a crear.
+     * @param archivos La lista de archivos (File) a incluir en el ZIP.
+     */
+        public static void crearArchivoZip(String rutaZip, List<File> archivos) {
+            try (FileOutputStream fos = new FileOutputStream(rutaZip)){
+                ZipOutputStream zos = new ZipOutputStream(fos);
+
+                byte[] buffer = new byte[1024];
+
+                for (File archivo : archivos) {
+                    ZipEntry zipEntry = new ZipEntry(archivo.getName());
+                    zos.putNextEntry(zipEntry);
+
+                    try (FileInputStream fis = new FileInputStream(archivo)){
+                        int longitud;
+                        while ((longitud = fis.read(buffer))>0){
+                            zos.write(buffer, 0, longitud);
+                        }
+                    }
+                }
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+
+        }
 }
