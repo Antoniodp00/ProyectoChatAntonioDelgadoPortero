@@ -230,4 +230,14 @@
         <adjuntoTamano>985841</adjuntoTamano>
         <adjuntoTipo>image/png</adjuntoTipo>
     </mensaje>
+    <mensaje>
+        <remitente>antoniodp07</remitente>
+        <destinatario>Fran</destinatario>
+        <mensaje>lamine</mensaje>
+        <fecha>2025-10-16T12:58:21</fecha>
+        <adjuntoNombre>Lamine Yamal - FootyRenders.png</adjuntoNombre>
+        <adjuntoRuta>Lamine Yamal - FootyRenders_dea39942-323a-40af-af77-d95b6ab56230.png</adjuntoRuta>
+        <adjuntoTamano>759377</adjuntoTamano>
+        <adjuntoTipo>png</adjuntoTipo>
+    </mensaje>
 </mensajes>

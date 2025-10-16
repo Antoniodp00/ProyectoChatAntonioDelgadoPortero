@@ -264,31 +264,48 @@ public class FileManager {
     }
 
     /**
-     * Comprime una lista de archivos en un único archivo ZIP.
+     * Crea un archivo ZIP a partir del texto de una conversación y una lista de mensajes que contienen los adjuntos.
+     * Utiliza Streams para leer los archivos y escribirlos directamente en el ZIP sin crear archivos temporales.
      *
-     * @param rutaZip La ruta completa del archivo ZIP a crear.
-     * @param archivos La lista de archivos (File) a incluir en el ZIP.
+     * @param archivoZipDestino El archivo .zip que se va a crear.
+     * @param conversacionTexto El contenido de la conversación como un String.
+     * @param mensajes La lista de mensajes de la cual se extraerán los adjuntos.
+     * @throws IOException Si ocurre un error de entrada/salida durante la creación del ZIP.
      */
-        public static void crearArchivoZip(String rutaZip, List<File> archivos) {
-            try (FileOutputStream fos = new FileOutputStream(rutaZip)){
-                ZipOutputStream zos = new ZipOutputStream(fos);
+    public static void crearArchivoZip(File archivoZipDestino, String conversacionTexto, List<Mensaje> mensajes) throws IOException {
 
-                byte[] buffer = new byte[1024];
+        // 1. Usamos try-with-resources para asegurar que todos los streams se cierren solos.
+        try (FileOutputStream fos = new FileOutputStream(archivoZipDestino);
+             ZipOutputStream zos = new ZipOutputStream(fos)) {
 
-                for (File archivo : archivos) {
-                    ZipEntry zipEntry = new ZipEntry(archivo.getName());
-                    zos.putNextEntry(zipEntry);
+            // 2. Añadir el archivo de texto de la conversación al ZIP
+            ZipEntry conversacionEntry = new ZipEntry("conversacion.txt");
+            zos.putNextEntry(conversacionEntry);
+            zos.write(conversacionTexto.getBytes()); // Convertimos el String a bytes y lo escribimos
+            zos.closeEntry();
 
-                    try (FileInputStream fis = new FileInputStream(archivo)){
-                        int longitud;
-                        while ((longitud = fis.read(buffer))>0){
-                            zos.write(buffer, 0, longitud);
+            // 3. Añadir cada archivo adjunto leyendo su contenido con un InputStream
+            for (Mensaje mensaje : mensajes) {
+                if (mensaje.getAdjuntoRuta() != null && !mensaje.getAdjuntoRuta().isBlank()) {
+                    File adjuntoFile = new File(getRutaMedia(mensaje.getAdjuntoRuta()));
+
+                    if (adjuntoFile.exists()) {
+                        // Creamos la entrada en el ZIP con el nombre original del archivo
+                        ZipEntry adjuntoEntry = new ZipEntry(mensaje.getAdjuntoNombre());
+                        zos.putNextEntry(adjuntoEntry);
+
+                        // Leemos el adjunto con un FileInputStream y lo escribimos en el ZipOutputStream
+                        try (FileInputStream fis = new FileInputStream(adjuntoFile)) {
+                            byte[] buffer = new byte[1024];
+                            int length;
+                            while ((length = fis.read(buffer)) > 0) {
+                                zos.write(buffer, 0, length);
+                            }
                         }
+                        zos.closeEntry();
                     }
                 }
-            }catch (IOException e){
-                e.printStackTrace();
             }
-
         }
+    }
 }
