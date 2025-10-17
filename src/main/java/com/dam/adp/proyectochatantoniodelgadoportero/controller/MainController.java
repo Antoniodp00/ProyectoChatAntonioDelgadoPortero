@@ -20,8 +20,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -95,11 +94,13 @@ public class MainController {
         btnAbrirAdjunto.setOnAction(e -> abrirAdjunto());
         btnExportarAdjunto.setOnAction(e -> exportarAdjunto());
         chkSoloAdjuntos.setOnAction(e -> mostrarMensajes());
+        btnExportarZip.setOnAction(e -> exportarZip());
     }
 
     /**
      * Obtiene y memoriza el Stage actual asociado a la vista.
      * Se usa para abrir diálogos (FileChooser/DirectoryChooser) desde este controlador.
+     *
      * @return Stage de la ventana actual, o null si aún no está disponible.
      */
     private Stage getStage() {
@@ -116,23 +117,23 @@ public class MainController {
      * También rellena la lista lateral de adjuntos detectados en la conversación.
      */
     private void mostrarMensajes() {
-         if (usuarioSeleccionado == null) return;
+        if (usuarioSeleccionado == null) return;
 
         txtChat.clear();
         Mensajes mensajes = MensajeDAO.listarMensajesEntre(usuarioLogueado.getNombreUsuario(), usuarioSeleccionado.getNombreUsuario());
 
         boolean soloAdjuntos = chkSoloAdjuntos != null && chkSoloAdjuntos.isSelected();
         List<String> adjuntosConversacion = new ArrayList<>();
-        for (Mensaje mensaje : mensajes.getMensajeList()){
-            boolean tieneAdjunto = 
+        for (Mensaje mensaje : mensajes.getMensajeList()) {
+            boolean tieneAdjunto =
                     (mensaje.getAdjuntoRuta() != null && !mensaje.getAdjuntoRuta().isEmpty()) ||
-                    (mensaje.getAdjuntoTamano() > 0);
+                            (mensaje.getAdjuntoTamano() > 0);
             if (soloAdjuntos && !tieneAdjunto) continue;
 
-            StringBuilder linea =  new StringBuilder();
+            StringBuilder linea = new StringBuilder();
             linea.append(mensaje.getRemitente()).append(": ").append(mensaje.getMensaje());
-            if (tieneAdjunto){
-                File f = mensaje.getAdjuntoRuta() != null ? FileManager.getMediaPath(mensaje.getAdjuntoRuta()).toFile() : null;
+            if (tieneAdjunto) {
+                File f = mensaje.getAdjuntoRuta() != null ? new File(FileManager.getRutaMedia(mensaje.getAdjuntoRuta())) : null;
                 boolean existe = f != null && f.exists();
                 String nombreAdj = mensaje.getAdjuntoNombre() != null && !mensaje.getAdjuntoNombre().isEmpty()
                         ? mensaje.getAdjuntoNombre()
@@ -148,7 +149,7 @@ public class MainController {
             txtChat.appendText(linea.toString());
         }
         // Actualizar lista de adjuntos de la conversación
-        if (listaAdjuntos != null){
+        if (listaAdjuntos != null) {
             listaAdjuntos.getItems().setAll(adjuntosConversacion);
         }
         // Scroll automatico
@@ -159,6 +160,7 @@ public class MainController {
 
     /**
      * Cierra la sesión actual y vuelve a la pantalla de inicio.
+     *
      * @param actionEvent evento del botón Cerrar sesión.
      */
     public void cerrarSesion(ActionEvent actionEvent) {
@@ -177,9 +179,9 @@ public class MainController {
         String mensaje = txtMensaje.getText().trim();
         if (mensaje.isEmpty()) return;
 
-        if (adjuntoSeleccionado != null){
-            MensajeDAO.enviarMensajeConAdjunto(usuarioLogueado.getNombreUsuario(),usuarioSeleccionado.getNombreUsuario(),mensaje,adjuntoSeleccionado);
-        }else {
+        if (adjuntoSeleccionado != null) {
+            MensajeDAO.enviarMensajeConAdjunto(usuarioLogueado.getNombreUsuario(), usuarioSeleccionado.getNombreUsuario(), mensaje, adjuntoSeleccionado);
+        } else {
             MensajeDAO.enviarMensaje(usuarioLogueado.getNombreUsuario(), usuarioSeleccionado.getNombreUsuario(), mensaje);
         }
         mostrarMensajes();
@@ -355,7 +357,7 @@ public class MainController {
      * pero 'private' es suficiente aquí).
      * * @return ArrayList<String> con cada línea de estadística, o una lista vacía si no hay mensajes.
      */
-    private ArrayList<String> generaEstadisticasTexto(){
+    private ArrayList<String> generaEstadisticasTexto() {
 
         // 1. Obtener la conversación
         Mensajes mensajes = MensajeDAO.listarMensajesEntre(usuarioLogueado.getNombreUsuario(), usuarioSeleccionado.getNombreUsuario());
@@ -393,7 +395,7 @@ public class MainController {
      * Abre un selector de archivos para elegir un adjunto a enviar, valida tamaño y extensión,
      * y muestra la selección de forma temporal en la lista de adjuntos hasta que se envíe el mensaje.
      */
-    private void seleccionarAdjunto(){
+    private void seleccionarAdjunto() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Seleccionar Archivo Adjunto");
         fileChooser.getExtensionFilters().addAll(
@@ -405,7 +407,7 @@ public class MainController {
 
         long tamañoMaximo = 10L * 1024 * 1024; //Esta operación calcula el número total de bytes en 10 Megabytes: 10×1024×1024=10.485.760 bytes.
         List<String> extensionesPermitidos = Arrays.asList(".png", ".jpg", ".jpeg", ".gif", ".pdf", ".txt", ".docx", ".xlsx");
-        if (!FileManager.validarArchivo(archivoElegido, tamañoMaximo, extensionesPermitidos)){
+        if (!FileManager.validarArchivo(archivoElegido, tamañoMaximo, extensionesPermitidos)) {
             lblEstado.setText("Error: Archivo Adjunto no valido");
             lblEstado.setStyle("-fx-text-fill: red;");
             return;
@@ -421,7 +423,7 @@ public class MainController {
      * Elimina la selección de adjunto actual antes de enviar el mensaje
      * y limpia la lista visual de adjuntos.
      */
-    private void quitarAdjunto(){
+    private void quitarAdjunto() {
         adjuntoSeleccionado = null;
         listaAdjuntos.getItems().clear();
         lblEstado.setText("Adjunto quitado.");
@@ -431,13 +433,13 @@ public class MainController {
      * Intenta abrir el archivo adjunto actualmente seleccionado usando la aplicación predeterminada del sistema.
      * Muestra un mensaje de estado si no hay adjunto seleccionado o si ocurre un error al abrirlo.
      */
-    private void abrirAdjunto(){
-        if (adjuntoSeleccionado != null){
+    private void abrirAdjunto() {
+        if (adjuntoSeleccionado != null) {
             boolean exitoso = FileManager.abrirArchivo(adjuntoSeleccionado);
-            if (!exitoso){
+            if (!exitoso) {
                 lblEstado.setText("No se pudo abrir el adjunto seleccionado.");
             }
-        }else {
+        } else {
             lblEstado.setText("No hay adjunto seleccionado.");
         }
     }
@@ -448,10 +450,10 @@ public class MainController {
      * Permite al usuario exportar el archivo adjunto seleccionado a una CARPETA de destino,
      * utilizando FileManager.exportarArchivo(origen, destinoDir).
      */
-    private void exportarAdjunto(){
+    private void exportarAdjunto() {
         String seleccionado = listaAdjuntos != null ? listaAdjuntos.getSelectionModel().getSelectedItem() : null;
 
-        if (seleccionado == null){
+        if (seleccionado == null) {
             lblEstado.setText("Error: Selecciona un adjunto de la lista.");
             lblEstado.setStyle("-fx-text-fill: red;");
             return;
@@ -460,21 +462,21 @@ public class MainController {
         // Intentar localizar el archivo adjunto dentro de la conversación (en media/)
         File archivoOrigen = null;
         Mensajes mensajes = MensajeDAO.listarMensajesEntre(usuarioLogueado.getNombreUsuario(), usuarioSeleccionado.getNombreUsuario());
-        for (Mensaje m : mensajes.getMensajeList()){
-            if (m.getAdjuntoNombre() != null && m.getAdjuntoNombre().equals(seleccionado) && m.getAdjuntoRuta() != null){
-                File posible = FileManager.getMediaPath(m.getAdjuntoRuta()).toFile();
-                if (posible.exists()){
+        for (Mensaje m : mensajes.getMensajeList()) {
+            if (m.getAdjuntoNombre() != null && m.getAdjuntoNombre().equals(seleccionado) && m.getAdjuntoRuta() != null) {
+                File posible = new File(FileManager.getRutaMedia(m.getAdjuntoRuta()));
+                if (posible.exists()) {
                     archivoOrigen = posible;
                     break;
                 }
             }
         }
         // Si no está en media, tal vez es un adjunto aún no enviado: usar archivo local seleccionado
-        if (archivoOrigen == null && adjuntoSeleccionado != null && seleccionado.equals(adjuntoSeleccionado.getName())){
+        if (archivoOrigen == null && adjuntoSeleccionado != null && seleccionado.equals(adjuntoSeleccionado.getName())) {
             archivoOrigen = adjuntoSeleccionado;
         }
 
-        if (archivoOrigen == null || !archivoOrigen.exists()){
+        if (archivoOrigen == null || !archivoOrigen.exists()) {
             lblEstado.setText("Error: Archivo de origen no encontrado.");
             lblEstado.setStyle("-fx-text-fill: red;");
             return;
@@ -485,19 +487,82 @@ public class MainController {
 
         File destino = directoryChooser.showDialog(getStage());
 
-        if (destino != null){
-            boolean exito = FileManager.exportarArchivo(archivoOrigen,destino);
+        if (destino != null) {
+            boolean exito = FileManager.exportarArchivo(archivoOrigen, destino);
 
-            if (exito){
+            if (exito) {
                 lblEstado.setText("Adjunto exportado con éxito a: " + destino.getAbsolutePath());
                 lblEstado.setStyle("-fx-text-fill: green;");
-            }else  {
+            } else {
                 lblEstado.setText("Error al exportar adjunto.");
                 lblEstado.setStyle("-fx-text-fill: red;");
             }
-        }else {
+        } else {
             lblEstado.setText("Exportación cancelada.");
             lblEstado.setStyle("-fx-text-fill: gray;");
         }
     }
+
+    private void exportarZip() {
+        if (usuarioSeleccionado == null){
+            lblEstado.setText("Error: No hay usuario seleccionado.");
+            lblEstado.setStyle("-fx-text-fill: red;");
+        return;
+        }
+
+        Mensajes mensajes = MensajeDAO.listarMensajesEntre(usuarioLogueado.getNombreUsuario(), usuarioSeleccionado.getNombreUsuario());
+        if (mensajes.getMensajeList().isEmpty()) {
+            lblEstado.setText("No hay mensajes para exportar");
+            return;
+        }
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Exportar conversacion a ZIP");
+        String nombreArchivo = usuarioLogueado.getNombreUsuario() +"-"+usuarioSeleccionado.getNombreUsuario()+ "-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmm"));
+        fileChooser.setInitialFileName(nombreArchivo+".zip");
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Archivo ZIP (*.zip)", "*.zip"));
+        File zipFile = fileChooser.showSaveDialog( getStage());
+
+        if (zipFile == null) {
+            lblEstado.setText("Operacion cancelada");
+            lblEstado.setStyle("-fx-text-fill: red;");
+            return;
+        }
+
+        File tempFile = null;
+
+        try {
+            String conversacionTexto = generarTextoConversacion(mensajes.getMensajeList());
+
+            FileManager.crearArchivoZip(zipFile,conversacionTexto,mensajes.getMensajeList());
+
+            lblEstado.setText("Exportado a ZIP con éxito: " + zipFile.getName());
+            lblEstado.setStyle("-fx-text-fill: green;");
+        } catch (IOException e) {
+            lblEstado.setText("Error al crear el archivo ZIP.");
+            lblEstado.setStyle("-fx-text-fill: red;");
+            e.printStackTrace(); // Para ver el error detallado en la consola
+        }
     }
+
+    /**
+     * Genera un único String con el contenido de la conversación. (Este método auxiliar no cambia)
+     * @param mensajes Lista de mensajes de la conversación.
+     * @return String formateado con la conversación.
+     */
+    private String generarTextoConversacion(List<Mensaje> mensajes) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Conversación entre: ").append(usuarioLogueado.getNombreUsuario()).append(" y ").append(usuarioSeleccionado.getNombreUsuario()).append("\n");
+        sb.append("==================================================\n\n");
+
+        for (Mensaje mensaje : mensajes) {
+            sb.append(mensaje.getRemitente()).append(" [").append(mensaje.getFecha()).append("]:\n");
+            sb.append(mensaje.getMensaje()).append("\n");
+            if (mensaje.getAdjuntoNombre() != null && !mensaje.getAdjuntoNombre().isBlank()) {
+                sb.append(" -> Adjunto: ").append(mensaje.getAdjuntoNombre()).append("\n");
+            }
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
+}

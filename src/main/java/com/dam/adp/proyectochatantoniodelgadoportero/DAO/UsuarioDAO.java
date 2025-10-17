@@ -56,20 +56,6 @@ public class UsuarioDAO {
     }
 
     /**
-     * Listar todos los usuarios
-     */
-    public static void listarUsuarios() {
-        ListaUsuarios listaUsuarios = leerUsuarios();
-        if (listaUsuarios.getLista().isEmpty()) {
-            System.out.println("No hay usuarios registrados.");
-            return;
-        }
-        for (Usuario usuario : listaUsuarios.getLista()) {
-            System.out.println(usuario);
-        }
-    }
-
-    /**
      * Devuelve un usuario por nombre de usuario, o null si no existe
      */
     public static Usuario cargarUsuario(String nombreUsuario) {
