@@ -8,11 +8,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 public class Utils {
+    private static final Logger log = LoggerFactory.getLogger(Utils.class);
     /**
      * Valida el formato de un correo electrónico sencillo mediante expresión regular.
      * @param email cadena a validar.
@@ -20,8 +22,7 @@ public class Utils {
      */
     public static boolean validarEmail(String email){
         if (!email.matches("^[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,6}$")) {
-            System.out.println("El formato del correo no es válido.");
-            System.out.println("-fx-text-fill: red;");
+            log.warn("El formato del correo no es válido: {}", email);
             return false;
         }
         return true;
@@ -42,11 +43,9 @@ public class Utils {
             stage.show();
 
         } catch (IOException e) {
-            e.printStackTrace();
-            System.err.println("Error al cargar la vista: " + fxmlPath);
+            log.error("Error al cargar la vista: {}", fxmlPath, e);
         } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println("Error inesperado al cambiar de escena.");
+            log.error("Error inesperado al cambiar de escena.", e);
         }
     }
 }

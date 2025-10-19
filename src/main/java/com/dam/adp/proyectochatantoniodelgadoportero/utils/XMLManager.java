@@ -6,8 +6,11 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
 import java.io.IOException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class XMLManager {
+    private static final Logger log = LoggerFactory.getLogger(XMLManager.class);
     /**
      * Escribe un objeto en un archivo XML.
      *
@@ -68,7 +71,7 @@ public class XMLManager {
             Unmarshaller unmarshaller = context.createUnmarshaller();
             result = (T) unmarshaller.unmarshal(file);
         } catch (JAXBException e) {
-            System.out.println("Archivo XML vacío o corrupto, usando objeto vacío.");
+            log.warn("Archivo XML vacío o corrupto, usando objeto vacío.");
         }
 
         return result;

@@ -6,12 +6,15 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Adaptador JAXB para serializar y deserializar LocalDateTime a/desde String.
  */
 public class LocalDateTimeAdapter extends XmlAdapter<String, LocalDateTime> {
 
+    private static final Logger log = LoggerFactory.getLogger(LocalDateTimeAdapter.class);
     private static final DateTimeFormatter STORAGE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 
     private static final DateTimeFormatter LEGACY_TIME_ONLY = DateTimeFormatter.ofPattern("HH:mm");
@@ -38,6 +41,7 @@ public class LocalDateTimeAdapter extends XmlAdapter<String, LocalDateTime> {
             return LocalDateTime.of(LocalDate.now(), t);
         } catch (DateTimeParseException ignored) { }
 
+        log.warn("No se pudo parsear LocalDateTime desde '{}', devolviendo null", val);
         return null;
     }
 

@@ -5,12 +5,15 @@ import com.dam.adp.proyectochatantoniodelgadoportero.model.ListaUsuarios;
 import com.dam.adp.proyectochatantoniodelgadoportero.model.Usuario;
 import com.dam.adp.proyectochatantoniodelgadoportero.utils.PasswordManager;
 import com.dam.adp.proyectochatantoniodelgadoportero.utils.XMLManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class UsuarioDAO {
 
+    private static final Logger log = LoggerFactory.getLogger(UsuarioDAO.class);
     private static final Path RUTA_XML = Paths.get("data", "usuarios.xml");
 
     /**
@@ -29,8 +32,7 @@ public class UsuarioDAO {
         try {
             XMLManager.writeXML(listaUsuarios, RUTA_XML.toString());
         } catch (Exception e) {
-            System.err.println("Error al guardar usuarios en XML: " + e.getMessage());
-            e.printStackTrace();
+            log.error("Error al guardar usuarios en XML: {}", e.getMessage(), e);
         }
     }
 
@@ -44,14 +46,14 @@ public class UsuarioDAO {
         for (Usuario usuario : listaUsuarios.getLista()) {
             if (usuario.getEmail().equalsIgnoreCase(usuarioNuevo.getEmail()) ||
                     usuario.getNombreUsuario().equalsIgnoreCase(usuarioNuevo.getNombreUsuario())) {
-                System.out.println("El usuario ya existe en el sistema");
+                log.warn("El usuario ya existe en el sistema: email={}, usuario={}", usuarioNuevo.getEmail(), usuarioNuevo.getNombreUsuario());
                 return false;
             }
         }
 
         listaUsuarios.getLista().add(usuarioNuevo);
         guardarUsuarios(listaUsuarios);
-        System.out.println("Usuario registrado correctamente");
+        log.info("Usuario registrado correctamente: {}", usuarioNuevo.getNombreUsuario());
         return true;
     }
 
