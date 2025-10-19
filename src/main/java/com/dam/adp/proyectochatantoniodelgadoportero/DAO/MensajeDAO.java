@@ -4,6 +4,8 @@ import com.dam.adp.proyectochatantoniodelgadoportero.model.Mensaje;
 import com.dam.adp.proyectochatantoniodelgadoportero.model.Mensajes;
 import com.dam.adp.proyectochatantoniodelgadoportero.utils.FileManager;
 import com.dam.adp.proyectochatantoniodelgadoportero.utils.XMLManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -14,6 +16,7 @@ import java.util.List;
 
 public class MensajeDAO {
 
+    private static final Logger log = LoggerFactory.getLogger(MensajeDAO.class);
     private static final Path RUTA_XML = Paths.get("data", "mensajes.xml");
 
     /**
@@ -32,10 +35,9 @@ public class MensajeDAO {
 
             guardarMensajes(mensajes);
 
-            System.out.println("Mensaje enviado correctamente de " + remitente + " a " + destinatario);
+            log.info("Mensaje enviado correctamente de {} a {}", remitente, destinatario);
         } catch (Exception e) {
-            System.err.println("Error al enviar mensaje: " + e.getMessage());
-            e.printStackTrace();
+            log.error("Error al enviar mensaje: {}", e.getMessage(), e);
             throw new RuntimeException("No se pudo enviar el mensaje", e);
         }
     }
@@ -68,8 +70,7 @@ public class MensajeDAO {
             mensajes.getMensajeList().add(nuevo);
             guardarMensajes(mensajes);
         } catch (Exception e) {
-            System.err.println("Error al enviar mensaje con adjunto: " + e.getMessage());
-            e.printStackTrace();
+            log.error("Error al enviar mensaje con adjunto: {}", e.getMessage(), e);
             throw new RuntimeException("No se pudo enviar el mensaje", e);
         }
     }
@@ -100,7 +101,7 @@ public class MensajeDAO {
         try {
             XMLManager.writeXML(mensajes, RUTA_XML.toString());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("No se pudo guardar el XML de mensajes: {}", e.getMessage(), e);
             throw new RuntimeException("No se pudo guardar el XML de mensajes", e);
         }
     }

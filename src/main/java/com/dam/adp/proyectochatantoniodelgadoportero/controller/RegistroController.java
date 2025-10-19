@@ -9,8 +9,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RegistroController {
+    private static final Logger log = LoggerFactory.getLogger(RegistroController.class);
+
     public TextField txtNombreUsuario;
     public PasswordField txtContrasena;
     public TextField txtNombre;
@@ -34,12 +38,14 @@ public class RegistroController {
         if (nombreUsuario.isEmpty() || contrasena.isEmpty() || nombre.isEmpty() || apellido.isEmpty()) {
             lblMensaje.setText("Todos los campos son obligatorios.");
             lblMensaje.setStyle("-fx-text-fill: red;");
+            log.warn("Registro fallido: campos obligatorios vacíos");
             return;
         }
 
         if (!Utils.validarEmail(email)) {
             lblMensaje.setText("El email no es válido.");
             lblMensaje.setStyle("-fx-text-fill: red;");
+            log.warn("Registro fallido: email no válido {}", email);
             return;
         }
 
@@ -48,10 +54,12 @@ public class RegistroController {
         if (UsuarioDAO.añadirUsuario(usuario)) {
             lblMensaje.setText("Usuario registrado correctamente.");
             lblMensaje.setStyle("-fx-text-fill: green;");
+            log.info("Usuario registrado: {} ({})", nombreUsuario, email);
             limpiarCampos();
         } else {
             lblMensaje.setText("Usuario con ese nombre de usuario (" + nombreUsuario + ") o email(" + email + ") ya existe");
             lblMensaje.setStyle("-fx-text-fill: red;");
+            log.warn("Intento de registro duplicado: {} ({})", nombreUsuario, email);
         }
     }
 
@@ -71,6 +79,7 @@ public class RegistroController {
      * @param actionEvent evento del botón Volver.
      */
     public void volverLanding(ActionEvent actionEvent) {
+        log.info("Navegando a Landing Page desde Registro");
         Utils.cambiarEscena("/com/dam/adp/proyectochatantoniodelgadoportero/landingPageView.fxml");
     }
 }

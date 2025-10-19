@@ -27,9 +27,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MainController {
+
+    private static final Logger log = LoggerFactory.getLogger(MainController.class);
 
     public ListView<String> listaAdjuntos;
     public Button btnQuitarAdjunto;
@@ -541,7 +544,7 @@ public class MainController {
         } catch (IOException e) {
             lblEstado.setText("Error al crear el archivo ZIP.");
             lblEstado.setStyle("-fx-text-fill: red;");
-            e.printStackTrace(); // Para ver el error detallado en la consola
+            log.error("Error al crear el archivo ZIP: {}", zipFile, e);
         }
     }
 

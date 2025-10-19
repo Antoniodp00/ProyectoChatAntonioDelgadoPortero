@@ -7,10 +7,13 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @XmlRootElement(name = "mensajes")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Mensajes {
+    private static final Logger log = LoggerFactory.getLogger(Mensajes.class);
     @XmlElement(name = "mensaje")
     private List<Mensaje> mensajeList = new ArrayList<>();
 
@@ -28,6 +31,7 @@ public class Mensajes {
      */
     public void setMensajeList(List<Mensaje> mensajeList) {
         this.mensajeList = mensajeList;
+        log.debug("Lista de mensajes establecida. Tamaño: {}", mensajeList != null ? mensajeList.size() : 0);
     }
 
     /**
@@ -36,6 +40,7 @@ public class Mensajes {
      */
     public void addMensaje(Mensaje mensaje) {
         mensajeList.add(mensaje);
+        log.debug("Mensaje añadido. Total ahora: {}", mensajeList.size());
     }
 
     @Override

@@ -4,9 +4,12 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @XmlRootElement(name = "usuarios")
 public class ListaUsuarios {
+    private static final Logger log = LoggerFactory.getLogger(ListaUsuarios.class);
     private ArrayList<Usuario> listaUsuarios = new ArrayList<>();
 
     @XmlElement(name = "usuario")
@@ -24,5 +27,6 @@ public class ListaUsuarios {
      */
     public void setLista(ArrayList<Usuario> lista){
         this.listaUsuarios = lista;
+        log.debug("ListaUsuarios actualizada. Tamaño: {}", lista != null ? lista.size() : 0);
     }
 }

@@ -1,9 +1,12 @@
 package com.dam.adp.proyectochatantoniodelgadoportero.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @XmlRootElement(name = "usuario")
 public class Usuario {
+    private static final Logger log = LoggerFactory.getLogger(Usuario.class);
     private String nombreUsuario;
     private String contraseña;
     private String nombre;

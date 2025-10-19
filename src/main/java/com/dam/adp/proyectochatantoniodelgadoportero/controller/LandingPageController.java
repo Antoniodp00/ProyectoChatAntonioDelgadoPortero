@@ -4,9 +4,12 @@ import com.dam.adp.proyectochatantoniodelgadoportero.utils.Utils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class LandingPageController {
 
+    private static final Logger log = LoggerFactory.getLogger(LandingPageController.class);
 
     @FXML
     private Button btnIniciarSesion;
@@ -20,6 +23,7 @@ public class LandingPageController {
      */
     @FXML
     public void abrirLogin(ActionEvent actionEvent) {
+        log.info("Navegando a Inicio de Sesión desde Landing Page");
         Utils.cambiarEscena("/com/dam/adp/proyectochatantoniodelgadoportero/inicioSesionView.fxml");
     }
 
@@ -29,6 +33,7 @@ public class LandingPageController {
      */
     @FXML
     public void abrirRegistro(ActionEvent actionEvent) {
+        log.info("Navegando a Registro desde Landing Page");
         Utils.cambiarEscena("/com/dam/adp/proyectochatantoniodelgadoportero/registroView.fxml");
     }
 

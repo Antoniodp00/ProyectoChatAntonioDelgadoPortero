@@ -11,9 +11,12 @@ import java.util.List;
 import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FileManager {
 
+    private static final Logger log = LoggerFactory.getLogger(FileManager.class);
     private static final String RUTAMEDIA = "media" + File.separator;
     //private static final String EXPORTACIONES = "exportaciones" + File.separator;
     private static final DateTimeFormatter EXPORT_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -45,7 +48,7 @@ public class FileManager {
             }
             return true;
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Error al exportar estadísticas a archivo {}", archivoDestino, e);
             return false;
         }
     }
@@ -74,7 +77,7 @@ public class FileManager {
             }
             return true;
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Error al exportar conversación a TXT {}", archivoDestino, e);
             return false;
         }
     }
@@ -110,7 +113,7 @@ public class FileManager {
             }
             return true;
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Error al exportar conversación a CSV {}", archivoDestino, e);
             return false;
         }
     }
@@ -129,7 +132,7 @@ public class FileManager {
             entrada.transferTo(salida);
             return true;
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Error al guardar archivo en 'media': origen={}, destino={} ", origen, destino.getPath(), e);
             return false;
         } 
     }
@@ -192,8 +195,8 @@ public class FileManager {
             // Lee los primeros bytes del flujo para identificar el tipo de archivo.
             return URLConnection.guessContentTypeFromStream(is);
         } catch (IOException e) {
-            // Manejar la excepción, por ejemplo, registrarla en un log.
-            e.printStackTrace();
+            // Manejo de error al detectar el tipo MIME
+            log.warn("No se pudo detectar el tipo MIME de {}", archivo, e);
             return null;
         }
     }
@@ -213,7 +216,7 @@ public class FileManager {
                 return true;
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("No se pudo abrir el archivo con la aplicación predeterminada: {}", archivo, e);
         }
         return false;
     }
@@ -239,7 +242,7 @@ public class FileManager {
             in.transferTo(out);
             return true;
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Error al exportar archivo {} a {}", origen, destinoDir, e);
             return false;
         }
     }

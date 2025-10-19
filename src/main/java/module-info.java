@@ -12,6 +12,7 @@ module com.dam.adp.proyectochatantoniodelgadoportero {
     requires com.almasb.fxgl.all;
     requires jbcrypt;
     requires java.desktop;
+    requires org.slf4j;
 
     // JavaFX
     opens com.dam.adp.proyectochatantoniodelgadoportero to javafx.fxml;

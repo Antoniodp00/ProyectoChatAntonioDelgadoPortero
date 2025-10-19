@@ -5,12 +5,15 @@ import com.dam.adp.proyectochatantoniodelgadoportero.model.Mensaje;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Clase de utilidad que proporciona métodos estáticos para realizar análisis estadísticos
  * sobre una lista de objetos Mensaje, utilizando la API de Java Streams.
  */
 public class StreamUtils {
+    private static final Logger log = LoggerFactory.getLogger(StreamUtils.class);
 
     /**
      * Constructor privado para prevenir la instanciación de esta clase de utilidad.

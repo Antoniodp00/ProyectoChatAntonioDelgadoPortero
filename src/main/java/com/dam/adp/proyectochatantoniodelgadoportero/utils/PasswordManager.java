@@ -1,8 +1,11 @@
 package com.dam.adp.proyectochatantoniodelgadoportero.utils;
 
 import org.mindrot.jbcrypt.BCrypt;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PasswordManager {
+    private static final Logger log = LoggerFactory.getLogger(PasswordManager.class);
 
     /**
      * Este método toma una contraseña en texto plano y devuelve su hash.
