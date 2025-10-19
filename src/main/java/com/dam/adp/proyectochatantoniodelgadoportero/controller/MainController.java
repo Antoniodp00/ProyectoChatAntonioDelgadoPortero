@@ -35,7 +35,6 @@ public class MainController {
     private static final Logger log = LoggerFactory.getLogger(MainController.class);
 
     public ListView<String> listaAdjuntos;
-    public Button btnQuitarAdjunto;
     public Button btnAbrirAdjunto;
     public Button btnExportarAdjunto;
     public Label lblEstado;
@@ -78,22 +77,29 @@ public class MainController {
 
         ObservableList<Usuario> usuariosObservableList = FXCollections.observableArrayList(UsuarioDAO.leerUsuarios().getLista());
 
-        usuariosObservableList.removeIf(usuario -> usuario.getNombre().equals(usuarioLogueado.getNombre()));
+        // Eliminar el usuario logueado de la lista sin usar lambda
+        for (int i = 0; i < usuariosObservableList.size(); i++) {
+            Usuario u = usuariosObservableList.get(i);
+            if (u != null && u.getNombre().equals(usuarioLogueado.getNombre())) {
+                usuariosObservableList.remove(i);
+                break;
+            }
+        }
 
         listaUsuarios.setItems(usuariosObservableList);
 
-        //Seleccionar un usuario de la lista
-        listaUsuarios.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                usuarioSeleccionado = newValue;
-                lblUsuarioChat.setText("Chat con: " + usuarioSeleccionado.getNombreUsuario());
-                mostrarMensajes();
-                cargarEstadisticas();
-            }
-        });
+        listaUsuarios.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    if (newValue != null) {
+                        usuarioSeleccionado = newValue;
+                        lblUsuarioChat.setText("Chat con: " + usuarioSeleccionado.getNombreUsuario());
+                        mostrarMensajes();
+                        cargarEstadisticas();
+                    }
+                }
+        );
 
         btnAdjuntar.setOnAction(e -> seleccionarAdjunto());
-        btnQuitarAdjunto.setOnAction(e -> quitarAdjunto());
         btnAbrirAdjunto.setOnAction(e -> abrirAdjunto());
         btnExportarAdjunto.setOnAction(e -> exportarAdjunto());
         chkSoloAdjuntos.setOnAction(e -> mostrarMensajes());
@@ -120,44 +126,46 @@ public class MainController {
      * También rellena la lista lateral de adjuntos detectados en la conversación.
      */
     private void mostrarMensajes() {
-        if (usuarioSeleccionado == null) return;
+        if (usuarioSeleccionado != null) {
+            txtChat.clear();
+            Mensajes mensajes = MensajeDAO.listarMensajesEntre(usuarioLogueado.getNombreUsuario(), usuarioSeleccionado.getNombreUsuario());
 
-        txtChat.clear();
-        Mensajes mensajes = MensajeDAO.listarMensajesEntre(usuarioLogueado.getNombreUsuario(), usuarioSeleccionado.getNombreUsuario());
+            boolean soloAdjuntos = (chkSoloAdjuntos != null) && chkSoloAdjuntos.isSelected();
+            List<String> adjuntosConversacion = new ArrayList<>();
+            for (Mensaje mensaje : mensajes.getMensajeList()) {
+                boolean tieneAdjunto =((mensaje.getAdjuntoRuta() != null) && !mensaje.getAdjuntoRuta().isEmpty()) || (mensaje.getAdjuntoTamano() > 0);
+                if (soloAdjuntos && !tieneAdjunto) {
+                    continue;
+                }
 
-        boolean soloAdjuntos = chkSoloAdjuntos != null && chkSoloAdjuntos.isSelected();
-        List<String> adjuntosConversacion = new ArrayList<>();
-        for (Mensaje mensaje : mensajes.getMensajeList()) {
-            boolean tieneAdjunto =
-                    (mensaje.getAdjuntoRuta() != null && !mensaje.getAdjuntoRuta().isEmpty()) ||
-                            (mensaje.getAdjuntoTamano() > 0);
-            if (soloAdjuntos && !tieneAdjunto) continue;
+                StringBuilder linea = new StringBuilder();
+                linea.append(mensaje.getRemitente()).append(": ").append(mensaje.getMensaje());
+                if (tieneAdjunto) {
+                    File f = (mensaje.getAdjuntoRuta() != null) ? new File(FileManager.getRutaMedia(mensaje.getAdjuntoRuta())) : null;
+                    boolean existe = (f != null) && f.exists();
+                    String nombreAdj = (mensaje.getAdjuntoNombre() != null && !mensaje.getAdjuntoNombre().isEmpty())
+                            ? mensaje.getAdjuntoNombre()
+                            : ((mensaje.getAdjuntoRuta() != null) ? mensaje.getAdjuntoRuta() : "adjunto");
+                    linea.append(" [Adjunto: ").append(nombreAdj);
+                    if (!existe) {
+                        linea.append(" - NO ENCONTRADO");
+                    }
+                    linea.append("]");
 
-            StringBuilder linea = new StringBuilder();
-            linea.append(mensaje.getRemitente()).append(": ").append(mensaje.getMensaje());
-            if (tieneAdjunto) {
-                File f = mensaje.getAdjuntoRuta() != null ? new File(FileManager.getRutaMedia(mensaje.getAdjuntoRuta())) : null;
-                boolean existe = f != null && f.exists();
-                String nombreAdj = mensaje.getAdjuntoNombre() != null && !mensaje.getAdjuntoNombre().isEmpty()
-                        ? mensaje.getAdjuntoNombre()
-                        : (mensaje.getAdjuntoRuta() != null ? mensaje.getAdjuntoRuta() : "adjunto");
-                linea.append(" [Adjunto: ").append(nombreAdj);
-                if (!existe) linea.append(" - NO ENCONTRADO");
-                linea.append("]");
-
-                // acumular adjuntos para la lista
-                adjuntosConversacion.add(nombreAdj);
+                    // acumular adjuntos para la lista
+                    adjuntosConversacion.add(nombreAdj);
+                }
+                linea.append("\n");
+                txtChat.appendText(linea.toString());
             }
-            linea.append("\n");
-            txtChat.appendText(linea.toString());
+            // Actualizar lista de adjuntos de la conversación
+            if (listaAdjuntos != null) {
+                listaAdjuntos.getItems().setAll(adjuntosConversacion);
+            }
+            // Scroll automatico
+            txtChat.selectPositionCaret(txtChat.getLength());
+            txtChat.deselect();
         }
-        // Actualizar lista de adjuntos de la conversación
-        if (listaAdjuntos != null) {
-            listaAdjuntos.getItems().setAll(adjuntosConversacion);
-        }
-        // Scroll automatico
-        txtChat.selectPositionCaret(txtChat.getLength());
-        txtChat.deselect();
     }
 
 
@@ -177,25 +185,26 @@ public class MainController {
      * @param actionEvent evento del botón Enviar.
      */
     public void enviarMensaje(ActionEvent actionEvent) {
-        if (usuarioSeleccionado == null) return;
-
-        String mensaje = txtMensaje.getText().trim();
-        if (mensaje.isEmpty()) return;
-
-        if (adjuntoSeleccionado != null) {
-            MensajeDAO.enviarMensajeConAdjunto(usuarioLogueado.getNombreUsuario(), usuarioSeleccionado.getNombreUsuario(), mensaje, adjuntoSeleccionado);
-        } else {
-            MensajeDAO.enviarMensaje(usuarioLogueado.getNombreUsuario(), usuarioSeleccionado.getNombreUsuario(), mensaje);
+        boolean puedeEnviar = (usuarioSeleccionado != null);
+        if (puedeEnviar) {
+            String mensaje = txtMensaje.getText().trim();
+            if (!mensaje.isEmpty()) {
+                if (adjuntoSeleccionado != null) {
+                    MensajeDAO.enviarMensajeConAdjunto(usuarioLogueado.getNombreUsuario(), usuarioSeleccionado.getNombreUsuario(), mensaje, adjuntoSeleccionado);
+                } else {
+                    MensajeDAO.enviarMensaje(usuarioLogueado.getNombreUsuario(), usuarioSeleccionado.getNombreUsuario(), mensaje);
+                }
+                mostrarMensajes();
+                cargarEstadisticas();
+                // Limpiar campos después de enviar
+                txtMensaje.clear();
+                adjuntoSeleccionado = null;
+                if (listaAdjuntos != null) {
+                    listaAdjuntos.getItems().clear();
+                }
+                lblEstado.setText("Mensaje enviado");
+            }
         }
-        mostrarMensajes();
-        cargarEstadisticas();
-        // Limpiar campos después de enviar
-        txtMensaje.clear();
-        adjuntoSeleccionado = null;
-        if (listaAdjuntos != null) {
-            listaAdjuntos.getItems().clear();
-        }
-        lblEstado.setText("Mensaje enviado");
     }
 
     /**
@@ -207,23 +216,21 @@ public class MainController {
             lblTotalMensajes.setText("-");
             lblMensajesPorUsuario.setText("-");
             lblPalabrasComunes.setText("-");
-            return;
+        } else {
+            Mensajes mensajes = MensajeDAO.listarMensajesEntre(usuarioLogueado.getNombreUsuario(), usuarioSeleccionado.getNombreUsuario());
+
+            // Total de mensajes
+            int totalMensajes = StreamUtils.contarMensajes(mensajes.getMensajeList());
+            lblTotalMensajes.setText(String.valueOf(totalMensajes));
+
+            // Mensajes por usuario
+            Map<String, Long> porUsuario = StreamUtils.contarMensajesPorUsuario(mensajes.getMensajeList());
+            lblMensajesPorUsuario.setText(StreamUtils.formatearConteoUsuario(porUsuario));
+
+            // Palabras mas comunes
+            Map<String, Long> topPalabras = StreamUtils.palabraMasComun(mensajes.getMensajeList(), 5);
+            lblPalabrasComunes.setText(StreamUtils.formatearTopPalabras(topPalabras));
         }
-
-        Mensajes mensajes = MensajeDAO.listarMensajesEntre(usuarioLogueado.getNombreUsuario(), usuarioSeleccionado.getNombreUsuario());
-
-        //Total de mensajes
-        int totalMensajes = StreamUtils.contarMensajes(mensajes.getMensajeList());
-        lblTotalMensajes.setText(String.valueOf(totalMensajes));
-
-
-        //Mensajes por usuario
-        Map<String, Long> porUsuario = StreamUtils.contarMensajesPorUsuario(mensajes.getMensajeList());
-        lblMensajesPorUsuario.setText(StreamUtils.formatearConteoUsuario(porUsuario));
-
-        //Palabras mas comunes
-        Map<String, Long> topPalabras = StreamUtils.palabraMasComun(mensajes.getMensajeList(), 5);
-        lblPalabrasComunes.setText(StreamUtils.formatearTopPalabras(topPalabras));
     }
 
     @FXML
@@ -235,40 +242,38 @@ public class MainController {
         if (usuarioSeleccionado == null) {
             lblEstado.setText("Error: No hay usuario seleccionado.");
             lblEstado.setStyle("-fx-text-fill: red;");
-            return;
-        }
-
-        //Obtener todos los mensajes
-        Mensajes mensajes = MensajeDAO.listarMensajesEntre(usuarioLogueado.getNombreUsuario(), usuarioSeleccionado.getNombreUsuario());
-        if (mensajes.getMensajeList().isEmpty()) {
-            lblEstado.setText("No hay mensajes para exportar");
-            return;
-        }
-
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Exportar conversacion a TXT");
-
-        //Nombre del archivo
-        String nombreArchivo = usuarioLogueado.getNombreUsuario() + "-" + usuarioSeleccionado.getNombreUsuario() + "-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmm"));
-        fileChooser.setInitialFileName(nombreArchivo + ".txt");
-
-        //Filtrar extension
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivo de Texto (*.txt)", "*.txt"));
-
-        File file = fileChooser.showSaveDialog(getStage());
-
-        if (file != null) {
-            boolean exito = FileManager.exportarAArchivoTexto(mensajes.getMensajeList(), file);
-            if (exito) {
-                lblEstado.setText("Exportado a: " + file.getAbsolutePath() + " con exito.");
-                lblEstado.setStyle("-fx-text-fill: green;");
-            } else {
-                lblEstado.setText("Error al exportar");
-                lblEstado.setStyle("-fx-text-fill: red;");
-            }
         } else {
-            lblEstado.setText("Operacion cancelada");
-            lblEstado.setStyle("-fx-text-fill: red;");
+            // Obtener todos los mensajes
+            Mensajes mensajes = MensajeDAO.listarMensajesEntre(usuarioLogueado.getNombreUsuario(), usuarioSeleccionado.getNombreUsuario());
+            if (!mensajes.getMensajeList().isEmpty()) {
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("Exportar conversacion a TXT");
+
+                // Nombre del archivo
+                String nombreArchivo = usuarioLogueado.getNombreUsuario() + "-" + usuarioSeleccionado.getNombreUsuario() + "-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmm"));
+                fileChooser.setInitialFileName(nombreArchivo + ".txt");
+
+                // Filtrar extension
+                fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivo de Texto (*.txt)", "*.txt"));
+
+                File file = fileChooser.showSaveDialog(getStage());
+
+                if (file != null) {
+                    boolean exito = FileManager.exportarAArchivoTexto(mensajes.getMensajeList(), file);
+                    if (exito) {
+                        lblEstado.setText("Exportado a: " + file.getAbsolutePath() + " con exito.");
+                        lblEstado.setStyle("-fx-text-fill: green;");
+                    } else {
+                        lblEstado.setText("Error al exportar");
+                        lblEstado.setStyle("-fx-text-fill: red;");
+                    }
+                } else {
+                    lblEstado.setText("Operacion cancelada");
+                    lblEstado.setStyle("-fx-text-fill: red;");
+                }
+            } else {
+                lblEstado.setText("No hay mensajes para exportar");
+            }
         }
     }
 
@@ -406,7 +411,9 @@ public class MainController {
                 new FileChooser.ExtensionFilter("Todos los archivos", "*.*")
         );
         File archivoElegido = fileChooser.showOpenDialog(btnAdjuntar.getScene().getWindow());
-        if (archivoElegido == null) return;
+        if (archivoElegido == null) {
+            return;
+        }
 
         long tamañoMaximo = 10L * 1024 * 1024; //Esta operación calcula el número total de bytes en 10 Megabytes: 10×1024×1024=10.485.760 bytes.
         List<String> extensionesPermitidos = Arrays.asList(".png", ".jpg", ".jpeg", ".gif", ".pdf", ".txt", ".docx", ".xlsx");
@@ -420,16 +427,6 @@ public class MainController {
         // Mostrar en la lista de adjuntos (selección temporal antes de enviar)
         listaAdjuntos.getItems().setAll(archivoElegido.getName());
         lblEstado.setText("Archivo Adjunto: " + archivoElegido.getName());
-    }
-
-    /**
-     * Elimina la selección de adjunto actual antes de enviar el mensaje
-     * y limpia la lista visual de adjuntos.
-     */
-    private void quitarAdjunto() {
-        adjuntoSeleccionado = null;
-        listaAdjuntos.getItems().clear();
-        lblEstado.setText("Adjunto quitado.");
     }
 
     /**

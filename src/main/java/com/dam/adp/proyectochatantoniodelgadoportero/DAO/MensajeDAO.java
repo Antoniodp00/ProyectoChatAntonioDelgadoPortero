@@ -126,7 +126,9 @@ public class MensajeDAO {
             String u2 = usuario2 == null ? "" : usuario2.trim().toLowerCase();
 
         for (Mensaje mensaje : mensajes.getMensajeList()) {
-            if (mensaje == null) continue;
+            if (mensaje == null) {
+                continue;
+            }
             String r = mensaje.getRemitente() == null ? "" : mensaje.getRemitente().trim().toLowerCase();
             String d = mensaje.getDestinatario() == null ? "" : mensaje.getDestinatario().trim().toLowerCase();
 
