@@ -2,6 +2,7 @@ package com.dam.adp.proyectochatantoniodelgadoportero.app;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
@@ -25,9 +26,15 @@ public class Aplicacion extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(
                 Aplicacion.class.getResource("/com/dam/adp/proyectochatantoniodelgadoportero/landingPageView.fxml")
         );
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
+        Parent root = fxmlLoader.load();
+        Scene scene = new Scene(root, 480, 560);
         stage.setTitle("Pagina Principal");
         stage.setScene(scene);
+
+        // Establecer tamaño mínimo para la ventana
+        stage.setMinWidth(480);
+        stage.setMinHeight(560);
+
         stage.show();
         log.info("Aplicación iniciada correctamente");
     }
