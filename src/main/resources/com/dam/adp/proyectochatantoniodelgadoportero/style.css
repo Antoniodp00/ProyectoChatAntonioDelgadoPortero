@@ -1,173 +1,260 @@
-
+/* --- Global Styles --- */
 .root {
-    -fx-background-color: #F4F6F8;
+    -fx-font-family: 'Segoe UI', 'San Francisco', 'Helvetica Neue', Arial, sans-serif;
+    -fx-background-color: #FDFEFE;
 }
 
 .container {
-    -fx-background-color: white;
-    -fx-background-radius: 15;
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 20;
     -fx-padding: 40;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 20, 0, 0, 5);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 25, 0, 0, 8);
 }
 
-/* Landing Page Styles */
+/* --- Typography --- */
 .chat-title {
-    -fx-font-size: 28px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #2E3D48;
+    -fx-font-size: 30px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #17202A;
 }
 
 .welcome-text {
-    -fx-font-size: 20px;
-    -fx-text-fill: #5A6A77;
+    -fx-font-size: 22px;
+    -fx-text-fill: #566573;
 }
 
-.version-label {
-    -fx-text-fill: #AEB6BF;
-    -fx-font-size: 12px;
-}
-
-/* Form Styles */
 .form-title {
-    -fx-font-size: 24px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #2E3D48;
+    -fx-font-size: 26px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #17202A;
 }
 
+.section-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #17202A;
+}
+
+.chat-header-label {
+    -fx-font-size: 18px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #17202A;
+}
+
+/* --- Form Elements --- */
 .text-field {
     -fx-font-size: 14px;
-    -fx-background-radius: 8;
-    -fx-border-color: #CED4DA;
-    -fx-border-radius: 8;
-    -fx-padding: 8;
-    -fx-pref-width: 250;
+    -fx-background-radius: 10;
+    -fx-border-color: #D5D8DC;
+    -fx-border-radius: 10;
+    -fx-padding: 10;
+    -fx-pref-width: 280;
+    -fx-prompt-text-fill: #AAB7B8;
+    -fx-background-color: #FDFEFE;
 }
 
 .text-field:focused {
-    -fx-border-color: #007BFF;
-    -fx-effect: dropshadow(gaussian, rgba(0,123,255,0.25), 5, 0, 0, 1);
+    -fx-border-color: #3498DB;
+    -fx-effect: dropshadow(gaussian, rgba(52, 152, 219, 0.3), 8, 0, 0, 1);
 }
 
 .error-label {
-    -fx-text-fill: #D9534F;
+    -fx-text-fill: #E74C3C;
     -fx-font-size: 13px;
+    -fx-font-weight: 600;
 }
 
 .form-link {
-    -fx-text-fill: #007BFF;
+    -fx-text-fill: #3498DB;
     -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-border-color: transparent;
 }
 
 .form-link:hover {
     -fx-underline: true;
 }
 
-
-/* Button Styles */
-.primary-button {
-    -fx-background-color: #007BFF;
-    -fx-text-fill: white;
+/* --- Buttons --- */
+.button {
     -fx-font-size: 15px;
-    -fx-background-radius: 8;
-    -fx-font-weight: bold;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0.5, 0, 2);
-    -fx-pref-height: 40;
+    -fx-background-radius: 10;
+    -fx-font-weight: 700;
+    -fx-pref-height: 45;
     -fx-pref-width: 220;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 10, 0.5, 0, 2);
+    -fx-transition: all 0.2s ease-in-out;
+}
+
+.primary-button {
+    -fx-background-color: linear-gradient(to right, #3498DB, #2E86C1);
+    -fx-text-fill: white;
 }
 
 .primary-button:hover {
-    -fx-background-color: #0056b3;
+    -fx-background-color: linear-gradient(to right, #2E86C1, #2874A6);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 15, 0.5, 0, 4);
 }
 
 .secondary-button {
-    -fx-background-color: #6C757D;
+    -fx-background-color: #ABB2B9;
     -fx-text-fill: white;
-    -fx-font-size: 15px;
-    -fx-background-radius: 8;
-    -fx-font-weight: bold;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0.5, 0, 2);
-    -fx-pref-height: 40;
-    -fx-pref-width: 220;
 }
 
 .secondary-button:hover {
-    -fx-background-color: #5a6268;
+    -fx-background-color: #99A3A4;
 }
 
 .danger-button {
-    -fx-background-color: #DC3545;
+    -fx-background-color: linear-gradient(to right, #E74C3C, #CB4335);
     -fx-text-fill: white;
-    -fx-font-size: 15px;
-    -fx-background-radius: 8;
-    -fx-font-weight: bold;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0.5, 0, 2);
 }
 
 .danger-button:hover {
-    -fx-background-color: #c82333;
+    -fx-background-color: linear-gradient(to right, #CB4335, #B03A2E);
 }
 
-/* Main View Styles */
-.main-container {
-    -fx-background-color: #F4F6F8;
-}
-
+/* --- Main View --- */
 .sidebar {
     -fx-background-color: #FFFFFF;
-    -fx-background-radius: 15;
+    -fx-background-radius: 20;
     -fx-padding: 20;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 20, 0, 0, 5);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 25, 0, 0, 8);
 }
 
 .chat-panel {
     -fx-background-color: #FFFFFF;
-    -fx-background-radius: 15;
+    -fx-background-radius: 20;
     -fx-padding: 20;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 20, 0, 0, 5);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 25, 0, 0, 8);
 }
 
 .list-view {
     -fx-background-color: transparent;
-    -fx-border-color: #E0E0E0;
-    -fx-border-radius: 8;
-}
-
-.list-cell:filled:selected:focused, .list-cell:filled:selected {
-    -fx-background-color: #007BFF;
-    -fx-text-fill: white;
+    -fx-border-color: #EAEDED;
+    -fx-border-radius: 10;
 }
 
 .list-cell {
-    -fx-padding: 10px;
+    -fx-padding: 12px;
     -fx-font-size: 14px;
+    -fx-background-color: transparent;
+    -fx-text-fill: #566573;
+    -fx-font-weight: 600;
+}
+
+.list-cell:filled:hover {
+    -fx-background-color: #F2F4F4;
+    -fx-background-radius: 8;
+}
+
+.list-cell:filled:selected {
+    -fx-background-color: #3498DB;
+    -fx-text-fill: white;
+    -fx-background-radius: 8;
 }
 
 .chat-area {
     -fx-font-size: 14px;
-    -fx-background-radius: 8;
-    -fx-border-radius: 8;
-    -fx-border-color: #CED4DA;
-}
-
-.section-title {
-    -fx-font-size: 18px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #2E3D48;
-}
-
-.chat-header-label {
-    -fx-font-size: 16px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #2E3D48;
-}
-
-.status-label {
-    -fx-text-fill: #6C757D;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #EAEDED;
+    -fx-background-color: #FDFEFE;
 }
 
 .titled-pane > .title {
-    -fx-background-color: #F8F9FA;
-    -fx-background-radius: 8 8 0 0;
-    -fx-border-color: #E0E0E0;
-    -fx-border-radius: 8 8 0 0;
+    -fx-background-color: #F8F9F9;
+    -fx-background-radius: 10 10 0 0;
+    -fx-border-color: #EAEDED;
+    -fx-border-radius: 10 10 0 0;
+    -fx-font-weight: 600;
 }
+
+.status-label {
+    -fx-text-fill: #99A3A4;
+}
+
+
+/* --- Minimalist Overrides (2025-10-19) --- */
+/* Softer background for the app root */
+.root {
+    -fx-background-color: #F7F9FB;
+}
+
+/* Cleaner container: lighter shadow, same rounding */
+.container {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 16;
+    -fx-padding: 32;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.06), 18, 0, 0, 6);
+}
+
+/* Typography tweaks */
+.form-title, .chat-title, .section-title, .chat-header-label {
+    -fx-text-fill: #111827; /* near-black for contrast */
+}
+.welcome-text { -fx-text-fill: #6B7280; }
+
+/* Inputs: subtler borders and focus */
+.text-field {
+    -fx-background-color: #FAFBFC;
+    -fx-border-color: #E5E7EB;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+}
+.text-field:focused {
+    -fx-border-color: #3B82F6; /* primary blue */
+    -fx-effect: dropshadow(gaussian, rgba(59, 130, 246, 0.22), 10, 0, 0, 1);
+}
+
+/* Links */
+.form-link {
+    -fx-text-fill: #3B82F6;
+}
+.form-link:hover { -fx-underline: true; }
+
+/* Buttons: keep hierarchy, soften effects */
+.button {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 10, 0.4, 0, 2);
+}
+.button:focused {
+    -fx-effect: dropshadow(gaussian, rgba(59, 130, 246, 0.45), 14, 0.3, 0, 0);
+}
+.primary-button {
+    -fx-background-color: linear-gradient(to right, #3B82F6, #2563EB);
+}
+.primary-button:hover {
+    -fx-background-color: linear-gradient(to right, #2563EB, #1D4ED8);
+}
+.secondary-button {
+    -fx-background-color: #9CA3AF; /* neutral gray */
+}
+.secondary-button:hover { -fx-background-color: #6B7280; }
+.danger-button {
+    -fx-background-color: linear-gradient(to right, #EF4444, #DC2626);
+}
+.danger-button:hover {
+    -fx-background-color: linear-gradient(to right, #DC2626, #B91C1C);
+}
+
+/* Lists and areas: flatter look */
+.list-view {
+    -fx-border-color: #E5E7EB;
+    -fx-border-radius: 10;
+    -fx-background-color: transparent;
+}
+.list-cell { -fx-text-fill: #4B5563; }
+.list-cell:filled:hover { -fx-background-color: #F3F4F6; }
+.list-cell:filled:selected { -fx-background-color: #3B82F6; }
+
+.chat-area {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #E5E7EB;
+}
+
+.titled-pane > .title {
+    -fx-background-color: #F3F4F6;
+    -fx-border-color: #E5E7EB;
+}
+
+.status-label { -fx-text-fill: #9CA3AF; }
