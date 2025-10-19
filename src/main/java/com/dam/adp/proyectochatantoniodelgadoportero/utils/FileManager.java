@@ -41,7 +41,9 @@ public class FileManager {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivoDestino))) {
             if (estadisticas != null) {
                 for (String estadistica : estadisticas) {
-                    if (estadistica == null) continue;
+                    if (estadistica == null) {
+                        continue;
+                    }
                     bw.write(estadistica);
                     bw.newLine();
                 }
@@ -64,7 +66,9 @@ public class FileManager {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivoDestino))) {
             List<Mensaje> lista = (mensajes != null) ? mensajes : java.util.Collections.emptyList();
             for (Mensaje mensaje : lista) {
-                if (mensaje == null) continue;
+                if (mensaje == null) {
+                    continue;
+                }
 
                 String fechaHora = (mensaje.getFecha() != null) ? mensaje.getFecha().format(EXPORT_FORMATTER) : "----";
                 String contenido = mensaje.getMensaje() == null ? "" : mensaje.getMensaje().replace('\n', ' ');
@@ -99,7 +103,9 @@ public class FileManager {
 
             List<Mensaje> lista = (mensajes != null) ? mensajes : java.util.Collections.emptyList();
             for (Mensaje mensaje : lista) {
-                if (mensaje == null) continue;
+                if (mensaje == null) {
+                    continue;
+                }
 
                 String fechaHora = (mensaje.getFecha() != null) ? mensaje.getFecha().format(EXPORT_FORMATTER) : "----";
                 String remitente = mensaje.getRemitente() == null ? "" : mensaje.getRemitente();
@@ -145,8 +151,10 @@ public class FileManager {
          * @return true si el archivo cumple las condiciones; false en caso contrario.
          */
         public static boolean validarArchivo(File archivo, long tamañoMaximo, List<String> extensionesPermitidas) {
-        if (archivo == null || !archivo.exists()) return false;
-        if (archivo.length() > tamañoMaximo) return false;
+        if ((archivo == null || !archivo.exists())||archivo.length() > tamañoMaximo){
+            return false;
+        }
+
 
         String nombre = archivo.getName().toLowerCase();
 
@@ -228,10 +236,14 @@ public class FileManager {
          * @return true si la exportación se completa; false si falla.
          */
         public static boolean exportarArchivo(File origen, File destinoDir) {
-        if (origen == null || !origen.exists() || destinoDir == null) return false;
+        if (origen == null || !origen.exists() || destinoDir == null){
+            return false;
+        }
 
         //Crea el directorio de destino si no existe (el usuario lo selecciona).
-        if (!destinoDir.exists()) destinoDir.mkdirs();
+        if (!destinoDir.exists()){
+            destinoDir.mkdirs();
+        }
 
         File destino = new File(destinoDir, origen.getName());
 
