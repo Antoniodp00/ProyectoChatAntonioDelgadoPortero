@@ -11,7 +11,6 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 
 public class MensajeDAO {
@@ -53,8 +52,8 @@ public class MensajeDAO {
             Mensaje nuevo = new Mensaje(remitente, destinatario, contenido, LocalDateTime.now());
 
             if (archivo != null) {
-                long max = 10L * 1024 * 1024; // 10 MB
-                List<String> permitidas = Arrays.asList(".png", ".jpg", ".jpeg", ".gif", ".pdf", ".txt", ".docx", ".xlsx");
+                long max = FileManager.TAMAÑO_MAXIMO_BYTES;
+                List<String> permitidas = FileManager.EXTENSIONES_PERMITIDAS;
                 boolean validado = FileManager.validarArchivo(archivo, max, permitidas);
                 if (validado) {
                     String nombreDestino = FileManager.generarNombreUnico(archivo.getName());

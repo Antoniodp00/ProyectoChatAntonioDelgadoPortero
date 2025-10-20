@@ -9,6 +9,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import org.slf4j.Logger;
@@ -18,8 +20,12 @@ public class FileManager {
 
     private static final Logger log = LoggerFactory.getLogger(FileManager.class);
     private static final String RUTAMEDIA = "media" + File.separator;
-    //private static final String EXPORTACIONES = "exportaciones" + File.separator;
     private static final DateTimeFormatter EXPORT_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    public static final long TAMAÑO_MAXIMO_BYTES = 10L * 1024 * 1024; // 10 MB
+    public static final List<String> EXTENSIONES_PERMITIDAS = Collections.unmodifiableList(
+            Arrays.asList(".png", ".jpg", ".jpeg", ".gif", ".pdf", ".txt", ".docx", ".xlsx")
+    );
+    public static final String CONVERSATION_TEXT_FILENAME = "conversacion.txt";
 
     private FileManager() {}
 
@@ -294,7 +300,7 @@ public class FileManager {
              ZipOutputStream zos = new ZipOutputStream(fos)) {
 
             // 2. Añadir el archivo de texto de la conversación al ZIP
-            ZipEntry conversacionEntry = new ZipEntry("conversacion.txt");
+            ZipEntry conversacionEntry = new ZipEntry(CONVERSATION_TEXT_FILENAME);
             zos.putNextEntry(conversacionEntry);
             zos.write(conversacionTexto.getBytes()); // Convertimos el String a bytes y lo escribimos
             zos.closeEntry();

@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import org.slf4j.Logger;
@@ -246,17 +245,9 @@ public class MainController {
             // Obtener todos los mensajes
             Mensajes mensajes = MensajeDAO.listarMensajesEntre(usuarioLogueado.getNombreUsuario(), usuarioSeleccionado.getNombreUsuario());
             if (!mensajes.getMensajeList().isEmpty()) {
-                FileChooser fileChooser = new FileChooser();
-                fileChooser.setTitle("Exportar conversacion a TXT");
 
-                // Nombre del archivo
                 String nombreArchivo = usuarioLogueado.getNombreUsuario() + "-" + usuarioSeleccionado.getNombreUsuario() + "-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmm"));
-                fileChooser.setInitialFileName(nombreArchivo + ".txt");
-
-                // Filtrar extension
-                fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivo de Texto (*.txt)", "*.txt"));
-
-                File file = fileChooser.showSaveDialog(getStage());
+                File file = mostrarDialogoExportar("Exportar a TXT",nombreArchivo,new FileChooser.ExtensionFilter("Archivo de Texto (*.txt)", "*.txt"));
 
                 if (file != null) {
                     boolean exito = FileManager.exportarAArchivoTexto(mensajes.getMensajeList(), file);
@@ -295,14 +286,8 @@ public class MainController {
             return;
         }
 
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Exportar conversacion a CSV");
-
         String nombreArchivo = usuarioLogueado.getNombreUsuario() + "-" + usuarioSeleccionado.getNombreUsuario() + "-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmm"));
-        fileChooser.setInitialFileName(nombreArchivo + ".csv");
-
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivo de Texto (*.csv)", "*.csv"));
-        File file = fileChooser.showSaveDialog(getStage());
+        File file = mostrarDialogoExportar("Exportar a CSV", nombreArchivo,new FileChooser.ExtensionFilter("Archivo de Texto (*.csv)", "*.csv"));
 
         if (file != null) {
             boolean exito = FileManager.exportarAArchivoCsv(mensajes.getMensajeList(), file);
@@ -334,14 +319,10 @@ public class MainController {
         ArrayList<String> estadisticasGeneradas = generaEstadisticasTexto();
 
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Guardar Estadísticas (TXT)");
+        fileChooser.setTitle("Guardar estadísticas de la conversación");
 
         String nombreSugerido = "Stats_" + usuarioLogueado.getNombreUsuario() + usuarioSeleccionado.getNombreUsuario() + "_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmm"));
-        fileChooser.setInitialFileName(nombreSugerido + ".txt");
-
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivo de Texto (*.txt)", "*.txt"));
-
-        File file = fileChooser.showSaveDialog(getStage());
+        File file = mostrarDialogoExportar("Guardar Estadísticas (TXT)",nombreSugerido,new FileChooser.ExtensionFilter("Archivo de Texto (*.txt)", "*.txt"));
 
         if (file != null) {
             boolean exito = FileManager.exportarEstadisticas(estadisticasGeneradas, file);
@@ -415,8 +396,8 @@ public class MainController {
             return;
         }
 
-        long tamañoMaximo = 10L * 1024 * 1024; //Esta operación calcula el número total de bytes en 10 Megabytes: 10×1024×1024=10.485.760 bytes.
-        List<String> extensionesPermitidos = Arrays.asList(".png", ".jpg", ".jpeg", ".gif", ".pdf", ".txt", ".docx", ".xlsx");
+        long tamañoMaximo = FileManager.TAMAÑO_MAXIMO_BYTES;
+        List<String> extensionesPermitidos = FileManager.EXTENSIONES_PERMITIDAS;
         if (!FileManager.validarArchivo(archivoElegido, tamañoMaximo, extensionesPermitidos)) {
             lblEstado.setText("Error: Archivo Adjunto no valido");
             lblEstado.setStyle("-fx-text-fill: red;");
@@ -430,17 +411,55 @@ public class MainController {
     }
 
     /**
+     * Localiza el archivo físico correspondiente al nombre de adjunto seleccionado.
+     * Busca primero en los mensajes (carpeta media/ mediante adjuntoRuta) y, si no lo encuentra,
+     * comprueba si coincide con el archivo pendiente de envío (adjuntoSeleccionado).
+     * @param nombreAdjunto nombre del adjunto seleccionado en la lista
+     * @return File encontrado o null si no existe/localiza
+     */
+    private File localizarArchivoAdjunto(String nombreAdjunto) {
+        if (nombreAdjunto == null || usuarioSeleccionado == null || usuarioLogueado == null) {
+            return null;
+        }
+        Mensajes mensajes = MensajeDAO.listarMensajesEntre(
+                usuarioLogueado.getNombreUsuario(),
+                usuarioSeleccionado.getNombreUsuario()
+        );
+        for (Mensaje m : mensajes.getMensajeList()) {
+            if (m.getAdjuntoNombre() != null && m.getAdjuntoNombre().equals(nombreAdjunto) && m.getAdjuntoRuta() != null) {
+                File posible = new File(FileManager.getRutaMedia(m.getAdjuntoRuta()));
+                if (posible.exists()) {
+                    return posible;
+                }
+            }
+        }
+        if (adjuntoSeleccionado != null && nombreAdjunto.equals(adjuntoSeleccionado.getName())) {
+            return adjuntoSeleccionado;
+        }
+        return null;
+    }
+
+    /**
      * Intenta abrir el archivo adjunto actualmente seleccionado usando la aplicación predeterminada del sistema.
      * Muestra un mensaje de estado si no hay adjunto seleccionado o si ocurre un error al abrirlo.
      */
     private void abrirAdjunto() {
-        if (adjuntoSeleccionado != null) {
-            boolean exitoso = FileManager.abrirArchivo(adjuntoSeleccionado);
-            if (!exitoso) {
-                lblEstado.setText("No se pudo abrir el adjunto seleccionado.");
-            }
-        } else {
+        String seleccionado = (listaAdjuntos != null) ? listaAdjuntos.getSelectionModel().getSelectedItem() : null;
+        if (seleccionado == null) {
             lblEstado.setText("No hay adjunto seleccionado.");
+            lblEstado.setStyle("-fx-text-fill: red;");
+            return;
+        }
+        File archivoOrigen = localizarArchivoAdjunto(seleccionado);
+        if (archivoOrigen == null || !archivoOrigen.exists()) {
+            lblEstado.setText("No se pudo localizar el adjunto seleccionado.");
+            lblEstado.setStyle("-fx-text-fill: red;");
+            return;
+        }
+        boolean exitoso = FileManager.abrirArchivo(archivoOrigen);
+        if (!exitoso) {
+            lblEstado.setText("No se pudo abrir el adjunto seleccionado.");
+            lblEstado.setStyle("-fx-text-fill: red;");
         }
     }
 
@@ -459,22 +478,7 @@ public class MainController {
             return;
         }
 
-        // Intentar localizar el archivo adjunto dentro de la conversación (en media/)
-        File archivoOrigen = null;
-        Mensajes mensajes = MensajeDAO.listarMensajesEntre(usuarioLogueado.getNombreUsuario(), usuarioSeleccionado.getNombreUsuario());
-        for (Mensaje m : mensajes.getMensajeList()) {
-            if (m.getAdjuntoNombre() != null && m.getAdjuntoNombre().equals(seleccionado) && m.getAdjuntoRuta() != null) {
-                File posible = new File(FileManager.getRutaMedia(m.getAdjuntoRuta()));
-                if (posible.exists()) {
-                    archivoOrigen = posible;
-                    break;
-                }
-            }
-        }
-        // Si no está en media, tal vez es un adjunto aún no enviado: usar archivo local seleccionado
-        if (archivoOrigen == null && adjuntoSeleccionado != null && seleccionado.equals(adjuntoSeleccionado.getName())) {
-            archivoOrigen = adjuntoSeleccionado;
-        }
+        File archivoOrigen = localizarArchivoAdjunto(seleccionado);
 
         if (archivoOrigen == null || !archivoOrigen.exists()) {
             lblEstado.setText("Error: Archivo de origen no encontrado.");
@@ -564,5 +568,15 @@ public class MainController {
             sb.append("\n");
         }
         return sb.toString();
+    }
+
+    private File mostrarDialogoExportar(String titulo,String nombreArchivo,FileChooser.ExtensionFilter filtro) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(titulo);
+        fileChooser.setInitialFileName(nombreArchivo+".extension");
+        if (filtro != null) {
+            fileChooser.getExtensionFilters().add(filtro);
+        }
+        return fileChooser.showSaveDialog( getStage());
     }
 }
