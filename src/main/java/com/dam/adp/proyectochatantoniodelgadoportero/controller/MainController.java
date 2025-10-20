@@ -318,9 +318,6 @@ public class MainController {
 
         ArrayList<String> estadisticasGeneradas = generaEstadisticasTexto();
 
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Guardar estadísticas de la conversación");
-
         String nombreSugerido = "Stats_" + usuarioLogueado.getNombreUsuario() + usuarioSeleccionado.getNombreUsuario() + "_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmm"));
         File file = mostrarDialogoExportar("Guardar Estadísticas (TXT)",nombreSugerido,new FileChooser.ExtensionFilter("Archivo de Texto (*.txt)", "*.txt"));
 
@@ -507,11 +504,16 @@ public class MainController {
         }
     }
 
+    /**
+     * Exporta la conversación actual a un archivo ZIP.
+     * Incluye un fichero de texto con la conversación y adjunta los archivos existentes en la carpeta 'media/'.
+     * Valida que haya un usuario seleccionado y que existan mensajes antes de mostrar el diálogo de guardado.
+     */
     private void exportarZip() {
         if (usuarioSeleccionado == null){
             lblEstado.setText("Error: No hay usuario seleccionado.");
             lblEstado.setStyle("-fx-text-fill: red;");
-        return;
+            return;
         }
 
         Mensajes mensajes = MensajeDAO.listarMensajesEntre(usuarioLogueado.getNombreUsuario(), usuarioSeleccionado.getNombreUsuario());
@@ -520,12 +522,8 @@ public class MainController {
             return;
         }
 
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Exportar conversacion a ZIP");
         String nombreArchivo = usuarioLogueado.getNombreUsuario() +"-"+usuarioSeleccionado.getNombreUsuario()+ "-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmm"));
-        fileChooser.setInitialFileName(nombreArchivo+".zip");
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Archivo ZIP (*.zip)", "*.zip"));
-        File zipFile = fileChooser.showSaveDialog( getStage());
+        File zipFile = mostrarDialogoExportar("Exportar conversacion a ZIP", nombreArchivo, new FileChooser.ExtensionFilter("Archivo ZIP (*.zip)", "*.zip"));
 
         if (zipFile == null) {
             lblEstado.setText("Operacion cancelada");
@@ -533,13 +531,9 @@ public class MainController {
             return;
         }
 
-        File tempFile = null;
-
         try {
             String conversacionTexto = generarTextoConversacion(mensajes.getMensajeList());
-
-            FileManager.crearArchivoZip(zipFile,conversacionTexto,mensajes.getMensajeList());
-
+            FileManager.crearArchivoZip(zipFile, conversacionTexto, mensajes.getMensajeList());
             lblEstado.setText("Exportado a ZIP con éxito: " + zipFile.getName());
             lblEstado.setStyle("-fx-text-fill: green;");
         } catch (IOException e) {
@@ -570,6 +564,15 @@ public class MainController {
         return sb.toString();
     }
 
+    /**
+     * Crea y muestra un diálogo de guardado para exportar archivos.
+     * Configura el título, el nombre de archivo sugerido y aplica el filtro de extensión indicado.
+     *
+     * @param titulo título del cuadro de diálogo.
+     * @param nombreArchivo nombre de archivo sugerido (sin extensión o con ella).
+     * @param filtro filtro de extensión (por ejemplo, "Archivo de Texto (*.txt)"). Puede ser null.
+     * @return el archivo elegido por el usuario o null si se cancela.
+     */
     private File mostrarDialogoExportar(String titulo,String nombreArchivo,FileChooser.ExtensionFilter filtro) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(titulo);

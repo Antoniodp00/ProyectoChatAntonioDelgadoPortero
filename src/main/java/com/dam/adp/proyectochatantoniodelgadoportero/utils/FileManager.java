@@ -25,7 +25,8 @@ public class FileManager {
     public static final List<String> EXTENSIONES_PERMITIDAS = Collections.unmodifiableList(
             Arrays.asList(".png", ".jpg", ".jpeg", ".gif", ".pdf", ".txt", ".docx", ".xlsx")
     );
-    public static final String CONVERSATION_TEXT_FILENAME = "conversacion.txt";
+    public static final String NOMBRE_TEXTO_CONVERSACION = "conversacion.txt";
+        public static final String CSV_SEPARADOR = ";";
 
     private FileManager() {}
 
@@ -100,7 +101,7 @@ public class FileManager {
      * @return true si la exportación fue exitosa, false en caso contrario.
      */
     public static boolean exportarAArchivoCsv(List<Mensaje> mensajes, File archivoDestino) {
-        final String SEPARADOR = ";";
+        final String SEPARADOR = CSV_SEPARADOR;
 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivoDestino))) {
             // Escribir la cabecera del CSV
@@ -300,7 +301,7 @@ public class FileManager {
              ZipOutputStream zos = new ZipOutputStream(fos)) {
 
             // 2. Añadir el archivo de texto de la conversación al ZIP
-            ZipEntry conversacionEntry = new ZipEntry(CONVERSATION_TEXT_FILENAME);
+            ZipEntry conversacionEntry = new ZipEntry(NOMBRE_TEXTO_CONVERSACION);
             zos.putNextEntry(conversacionEntry);
             zos.write(conversacionTexto.getBytes()); // Convertimos el String a bytes y lo escribimos
             zos.closeEntry();
