@@ -10,10 +10,8 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="640.0" prefWidth="520.0" styleClass="root" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dam.adp.proyectochatantoniodelgadoportero.controller.RegistroController">
-    <stylesheets>
-        <String fx:value="@style.css" />
-    </stylesheets>
+<AnchorPane stylesheets="@style.css" prefHeight="640.0" prefWidth="520.0" styleClass="root" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dam.adp.proyectochatantoniodelgadoportero.controller.RegistroController">
+
     <children>
         <VBox alignment="CENTER" layoutX="50.0" layoutY="50.0" spacing="15.0" styleClass="container" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="50.0">
             <children>

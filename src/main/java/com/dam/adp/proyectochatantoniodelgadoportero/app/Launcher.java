@@ -12,6 +12,7 @@ public class Launcher {
     /**
      * Método principal que inicia la aplicación cargando la clase Aplicacion.
      * @param args argumentos de línea de comandos.
+     *
      */
     public static void main(String[] args) {
         log.info("Lanzando JavaFX Application");

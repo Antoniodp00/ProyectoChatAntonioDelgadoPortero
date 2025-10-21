@@ -16,6 +16,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
+import com.dam.adp.proyectochatantoniodelgadoportero.utils.ChatMessageCell;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -53,7 +54,7 @@ public class MainController {
     @FXML
     private Label lblUsuarioChat;
     @FXML
-    private TextArea txtChat;
+    private ListView<Mensaje> lvChat;
     @FXML
     private TextField txtMensaje;
     @FXML
@@ -71,6 +72,11 @@ public class MainController {
      */
     @FXML
     public void initialize() {
+
+        // Configurar celdas personalizadas para la lista de mensajes
+        if (lvChat != null) {
+            lvChat.setCellFactory(list -> new ChatMessageCell(() -> usuarioLogueado != null ? usuarioLogueado.getNombreUsuario() : null, lblEstado));
+        }
 
         usuarioLogueado = Sesion.getInstancia().getUsuario();
 
@@ -134,44 +140,40 @@ public class MainController {
      */
     private void mostrarMensajes() {
         if (usuarioSeleccionado != null) {
-            txtChat.clear();
-            Mensajes mensajes = MensajeDAO.listarMensajesEntre(usuarioLogueado.getNombreUsuario(), usuarioSeleccionado.getNombreUsuario());
+            Mensajes mensajes = MensajeDAO.listarMensajesEntre(
+                    usuarioLogueado.getNombreUsuario(),
+                    usuarioSeleccionado.getNombreUsuario()
+            );
 
             boolean soloAdjuntos = (chkSoloAdjuntos != null) && chkSoloAdjuntos.isSelected();
+
+            // Filtrar si es necesario y recopilar nombres de adjuntos
+            List<Mensaje> filtrados = new ArrayList<>();
             List<String> adjuntosConversacion = new ArrayList<>();
             for (Mensaje mensaje : mensajes.getMensajeList()) {
-                boolean tieneAdjunto =((mensaje.getAdjuntoRuta() != null) && !mensaje.getAdjuntoRuta().isEmpty()) || (mensaje.getAdjuntoTamano() > 0);
+                boolean tieneAdjunto = ((mensaje.getAdjuntoRuta() != null) && !mensaje.getAdjuntoRuta().isEmpty()) || (mensaje.getAdjuntoTamano() > 0);
                 if (soloAdjuntos && !tieneAdjunto) {
                     continue;
                 }
-
-                StringBuilder linea = new StringBuilder();
-                linea.append(mensaje.getRemitente()).append(": ").append(mensaje.getMensaje());
+                filtrados.add(mensaje);
                 if (tieneAdjunto) {
-                    File f = (mensaje.getAdjuntoRuta() != null) ? new File(FileManager.getRutaMedia(mensaje.getAdjuntoRuta())) : null;
-                    boolean existe = (f != null) && f.exists();
                     String nombreAdj = (mensaje.getAdjuntoNombre() != null && !mensaje.getAdjuntoNombre().isEmpty())
                             ? mensaje.getAdjuntoNombre()
                             : ((mensaje.getAdjuntoRuta() != null) ? mensaje.getAdjuntoRuta() : "adjunto");
-                    linea.append(" [Adjunto: ").append(nombreAdj);
-                    if (!existe) {
-                        linea.append(" - NO ENCONTRADO");
-                    }
-                    linea.append("]");
-
-
                     adjuntosConversacion.add(nombreAdj);
                 }
-                linea.append("\n");
-                txtChat.appendText(linea.toString());
             }
-            // Actualizar lista de adjuntos de la conversación
+
+            if (lvChat != null) {
+                lvChat.setItems(FXCollections.observableArrayList(filtrados));
+                if (!filtrados.isEmpty()) {
+                    lvChat.scrollTo(filtrados.size() - 1);
+                }
+            }
+
             if (listaAdjuntos != null) {
                 listaAdjuntos.getItems().setAll(adjuntosConversacion);
             }
-            // Scroll automatico
-            txtChat.selectPositionCaret(txtChat.getLength());
-            txtChat.deselect();
         }
     }
 
@@ -585,4 +587,5 @@ public class MainController {
         }
         return fileChooser.showSaveDialog( getStage());
     }
+    
 }

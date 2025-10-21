@@ -240,4 +240,35 @@
         <adjuntoTamano>759377</adjuntoTamano>
         <adjuntoTipo>png</adjuntoTipo>
     </mensaje>
+    <mensaje>
+        <remitente>antoniodp07</remitente>
+        <destinatario>Fran</destinatario>
+        <mensaje>gola</mensaje>
+        <fecha>2025-10-21T12:57:11</fecha>
+        <adjuntoTamano>0</adjuntoTamano>
+    </mensaje>
+    <mensaje>
+        <remitente>antoniodp07</remitente>
+        <destinatario>Fran</destinatario>
+        <mensaje>como estas</mensaje>
+        <fecha>2025-10-21T13:16:40</fecha>
+        <adjuntoTamano>0</adjuntoTamano>
+    </mensaje>
+    <mensaje>
+        <remitente>antoniodp07</remitente>
+        <destinatario>Fran</destinatario>
+        <mensaje>que te parece</mensaje>
+        <fecha>2025-10-21T19:17:36</fecha>
+        <adjuntoNombre>wallpaperflare.com_wallpaper.jpg</adjuntoNombre>
+        <adjuntoRuta>wallpaperflare.com_wallpaper_bee162f3-446d-4f76-bf81-a6b20b8790f2.jpg</adjuntoRuta>
+        <adjuntoTamano>1622602</adjuntoTamano>
+        <adjuntoTipo>jpg</adjuntoTipo>
+    </mensaje>
+    <mensaje>
+        <remitente>antoniodp07</remitente>
+        <destinatario>Fran</destinatario>
+        <mensaje>paco</mensaje>
+        <fecha>2025-10-21T19:18:23</fecha>
+        <adjuntoTamano>0</adjuntoTamano>
+    </mensaje>
 </mensajes>
