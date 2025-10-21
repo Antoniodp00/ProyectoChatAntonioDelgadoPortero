@@ -20,11 +20,11 @@ public class Mensaje {
     @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
     private LocalDateTime fecha;
 
-    // Metadatos opcionales de adjunto
+    // Datos del adjunto
     private String adjuntoNombre; // nombre del archivo
     private String adjuntoRuta;   // ruta relativa en media/
     private long adjuntoTamano;   // tamaño en bytes
-    private String adjuntoTipo;   // tipo MIME o extensión
+    private String adjuntoTipo;   // tipo extensión
 
     public Mensaje() {}
 

@@ -22,10 +22,8 @@ public class XMLManager {
     public static <T> boolean writeXML(T objeto, String fileName) {
         boolean result = false;
         try {
-            //Paso 1: Crear el contexto de JaxB para la clase que queremos serializar
             JAXBContext context = JAXBContext.newInstance(objeto.getClass());
 
-            //Paso 2: proceso Marshalling: convertir objeto en XML
             Marshaller marshaller = context.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
             marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
@@ -50,10 +48,10 @@ public class XMLManager {
     public static <T> T readXML(T objeto, String fileName) {
         File file = new File(fileName);
 
-        // 🔹 Crear directorios intermedios si no existen
+
         File parentDir = file.getParentFile();
         if (parentDir != null && !parentDir.exists()) {
-            parentDir.mkdirs(); // crea todas las carpetas necesarias
+            parentDir.mkdirs();
         }
 
         if (!file.exists()) {

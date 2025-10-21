@@ -9,7 +9,6 @@ public class Sesion {
     private static Sesion instancia;
     private Usuario usuarioLogueado;
 
-    // Constructor privado: evita que se creen instancias desde fuera
     private Sesion() {}
 
     /**

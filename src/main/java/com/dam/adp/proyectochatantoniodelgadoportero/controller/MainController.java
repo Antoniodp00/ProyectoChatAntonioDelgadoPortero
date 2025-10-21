@@ -103,6 +103,14 @@ public class MainController {
         btnExportarAdjunto.setOnAction(e -> exportarAdjunto());
         chkSoloAdjuntos.setOnAction(e -> mostrarMensajes());
         btnExportarZip.setOnAction(e -> exportarZip());
+
+        //Pulsar Enter para enviar mensaje
+        txtMensaje.setOnKeyPressed(event -> {
+            if (event.getCode() == javafx.scene.input.KeyCode.ENTER) {
+                enviarMensaje(null);
+                event.consume();
+            }
+        });
     }
 
     /**
@@ -151,7 +159,7 @@ public class MainController {
                     }
                     linea.append("]");
 
-                    // acumular adjuntos para la lista
+
                     adjuntosConversacion.add(nombreAdj);
                 }
                 linea.append("\n");
@@ -195,7 +203,6 @@ public class MainController {
                 }
                 mostrarMensajes();
                 cargarEstadisticas();
-                // Limpiar campos después de enviar
                 txtMensaje.clear();
                 adjuntoSeleccionado = null;
                 if (listaAdjuntos != null) {
@@ -218,15 +225,12 @@ public class MainController {
         } else {
             Mensajes mensajes = MensajeDAO.listarMensajesEntre(usuarioLogueado.getNombreUsuario(), usuarioSeleccionado.getNombreUsuario());
 
-            // Total de mensajes
             int totalMensajes = StreamUtils.contarMensajes(mensajes.getMensajeList());
             lblTotalMensajes.setText(String.valueOf(totalMensajes));
 
-            // Mensajes por usuario
             Map<String, Long> porUsuario = StreamUtils.contarMensajesPorUsuario(mensajes.getMensajeList());
             lblMensajesPorUsuario.setText(StreamUtils.formatearConteoUsuario(porUsuario));
 
-            // Palabras mas comunes
             Map<String, Long> topPalabras = StreamUtils.palabraMasComun(mensajes.getMensajeList(), 5);
             lblPalabrasComunes.setText(StreamUtils.formatearTopPalabras(topPalabras));
         }
@@ -394,15 +398,14 @@ public class MainController {
         }
 
         long tamañoMaximo = FileManager.TAMAÑO_MAXIMO_BYTES;
-        List<String> extensionesPermitidos = FileManager.EXTENSIONES_PERMITIDAS;
-        if (!FileManager.validarArchivo(archivoElegido, tamañoMaximo, extensionesPermitidos)) {
+        if (!FileManager.validarArchivo(archivoElegido, tamañoMaximo, FileManager.EXTENSIONES_PERMITIDAS)) {
             lblEstado.setText("Error: Archivo Adjunto no valido");
             lblEstado.setStyle("-fx-text-fill: red;");
             return;
         }
-        // Guardar selección en el estado del controlador
+
         adjuntoSeleccionado = archivoElegido;
-        // Mostrar en la lista de adjuntos (selección temporal antes de enviar)
+
         listaAdjuntos.getItems().setAll(archivoElegido.getName());
         lblEstado.setText("Archivo Adjunto: " + archivoElegido.getName());
     }

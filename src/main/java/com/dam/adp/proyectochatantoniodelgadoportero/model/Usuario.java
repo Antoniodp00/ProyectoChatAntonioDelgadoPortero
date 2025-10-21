@@ -13,7 +13,7 @@ public class Usuario {
     private String apellido;
     private String email;
 
-    //Constructor vacio(Requerido por JAXB)
+
     public Usuario() {}
 
     public Usuario(String nombreUsuario, String contraseña, String nombre, String apellido, String email) {

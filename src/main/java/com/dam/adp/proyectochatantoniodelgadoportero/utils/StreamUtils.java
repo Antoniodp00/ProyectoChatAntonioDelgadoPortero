@@ -36,7 +36,6 @@ public class StreamUtils {
      * es el número de mensajes enviados (Long).
      */
     public static Map<String, Long> contarMensajesPorUsuario(List<Mensaje> mensajes) {
-        // Manejo de la lista nula
         if (mensajes == null) return Collections.emptyMap();
 
         return mensajes.stream()
@@ -59,7 +58,6 @@ public class StreamUtils {
      * la frecuencia de aparición (Long).
      */
     public static Map<String, Long> palabraMasComun(List<Mensaje> mensajes, int topN) {
-        // Manejo de la lista nula o topN inválido
         if (mensajes == null || topN <= 0) return Collections.emptyMap();
 
         //Transformación a Stream de Palabras y Conteo ---

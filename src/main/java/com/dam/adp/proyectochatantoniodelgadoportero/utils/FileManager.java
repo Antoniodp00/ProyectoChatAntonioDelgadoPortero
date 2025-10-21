@@ -31,7 +31,7 @@ public class FileManager {
     private FileManager() {}
 
     /**
-     * Crea (si no existen) las carpetas internas de trabajo como 'media' y 'exportaciones'.
+     * Crea (si no existen) las carpetas internas de trabajo como 'media'.
      */
     public static void asegurarDirectorios() {
         new File(RUTAMEDIA).mkdirs();
@@ -165,8 +165,6 @@ public class FileManager {
 
         String nombre = archivo.getName().toLowerCase();
 
-        //Verifica la extensión: devuelve true si la lista de extensiones es nula/vacía (sin restricción)
-        //    O si el nombre del archivo termina con alguna de las extensiones permitidas.
         return extensionesPermitidas == null || extensionesPermitidas.isEmpty() ||
                 extensionesPermitidas.stream().anyMatch(nombre::endsWith);
     }
@@ -182,14 +180,10 @@ public class FileManager {
         int idx = nombreOriginal.lastIndexOf('.');
 
         if (idx >= 0) {
-            //Extrae la extensión (incluyendo el punto).
             ext = nombreOriginal.substring(idx);
-            //Extrae el nombre base.
             nombreOriginal = nombreOriginal.substring(0, idx);
         }
 
-        //Combina el nombre original, un identificador universal único (UUID) y la extensión.
-        //Esto previene que dos archivos con el mismo nombre se sobrescriban en la carpeta 'media'.
         return nombreOriginal + "_" + UUID.randomUUID() + ext;
     }
 
@@ -204,13 +198,10 @@ public class FileManager {
         if (archivo == null || !archivo.exists()) {
             return null;
         }
-
         try (InputStream is = new FileInputStream(archivo)) {
-            // URLConnection.guessContentTypeFromStream es el método clave aquí.
             // Lee los primeros bytes del flujo para identificar el tipo de archivo.
             return URLConnection.guessContentTypeFromStream(is);
         } catch (IOException e) {
-            // Manejo de error al detectar el tipo MIME
             log.warn("No se pudo detectar el tipo MIME de {}", archivo, e);
             return null;
         }
@@ -224,7 +215,6 @@ public class FileManager {
          */
         public static boolean abrirArchivo(File archivo) {
         try {
-            // Verifica si el archivo existe y si la funcionalidad de escritorio está disponible.
             if (archivo != null && archivo.exists() && Desktop.isDesktopSupported()) {
                 // Pide al sistema operativo abrir el archivo con su aplicación predeterminada.
                 Desktop.getDesktop().open(archivo);
@@ -247,15 +237,12 @@ public class FileManager {
             return false;
         }
 
-        //Crea el directorio de destino si no existe (el usuario lo selecciona).
         if (!destinoDir.exists()){
             destinoDir.mkdirs();
         }
 
         File destino = new File(destinoDir, origen.getName());
 
-        //Similar a guardarArchivo(), moviendo el archivo
-        //desde la carpeta interna 'media' a la carpeta elegida por el usuario.
         try (InputStream in = new BufferedInputStream(new FileInputStream(origen));
              OutputStream out = new BufferedOutputStream(new FileOutputStream(destino))) {
             in.transferTo(out);
@@ -272,16 +259,13 @@ public class FileManager {
      * @return String con la ruta completa relativa a la aplicación.
      */
     public static String getRutaMedia(String relative) {
-        // Es una buena práctica usar File.separator para que la ruta sea válida
-        // en cualquier sistema operativo ('\' en Windows, '/' en Mac/Linux).
+
         final String RUTAMEDIA = "media" + File.separator;
 
-        // Si la ruta relativa es nula o está en blanco, devuelve solo la ruta base.
         if (relative == null || relative.isBlank()) {
             return RUTAMEDIA;
         }
 
-        // Concatena la ruta base con el nombre de archivo/ruta relativa.
         return RUTAMEDIA + relative;
     }
 

@@ -42,19 +42,19 @@ public class UsuarioDAO {
      */
     public static boolean añadirUsuario(Usuario usuarioNuevo) {
         ListaUsuarios listaUsuarios = leerUsuarios();
-
+        boolean añadido = true;
         for (Usuario usuario : listaUsuarios.getLista()) {
             if (usuario.getEmail().equalsIgnoreCase(usuarioNuevo.getEmail()) ||
                     usuario.getNombreUsuario().equalsIgnoreCase(usuarioNuevo.getNombreUsuario())) {
                 log.warn("El usuario ya existe en el sistema: email={}, usuario={}", usuarioNuevo.getEmail(), usuarioNuevo.getNombreUsuario());
-                return false;
+                añadido = false;
             }
         }
 
         listaUsuarios.getLista().add(usuarioNuevo);
         guardarUsuarios(listaUsuarios);
         log.info("Usuario registrado correctamente: {}", usuarioNuevo.getNombreUsuario());
-        return true;
+        return añadido;
     }
 
     /**
@@ -62,12 +62,13 @@ public class UsuarioDAO {
      */
     public static Usuario cargarUsuario(String nombreUsuario) {
         ListaUsuarios listaUsuarios = leerUsuarios();
+        Usuario usuarioAux = null;
         for (Usuario u : listaUsuarios.getLista()) {
             if (u.getNombreUsuario().equalsIgnoreCase(nombreUsuario)) {
-                return u;
+                usuarioAux = u;
             }
         }
-        return null; // no encontrado
+        return usuarioAux;
     }
 
     /**
