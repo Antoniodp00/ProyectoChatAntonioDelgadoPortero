@@ -240,4 +240,18 @@
         <adjuntoTamano>759377</adjuntoTamano>
         <adjuntoTipo>png</adjuntoTipo>
     </mensaje>
+    <mensaje>
+        <remitente>antoniodp07</remitente>
+        <destinatario>Fran</destinatario>
+        <mensaje>gola</mensaje>
+        <fecha>2025-10-21T12:57:11</fecha>
+        <adjuntoTamano>0</adjuntoTamano>
+    </mensaje>
+    <mensaje>
+        <remitente>antoniodp07</remitente>
+        <destinatario>Fran</destinatario>
+        <mensaje>como estas</mensaje>
+        <fecha>2025-10-21T13:16:40</fecha>
+        <adjuntoTamano>0</adjuntoTamano>
+    </mensaje>
 </mensajes>
