@@ -4,6 +4,7 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import org.controlsfx.glyphfont.Glyph?>
 
 <AnchorPane prefHeight="640.0" prefWidth="960.0" styleClass="main-container" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dam.adp.proyectochatantoniodelgadoportero.controller.MainController">
     <stylesheets>
@@ -16,7 +17,11 @@
                     <children>
                         <Label styleClass="section-title" text="Usuarios" />
                         <ListView fx:id="listaUsuarios" styleClass="list-view" VBox.vgrow="ALWAYS" />
-                        <Button fx:id="btnCerrarSesion" maxWidth="1.7976931348623157E308" onAction="#cerrarSesion" styleClass="danger-button" text="Cerrar sesión" />
+                        <Button fx:id="btnCerrarSesion" maxWidth="1.7976931348623157E308" onAction="#cerrarSesion" styleClass="danger-button" text="Cerrar sesión">
+                            <graphic>
+                                <Glyph fontFamily="FontAwesome" icon="SIGN_OUT" fontSize="16" />
+                            </graphic>
+                        </Button>
                     </children>
                 </VBox>
                 <VBox fx:id="panelChat" alignment="TOP_CENTER" prefWidth="580.0" spacing="12.0" styleClass="chat-panel" HBox.hgrow="ALWAYS">
@@ -26,6 +31,9 @@
                                 <Label fx:id="lblUsuarioChat" styleClass="chat-header-label" text="Selecciona un usuario para chatear" />
                                 <Pane HBox.hgrow="ALWAYS" />
                                 <Button fx:id="btnGenerarResumen" onAction="#generarResumen" styleClass="secondary-button" text="Generar resumen">
+                                    <graphic>
+                                        <Glyph fontFamily="FontAwesome" icon="LINE_CHART" fontSize="16" />
+                                    </graphic>
                                     <tooltip>
                                         <Tooltip text="Generar estadísticas de la conversación (Streams)" />
                                     </tooltip>
@@ -58,26 +66,41 @@
                                 </GridPane>
                             </content>
                         </TitledPane>
-                        <TextArea fx:id="txtChat" editable="false" styleClass="chat-area" VBox.vgrow="ALWAYS" />
+                        <ListView fx:id="lvChat" styleClass="message-list" VBox.vgrow="ALWAYS" />
                         <VBox alignment="CENTER_LEFT" spacing="8.0">
                             <children>
                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
                                     <children>
                                         <TextField fx:id="txtMensaje" promptText="Escribe un mensaje..." styleClass="text-field" HBox.hgrow="ALWAYS" />
                                         <Button fx:id="btnAdjuntar" styleClass="secondary-button" text="Adjuntar">
+                                            <graphic>
+                                                <Glyph fontFamily="FontAwesome" icon="PAPERCLIP" fontSize="16" />
+                                            </graphic>
                                             <tooltip>
                                                 <Tooltip text="Añadir imagen/PDF u otros" />
                                             </tooltip>
                                         </Button>
-                                        <Button fx:id="btnEnviar" onAction="#enviarMensaje" styleClass="primary-button" text="Enviar" />
+                                        <Button fx:id="btnEnviar" onAction="#enviarMensaje" styleClass="primary-button" text="Enviar">
+                                            <graphic>
+                                                <Glyph fontFamily="FontAwesome" icon="SEND" fontSize="16" />
+                                            </graphic>
+                                        </Button>
                                     </children>
                                 </HBox>
                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
                                     <children>
                                         <Label text="Adjuntos:" />
                                         <ListView fx:id="listaAdjuntos" prefHeight="70.0" prefWidth="350.0" styleClass="list-view" />
-                                        <Button fx:id="btnAbrirAdjunto" styleClass="secondary-button" text="Abrir" />
-                                        <Button fx:id="btnExportarAdjunto" styleClass="secondary-button" text="Exportar" />
+                                        <Button fx:id="btnAbrirAdjunto" styleClass="secondary-button" text="Abrir">
+                                            <graphic>
+                                                <Glyph fontFamily="FontAwesome" icon="FOLDER_OPEN" fontSize="16" />
+                                            </graphic>
+                                        </Button>
+                                        <Button fx:id="btnExportarAdjunto" styleClass="secondary-button" text="Exportar">
+                                            <graphic>
+                                                <Glyph fontFamily="FontAwesome" icon="DOWNLOAD" fontSize="16" />
+                                            </graphic>
+                                        </Button>
                                     </children>
                                 </HBox>
                             </children>
@@ -88,16 +111,25 @@
                                 <CheckBox fx:id="chkSoloAdjuntos" text="Filtrar mensajes con adjuntos" />
                                 <Pane HBox.hgrow="ALWAYS" />
                                 <Button fx:id="btnExportarTxt" onAction="#exportarTxt" styleClass="secondary-button" text="Exportar TXT">
+                                    <graphic>
+                                        <Glyph fontFamily="FontAwesome" icon="FILE_TEXT_ALT" fontSize="16" />
+                                    </graphic>
                                     <tooltip>
                                         <Tooltip text="Exportar conversación a texto plano" />
                                     </tooltip>
                                 </Button>
                                 <Button fx:id="btnExportarCsv" onAction="#exportarCsv" styleClass="secondary-button" text="Exportar CSV">
+                                    <graphic>
+                                        <Glyph fontFamily="FontAwesome" icon="FILE_CODE" fontSize="16" />
+                                    </graphic>
                                     <tooltip>
                                         <Tooltip text="Exportar conversación a CSV" />
                                     </tooltip>
                                 </Button>
                                 <Button fx:id="btnExportarZip" styleClass="secondary-button" text="ZIP (conv+adj)">
+                                    <graphic>
+                                        <Glyph fontFamily="FontAwesome" icon="FILE_ARCHIVE_ALT" fontSize="16" />
+                                    </graphic>
                                     <tooltip>
                                         <Tooltip text="Empaquetar conversación y adjuntos en ZIP" />
                                     </tooltip>

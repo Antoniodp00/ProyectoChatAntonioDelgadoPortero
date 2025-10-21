@@ -258,3 +258,36 @@
 }
 
 .status-label { -fx-text-fill: #9CA3AF; }
+
+/* --- Chat list & message bubbles (added) --- */
+.message-list {
+    -fx-background-color: #F8F9F9;
+    -fx-padding: 8 4 8 4;
+}
+
+.message-list .list-cell {
+    -fx-background-color: transparent;
+    -fx-padding: 6 10 6 10;
+}
+
+.message-bubble {
+    -fx-background-color: #ECF0F1;
+    -fx-background-radius: 14;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 4, 0, 0, 1);
+    -fx-max-width: 70%;
+}
+
+.own-message {
+    -fx-background-color: linear-gradient(to bottom, #D6EAF8, #AED6F1);
+    -fx-alignment: CENTER_RIGHT;
+}
+
+.other-message {
+    -fx-background-color: #F2F3F4;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.timestamp {
+    -fx-text-fill: #7B8A8B;
+    -fx-font-size: 10px;
+}
