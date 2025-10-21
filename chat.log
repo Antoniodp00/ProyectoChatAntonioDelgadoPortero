@@ -330,3 +330,10 @@ Caused by: java.lang.IllegalArgumentException: Unable to coerce {/* ... Contenid
 2025-10-21 13:19:02 [JavaFX Application Thread] INFO  c.d.a.p.c.InicioSesionController - Login correcto para usuario antoniodp07
 2025-10-21 13:19:02 [JavaFX Application Thread] INFO  c.d.a.p.model.Sesion - Sesión iniciada para usuario: antoniodp07
 2025-10-21 13:19:30 [JavaFX Application Thread] INFO  c.d.a.p.model.Sesion - Sesión cerrada para usuario: antoniodp07
+2025-10-21 19:16:32 [main] INFO  c.d.a.p.app.Launcher - Lanzando JavaFX Application
+2025-10-21 19:16:32 [JavaFX Application Thread] INFO  c.d.a.p.app.Aplicacion - Iniciando aplicación y cargando Landing Page
+2025-10-21 19:16:33 [JavaFX Application Thread] INFO  c.d.a.p.app.Aplicacion - Aplicación iniciada correctamente
+2025-10-21 19:16:40 [JavaFX Application Thread] INFO  c.d.a.p.c.LandingPageController - Navegando a Inicio de Sesión desde Landing Page
+2025-10-21 19:16:51 [JavaFX Application Thread] INFO  c.d.a.p.c.InicioSesionController - Login correcto para usuario antoniodp07
+2025-10-21 19:16:51 [JavaFX Application Thread] INFO  c.d.a.p.model.Sesion - Sesión iniciada para usuario: antoniodp07
+2025-10-21 19:18:23 [JavaFX Application Thread] INFO  c.d.a.p.DAO.MensajeDAO - Mensaje enviado correctamente de antoniodp07 a Fran
