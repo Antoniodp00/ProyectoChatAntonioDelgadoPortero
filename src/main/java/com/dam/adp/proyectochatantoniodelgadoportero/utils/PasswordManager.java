@@ -8,6 +8,11 @@ public class PasswordManager {
     private static final Logger log = LoggerFactory.getLogger(PasswordManager.class);
 
     /**
+     * Constructor privado para evitar la instanciación de la clase de utilidad.
+     */
+    private PasswordManager() {}
+
+    /**
      * Este método toma una contraseña en texto plano y devuelve su hash.
      * El salt se genera automáticamente.
      *

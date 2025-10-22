@@ -28,6 +28,9 @@ public class FileManager {
     public static final String NOMBRE_TEXTO_CONVERSACION = "conversacion.txt";
         public static final String CSV_SEPARADOR = ";";
 
+    /**
+     * Constructor privado para evitar la instanciación de la clase de utilidad.
+     */
     private FileManager() {}
 
     /**

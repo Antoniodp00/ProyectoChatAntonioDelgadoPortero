@@ -28,6 +28,11 @@ public class ChatMessageCell extends ListCell<Mensaje> {
     private final Supplier<String> loggedUsernameSupplier;
     private final Label statusLabel;
 
+    /**
+     * Constructor para ChatMessageCell.
+     * @param loggedUsernameSupplier Un proveedor para obtener el nombre de usuario logueado.
+     * @param statusLabel Una etiqueta para mostrar mensajes de estado.
+     */
     public ChatMessageCell(Supplier<String> loggedUsernameSupplier, Label statusLabel) {
         super();
         this.loggedUsernameSupplier = loggedUsernameSupplier;
@@ -70,6 +75,11 @@ public class ChatMessageCell extends ListCell<Mensaje> {
         imgThumb.setVisible(false);
     }
 
+    /**
+     * Actualiza el elemento de la celda con un nuevo mensaje.
+     * @param item El mensaje a mostrar en la celda.
+     * @param empty Si la celda está vacía.
+     */
     @Override
     protected void updateItem(Mensaje item, boolean empty) {
         super.updateItem(item, empty);

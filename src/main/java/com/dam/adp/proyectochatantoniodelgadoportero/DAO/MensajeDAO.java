@@ -74,6 +74,11 @@ public class MensajeDAO {
         }
     }
 
+    /**
+     * Obtiene la extensión de un archivo a partir de su nombre.
+     * @param nombre El nombre del archivo.
+     * @return La extensión del archivo, o una cadena vacía si no tiene extensión.
+     */
     private static String obtenerExtension(String nombre) {
         int i = nombre.lastIndexOf('.');
         return i >= 0 ? nombre.substring(i + 1) : "";

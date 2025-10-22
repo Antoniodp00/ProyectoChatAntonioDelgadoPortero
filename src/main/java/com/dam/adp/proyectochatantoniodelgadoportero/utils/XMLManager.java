@@ -11,6 +11,12 @@ import org.slf4j.LoggerFactory;
 
 public class XMLManager {
     private static final Logger log = LoggerFactory.getLogger(XMLManager.class);
+
+    /**
+     * Constructor privado para evitar la instanciación de la clase de utilidad.
+     */
+    private XMLManager() {}
+
     /**
      * Escribe un objeto en un archivo XML.
      *

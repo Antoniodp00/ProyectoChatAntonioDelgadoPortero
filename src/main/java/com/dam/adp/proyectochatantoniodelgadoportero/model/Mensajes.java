@@ -43,6 +43,10 @@ public class Mensajes {
         log.debug("Mensaje añadido. Total ahora: {}", mensajeList.size());
     }
 
+    /**
+     * Devuelve una representación en cadena de la lista de mensajes.
+     * @return Una cadena que representa la lista de mensajes.
+     */
     @Override
     public String toString() {
         if (mensajeList.isEmpty()) {

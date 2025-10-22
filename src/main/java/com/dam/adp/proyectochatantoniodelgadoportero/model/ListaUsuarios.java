@@ -12,11 +12,11 @@ public class ListaUsuarios {
     private static final Logger log = LoggerFactory.getLogger(ListaUsuarios.class);
     private ArrayList<Usuario> listaUsuarios = new ArrayList<>();
 
-    @XmlElement(name = "usuario")
     /**
      * Obtiene la lista de usuarios.
      * @return lista interna de usuarios.
      */
+    @XmlElement(name = "usuario")
     public List<Usuario> getLista(){
         return listaUsuarios;
     }

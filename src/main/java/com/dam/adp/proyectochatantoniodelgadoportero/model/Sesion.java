@@ -9,6 +9,9 @@ public class Sesion {
     private static Sesion instancia;
     private Usuario usuarioLogueado;
 
+    /**
+     * Constructor privado para implementar el patrón Singleton.
+     */
     private Sesion() {}
 
     /**

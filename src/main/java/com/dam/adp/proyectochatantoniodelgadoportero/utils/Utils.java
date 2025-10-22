@@ -15,6 +15,12 @@ import java.io.IOException;
 
 public class Utils {
     private static final Logger log = LoggerFactory.getLogger(Utils.class);
+
+    /**
+     * Constructor privado para evitar la instanciación de la clase de utilidad.
+     */
+    private Utils() {}
+
     /**
      * Valida el formato de un correo electrónico sencillo mediante expresión regular.
      * @param email cadena a validar.
