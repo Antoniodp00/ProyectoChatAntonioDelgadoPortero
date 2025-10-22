@@ -271,4 +271,18 @@
         <fecha>2025-10-21T19:18:23</fecha>
         <adjuntoTamano>0</adjuntoTamano>
     </mensaje>
+    <mensaje>
+        <remitente>antoniodp07</remitente>
+        <destinatario>laurag</destinatario>
+        <mensaje>Como estas?</mensaje>
+        <fecha>2025-10-22T10:32:52</fecha>
+        <adjuntoTamano>0</adjuntoTamano>
+    </mensaje>
+    <mensaje>
+        <remitente>antoniodp07</remitente>
+        <destinatario>carlosm</destinatario>
+        <mensaje>Vaya cara me llevas</mensaje>
+        <fecha>2025-10-22T10:33:00</fecha>
+        <adjuntoTamano>0</adjuntoTamano>
+    </mensaje>
 </mensajes>
