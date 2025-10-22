@@ -11,10 +11,7 @@ import org.slf4j.LoggerFactory;
 
 public class Prueba {
     private static final Logger log = LoggerFactory.getLogger(Prueba.class);
-    /**
-     * Método principal para realizar pruebas.
-     * @param args Argumentos de la línea de comandos.
-     */
+
     public static void main(String[] args) {
         log.info("Ejecutando Prueba.main()");
         Usuario u1 = new Usuario("antoniodp","1234","antonio","delgado","antonio@gmail.com");

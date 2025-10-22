@@ -82,7 +82,6 @@ public class MainController {
 
         ObservableList<Usuario> usuariosObservableList = FXCollections.observableArrayList(UsuarioDAO.leerUsuarios().getLista());
 
-        // Eliminar el usuario logueado de la lista sin usar lambda
         for (int i = 0; i < usuariosObservableList.size(); i++) {
             Usuario u = usuariosObservableList.get(i);
             if (u != null && u.getNombre().equals(usuarioLogueado.getNombre())) {
