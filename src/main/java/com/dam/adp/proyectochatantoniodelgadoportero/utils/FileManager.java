@@ -165,11 +165,10 @@ public class FileManager {
             return false;
         }
 
-
         String nombre = archivo.getName().toLowerCase();
 
         return extensionesPermitidas == null || extensionesPermitidas.isEmpty() ||
-                extensionesPermitidas.stream().anyMatch(nombre::endsWith);
+                extensionesPermitidas.stream().anyMatch(nombre::endsWith); //verifica que esta en extensiones permitidas con el final del nombre del arhico(su extension)
     }
 
     /**
@@ -217,16 +216,17 @@ public class FileManager {
          * @return true si se lanzó correctamente; false si falla.
          */
         public static boolean abrirArchivo(File archivo) {
+            boolean abierto = false;
         try {
             if (archivo != null && archivo.exists() && Desktop.isDesktopSupported()) {
                 // Pide al sistema operativo abrir el archivo con su aplicación predeterminada.
                 Desktop.getDesktop().open(archivo);
-                return true;
+                abierto = true;
             }
         } catch (IOException e) {
             log.error("No se pudo abrir el archivo con la aplicación predeterminada: {}", archivo, e);
         }
-        return false;
+        return abierto;
     }
 
     /**
@@ -236,6 +236,7 @@ public class FileManager {
          * @return true si la exportación se completa; false si falla.
          */
         public static boolean exportarArchivo(File origen, File destinoDir) {
+            boolean exportado = false;
         if (origen == null || !origen.exists() || destinoDir == null){
             return false;
         }
