@@ -22,7 +22,12 @@ public class UsuarioDAO {
     public static ListaUsuarios leerUsuarios() {
         ListaUsuarios listaUsuarios = new ListaUsuarios();
         ListaUsuarios leidos = XMLManager.readXML(listaUsuarios, RUTA_XML.toString());
-        return leidos != null ? leidos : listaUsuarios;
+
+        if (leidos != null) {
+            listaUsuarios = leidos;
+        }
+
+        return listaUsuarios;
     }
 
     /**
@@ -78,11 +83,13 @@ public class UsuarioDAO {
      * @return Usuario si las credenciales son correctas, null si no
      */
     public static Usuario validarCredenciales(String nombreUsuario, String password) {
+        Usuario usuarioValidado = null;
         Usuario usuario = cargarUsuario(nombreUsuario);
+
         if (usuario != null && PasswordManager.checkPassword(password, usuario.getContraseña())) {
-            return usuario;
+            usuarioValidado = usuario;
         }
-        return null;
+        return usuarioValidado;
     }
 
 }

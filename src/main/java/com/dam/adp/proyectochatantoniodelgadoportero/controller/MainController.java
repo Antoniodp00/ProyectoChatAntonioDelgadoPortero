@@ -419,25 +419,30 @@ public class MainController {
      * @return File encontrado o null si no existe/localiza
      */
     private File localizarArchivoAdjunto(String nombreAdjunto) {
-        if (nombreAdjunto == null || usuarioSeleccionado == null || usuarioLogueado == null) {
-            return null;
-        }
-        Mensajes mensajes = MensajeDAO.listarMensajesEntre(
-                usuarioLogueado.getNombreUsuario(),
-                usuarioSeleccionado.getNombreUsuario()
-        );
-        for (Mensaje m : mensajes.getMensajeList()) {
-            if (m.getAdjuntoNombre() != null && m.getAdjuntoNombre().equals(nombreAdjunto) && m.getAdjuntoRuta() != null) {
-                File posible = new File(FileManager.getRutaMedia(m.getAdjuntoRuta()));
-                if (posible.exists()) {
-                    return posible;
+        File archivoEncontrado = null;
+
+        if (nombreAdjunto != null && usuarioSeleccionado != null && usuarioLogueado != null) {
+            Mensajes mensajes = MensajeDAO.listarMensajesEntre(
+                    usuarioLogueado.getNombreUsuario(),
+                    usuarioSeleccionado.getNombreUsuario()
+            );
+
+            for (Mensaje m : mensajes.getMensajeList()) {
+                if (m.getAdjuntoNombre() != null && m.getAdjuntoNombre().equals(nombreAdjunto) && m.getAdjuntoRuta() != null) {
+                    File posible = new File(FileManager.getRutaMedia(m.getAdjuntoRuta()));
+                    if (posible.exists()) {
+                        archivoEncontrado = posible;
+                        break;
+                    }
                 }
             }
+
+            if (archivoEncontrado == null && adjuntoSeleccionado != null && nombreAdjunto.equals(adjuntoSeleccionado.getName())) {
+                archivoEncontrado = adjuntoSeleccionado;
+            }
         }
-        if (adjuntoSeleccionado != null && nombreAdjunto.equals(adjuntoSeleccionado.getName())) {
-            return adjuntoSeleccionado;
-        }
-        return null;
+
+        return archivoEncontrado;
     }
 
     /**

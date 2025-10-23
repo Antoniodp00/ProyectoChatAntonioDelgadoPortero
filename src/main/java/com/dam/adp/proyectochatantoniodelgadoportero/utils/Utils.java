@@ -26,12 +26,12 @@ public class Utils {
      * @param email cadena a validar.
      * @return true si el email cumple el patrón, false en caso contrario.
      */
-    public static boolean validarEmail(String email){
-        if (!email.matches("^[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,6}$")) {
+    public static boolean validarEmail(String email) {
+        boolean esValido = (email != null) && email.matches("^[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,6}$");
+        if (!esValido) {
             log.warn("El formato del correo no es válido: {}", email);
-            return false;
         }
-        return true;
+        return esValido;
     }
 
     /**

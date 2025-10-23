@@ -80,8 +80,16 @@ public class MensajeDAO {
      * @return La extensión del archivo, o una cadena vacía si no tiene extensión.
      */
     private static String obtenerExtension(String nombre) {
-        int i = nombre.lastIndexOf('.');
-        return i >= 0 ? nombre.substring(i + 1) : "";
+        String extension = "";
+
+        if (nombre != null) {
+            int i = nombre.lastIndexOf('.');
+            if (i >= 0) {
+                extension = nombre.substring(i + 1);
+            }
+        }
+
+        return extension;
     }
 
 
@@ -91,9 +99,13 @@ public class MensajeDAO {
      * @return objeto Mensajes, vacío si el XML no existe o está vacío
      */
     private static Mensajes cargarMensajes() {
-        Mensajes mensajesVacios = new Mensajes();
-        Mensajes leidos = XMLManager.readXML(mensajesVacios, RUTA_XML.toString());
-        return leidos != null ? leidos : mensajesVacios;
+        Mensajes mensajes = new Mensajes();
+        Mensajes leidos = XMLManager.readXML(mensajes, RUTA_XML.toString());
+
+        if (leidos != null) {
+            mensajes = leidos;
+        }
+        return mensajes;
     }
 
     /**
@@ -122,26 +134,24 @@ public class MensajeDAO {
         Mensajes mensajesFiltrados = new Mensajes();
         Mensajes mensajes = cargarMensajes();
 
-        if (mensajes.getMensajeList().isEmpty()) {
-            return mensajesFiltrados;
-        }
+        if (mensajes != null && !mensajes.getMensajeList().isEmpty()) {
+            String u1 = (usuario1 == null) ? "" : usuario1.trim().toLowerCase();
+            String u2 = (usuario2 == null) ? "" : usuario2.trim().toLowerCase();
 
-            String u1 = usuario1 == null ? "" : usuario1.trim().toLowerCase();
-            String u2 = usuario2 == null ? "" : usuario2.trim().toLowerCase();
+            for (Mensaje mensaje : mensajes.getMensajeList()) {
+                if (mensaje != null) {
+                    String r = (mensaje.getRemitente() == null) ? "" : mensaje.getRemitente().trim().toLowerCase();
+                    String d = (mensaje.getDestinatario() == null) ? "" : mensaje.getDestinatario().trim().toLowerCase();
 
-        for (Mensaje mensaje : mensajes.getMensajeList()) {
-            if (mensaje == null) {
-                continue;
-            }
-            String r = mensaje.getRemitente() == null ? "" : mensaje.getRemitente().trim().toLowerCase();
-            String d = mensaje.getDestinatario() == null ? "" : mensaje.getDestinatario().trim().toLowerCase();
+                    boolean esEntreUsuarios = (r.equals(u1) && d.equals(u2)) || (r.equals(u2) && d.equals(u1));
 
-            boolean esEntreUsuarios = (r.equals(u1) && d.equals(u2)) || (r.equals(u2) && d.equals(u1));
-
-            if (esEntreUsuarios) {
-                mensajesFiltrados.addMensaje(mensaje);
+                    if (esEntreUsuarios) {
+                        mensajesFiltrados.addMensaje(mensaje);
+                    }
+                }
             }
         }
+
         return mensajesFiltrados;
     }
 }

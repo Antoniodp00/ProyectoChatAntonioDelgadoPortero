@@ -48,6 +48,7 @@ public class FileManager {
      * @return true si la exportación fue exitosa, false en caso contrario.
      */
     public static boolean exportarEstadisticas(ArrayList<String> estadisticas, File archivoDestino) {
+        boolean exportado = false;
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivoDestino))) {
             if (estadisticas != null) {
                 for (String estadistica : estadisticas) {
@@ -58,11 +59,12 @@ public class FileManager {
                     bw.newLine();
                 }
             }
-            return true;
+            exportado = true;
         } catch (IOException e) {
             log.error("Error al exportar estadísticas a archivo {}", archivoDestino, e);
-            return false;
+
         }
+        return exportado;
     }
 
     /**
@@ -73,6 +75,7 @@ public class FileManager {
      * @return true si la exportación fue exitosa, false en caso contrario.
      */
     public static boolean exportarAArchivoTexto(List<Mensaje> mensajes, File archivoDestino) {
+        boolean exportado = false;
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivoDestino))) {
             List<Mensaje> lista = (mensajes != null) ? mensajes : java.util.Collections.emptyList();
             for (Mensaje mensaje : lista) {
@@ -89,11 +92,12 @@ public class FileManager {
                 bw.write(linea);
                 bw.newLine();
             }
-            return true;
+            exportado = true;
         } catch (IOException e) {
             log.error("Error al exportar conversación a TXT {}", archivoDestino, e);
-            return false;
+
         }
+        return exportado;
     }
 
     /**
@@ -105,7 +109,7 @@ public class FileManager {
      */
     public static boolean exportarAArchivoCsv(List<Mensaje> mensajes, File archivoDestino) {
         final String SEPARADOR = CSV_SEPARADOR;
-
+        boolean exportado = false;
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivoDestino))) {
             // Escribir la cabecera del CSV
             bw.write("FechaHora" + SEPARADOR + "Remitente" + SEPARADOR + "Contenido");
@@ -127,11 +131,11 @@ public class FileManager {
                 bw.write(linea);
                 bw.newLine();
             }
-            return true;
+            exportado = true;
         } catch (IOException e) {
             log.error("Error al exportar conversación a CSV {}", archivoDestino, e);
-            return false;
         }
+        return exportado;
     }
 
     /**
@@ -142,15 +146,17 @@ public class FileManager {
          */
         public static boolean guardarArchivo(File origen, String nombreArchivo) {
         asegurarDirectorios();
+        boolean guardado = false;
         File destino = new File(RUTAMEDIA + nombreArchivo);
         try (InputStream entrada = new BufferedInputStream(new FileInputStream(origen));
              OutputStream salida = new BufferedOutputStream(new FileOutputStream(destino))) {
             entrada.transferTo(salida);
-            return true;
+            guardado = true;
         } catch (IOException e) {
             log.error("Error al guardar archivo en 'media': origen={}, destino={} ", origen, destino.getPath(), e);
-            return false;
-        } 
+
+        }
+        return guardado;
     }
 
     /**
@@ -161,14 +167,19 @@ public class FileManager {
          * @return true si el archivo cumple las condiciones; false en caso contrario.
          */
         public static boolean validarArchivo(File archivo, long tamañoMaximo, List<String> extensionesPermitidas) {
+            boolean validado = false;
         if ((archivo == null || !archivo.exists())||archivo.length() > tamañoMaximo){
-            return false;
+            validado = false;
         }
 
         String nombre = archivo.getName().toLowerCase();
 
-        return extensionesPermitidas == null || extensionesPermitidas.isEmpty() ||
-                extensionesPermitidas.stream().anyMatch(nombre::endsWith); //verifica que esta en extensiones permitidas con el final del nombre del arhico(su extension)
+      if (extensionesPermitidas == null || extensionesPermitidas.isEmpty() ||
+              //verifica que esta en extensiones permitidas con el final del nombre del arhico(su extension)
+              extensionesPermitidas.stream().anyMatch(nombre::endsWith)){
+            validado = true;
+      }
+        return validado;
     }
 
     /**
@@ -178,14 +189,12 @@ public class FileManager {
          */
         public static String generarNombreUnico(String nombreOriginal) {
         String ext = "";
-
         int idx = nombreOriginal.lastIndexOf('.');
 
         if (idx >= 0) {
             ext = nombreOriginal.substring(idx);
             nombreOriginal = nombreOriginal.substring(0, idx);
         }
-
         return nombreOriginal + "_" + UUID.randomUUID() + ext;
     }
 
@@ -197,16 +206,16 @@ public class FileManager {
      * @return Un String con el tipo MIME (ej. "image/png", "application/pdf") o null si no se puede determinar.
      */
     public static String detectarMimeType(File archivo) {
-        if (archivo == null || !archivo.exists()) {
-            return null;
+        String mimeType = null;
+
+        if (archivo != null && archivo.exists()) {
+            try (InputStream is = new FileInputStream(archivo)) {
+                mimeType = URLConnection.guessContentTypeFromStream(is);
+            } catch (IOException e) {
+                log.warn("No se pudo detectar el tipo MIME de {}", archivo, e);
+            }
         }
-        try (InputStream is = new FileInputStream(archivo)) {
-            // Lee los primeros bytes del flujo para identificar el tipo de archivo.
-            return URLConnection.guessContentTypeFromStream(is);
-        } catch (IOException e) {
-            log.warn("No se pudo detectar el tipo MIME de {}", archivo, e);
-            return null;
-        }
+        return mimeType;
     }
 
 
@@ -235,26 +244,29 @@ public class FileManager {
          * @param destinoDir carpeta de destino.
          * @return true si la exportación se completa; false si falla.
          */
-        public static boolean exportarArchivo(File origen, File destinoDir) {
-            boolean exportado = false;
-        if (origen == null || !origen.exists() || destinoDir == null){
-            return false;
+    public static boolean exportarArchivo(File origen, File destinoDir) {
+        boolean exportado = false;
+
+        if (origen != null && origen.exists() && destinoDir != null) {
+
+            try {
+                if (!destinoDir.exists()) {
+                    destinoDir.mkdirs();
+                }
+
+                File destino = new File(destinoDir, origen.getName());
+
+                try (InputStream in = new BufferedInputStream(new FileInputStream(origen));
+                     OutputStream out = new BufferedOutputStream(new FileOutputStream(destino))) {
+                    in.transferTo(out);
+                    exportado = true;
+                }
+            } catch (IOException e) {
+                log.error("Error al exportar archivo {} a {}", origen, destinoDir, e);
+            }
         }
 
-        if (!destinoDir.exists()){
-            destinoDir.mkdirs();
-        }
-
-        File destino = new File(destinoDir, origen.getName());
-
-        try (InputStream in = new BufferedInputStream(new FileInputStream(origen));
-             OutputStream out = new BufferedOutputStream(new FileOutputStream(destino))) {
-            in.transferTo(out);
-            return true;
-        } catch (IOException e) {
-            log.error("Error al exportar archivo {} a {}", origen, destinoDir, e);
-            return false;
-        }
+        return exportado;
     }
 
     /**
@@ -263,14 +275,14 @@ public class FileManager {
      * @return String con la ruta completa relativa a la aplicación.
      */
     public static String getRutaMedia(String relative) {
-
         final String RUTAMEDIA = "media" + File.separator;
+        String rutaCompleta = RUTAMEDIA;
 
-        if (relative == null || relative.isBlank()) {
-            return RUTAMEDIA;
+        if (relative != null && !relative.isBlank()) {
+            rutaCompleta += relative;
         }
 
-        return RUTAMEDIA + relative;
+        return rutaCompleta;
     }
 
     /**
@@ -284,7 +296,7 @@ public class FileManager {
      */
     public static void crearArchivoZip(File archivoZipDestino, String conversacionTexto, List<Mensaje> mensajes) throws IOException {
 
-        // 1. Usamos try-with-resources para asegurar que todos los streams se cierren solos.
+        // 1. Usamos try para asegurar que todos los streams se cierren solos.
         try (FileOutputStream fos = new FileOutputStream(archivoZipDestino);
              ZipOutputStream zos = new ZipOutputStream(fos)) {
 
