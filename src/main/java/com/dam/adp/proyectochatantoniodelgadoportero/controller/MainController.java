@@ -206,9 +206,6 @@ public class MainController {
                 cargarEstadisticas();
                 txtMensaje.clear();
                 adjuntoSeleccionado = null;
-                if (listaAdjuntos != null) {
-                    listaAdjuntos.getItems().clear();
-                }
                 lblEstado.setText("Mensaje enviado");
             }
         }

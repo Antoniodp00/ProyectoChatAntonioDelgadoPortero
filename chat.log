@@ -378,3 +378,23 @@ Caused by: java.lang.IllegalArgumentException: Unable to coerce {/* ... Contenid
 2025-10-23 18:48:05 [JavaFX Application Thread] INFO  c.d.a.p.c.LandingPageController - Navegando a Inicio de Sesión desde Landing Page
 2025-10-23 18:48:12 [JavaFX Application Thread] INFO  c.d.a.p.c.InicioSesionController - Login correcto para usuario antoniodp07
 2025-10-23 18:48:12 [JavaFX Application Thread] INFO  c.d.a.p.model.Sesion - Sesión iniciada para usuario: antoniodp07
+2025-10-24 09:23:55 [main] INFO  c.d.a.p.app.Launcher - Lanzando JavaFX Application
+2025-10-24 09:23:56 [JavaFX Application Thread] INFO  c.d.a.p.app.Aplicacion - Iniciando aplicación y cargando Landing Page
+2025-10-24 09:23:56 [JavaFX Application Thread] INFO  c.d.a.p.app.Aplicacion - Aplicación iniciada correctamente
+2025-10-24 09:23:59 [JavaFX Application Thread] INFO  c.d.a.p.c.LandingPageController - Navegando a Inicio de Sesión desde Landing Page
+2025-10-24 09:24:06 [JavaFX Application Thread] INFO  c.d.a.p.c.InicioSesionController - Login correcto para usuario antoniodp07
+2025-10-24 09:24:06 [JavaFX Application Thread] INFO  c.d.a.p.model.Sesion - Sesión iniciada para usuario: antoniodp07
+2025-10-24 09:24:11 [JavaFX Application Thread] INFO  c.d.a.p.DAO.MensajeDAO - Mensaje enviado correctamente de antoniodp07 a Fran
+2025-10-24 09:24:14 [JavaFX Application Thread] INFO  c.d.a.p.DAO.MensajeDAO - Mensaje enviado correctamente de antoniodp07 a Fran
+2025-10-24 09:32:29 [main] INFO  c.d.a.p.app.Launcher - Lanzando JavaFX Application
+2025-10-24 09:32:29 [JavaFX Application Thread] INFO  c.d.a.p.app.Aplicacion - Iniciando aplicación y cargando Landing Page
+2025-10-24 09:32:30 [JavaFX Application Thread] INFO  c.d.a.p.app.Aplicacion - Aplicación iniciada correctamente
+2025-10-24 09:32:31 [JavaFX Application Thread] INFO  c.d.a.p.c.LandingPageController - Navegando a Inicio de Sesión desde Landing Page
+2025-10-24 09:32:37 [JavaFX Application Thread] INFO  c.d.a.p.c.InicioSesionController - Login correcto para usuario antoniodp07
+2025-10-24 09:32:37 [JavaFX Application Thread] INFO  c.d.a.p.model.Sesion - Sesión iniciada para usuario: antoniodp07
+2025-10-24 09:43:05 [main] INFO  c.d.a.p.app.Launcher - Lanzando JavaFX Application
+2025-10-24 09:43:06 [JavaFX Application Thread] INFO  c.d.a.p.app.Aplicacion - Iniciando aplicación y cargando Landing Page
+2025-10-24 09:43:06 [JavaFX Application Thread] INFO  c.d.a.p.app.Aplicacion - Aplicación iniciada correctamente
+2025-10-24 09:43:07 [JavaFX Application Thread] INFO  c.d.a.p.c.LandingPageController - Navegando a Inicio de Sesión desde Landing Page
+2025-10-24 09:43:12 [JavaFX Application Thread] INFO  c.d.a.p.c.InicioSesionController - Login correcto para usuario antoniodp07
+2025-10-24 09:43:12 [JavaFX Application Thread] INFO  c.d.a.p.model.Sesion - Sesión iniciada para usuario: antoniodp07

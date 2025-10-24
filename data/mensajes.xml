@@ -285,4 +285,38 @@
         <fecha>2025-10-22T10:33:00</fecha>
         <adjuntoTamano>0</adjuntoTamano>
     </mensaje>
+    <mensaje>
+        <remitente>antoniodp07</remitente>
+        <destinatario>Fran</destinatario>
+        <mensaje>hola</mensaje>
+        <fecha>2025-10-24T09:24:11</fecha>
+        <adjuntoTamano>0</adjuntoTamano>
+    </mensaje>
+    <mensaje>
+        <remitente>antoniodp07</remitente>
+        <destinatario>Fran</destinatario>
+        <mensaje>viernes</mensaje>
+        <fecha>2025-10-24T09:24:14</fecha>
+        <adjuntoTamano>0</adjuntoTamano>
+    </mensaje>
+    <mensaje>
+        <remitente>antoniodp07</remitente>
+        <destinatario>Fran</destinatario>
+        <mensaje>mira</mensaje>
+        <fecha>2025-10-24T09:24:35</fecha>
+        <adjuntoNombre>Screenshot 2025-04-09 083825.png</adjuntoNombre>
+        <adjuntoRuta>Screenshot 2025-04-09 083825_247c0c77-aaed-4ad6-b32d-af779d6b86ef.png</adjuntoRuta>
+        <adjuntoTamano>417309</adjuntoTamano>
+        <adjuntoTipo>png</adjuntoTipo>
+    </mensaje>
+    <mensaje>
+        <remitente>antoniodp07</remitente>
+        <destinatario>Fran</destinatario>
+        <mensaje>me gusta</mensaje>
+        <fecha>2025-10-24T09:33:19</fecha>
+        <adjuntoNombre>Screenshot 2025-10-17 144410.png</adjuntoNombre>
+        <adjuntoRuta>Screenshot 2025-10-17 144410_c1815b8c-3b65-4fc5-863c-4ce168d59562.png</adjuntoRuta>
+        <adjuntoTamano>189748</adjuntoTamano>
+        <adjuntoTipo>png</adjuntoTipo>
+    </mensaje>
 </mensajes>

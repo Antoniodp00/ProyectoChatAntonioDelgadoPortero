@@ -20,7 +20,7 @@ public class FileManager {
 
     private static final Logger log = LoggerFactory.getLogger(FileManager.class);
     private static final String RUTAMEDIA = "media" + File.separator;
-    private static final DateTimeFormatter EXPORT_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private static final DateTimeFormatter FORMATO_FECHA_EXPORTACION = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     public static final long TAMAÑO_MAXIMO_BYTES = 10L * 1024 * 1024; // 10 MB
     public static final List<String> EXTENSIONES_PERMITIDAS = Collections.unmodifiableList(
             Arrays.asList(".png", ".jpg", ".jpeg", ".gif", ".pdf", ".txt", ".docx", ".xlsx")
@@ -83,11 +83,16 @@ public class FileManager {
                     continue;
                 }
 
-                String fechaHora = (mensaje.getFecha() != null) ? mensaje.getFecha().format(EXPORT_FORMATTER) : "----";
+                String fechaHora = (mensaje.getFecha() != null) ? mensaje.getFecha().format(FORMATO_FECHA_EXPORTACION) : "----";
                 String contenido = mensaje.getMensaje() == null ? "" : mensaje.getMensaje().replace('\n', ' ');
                 String remitente = mensaje.getRemitente() == null ? "" : mensaje.getRemitente();
 
                 String linea = String.format("[%s] %s: %s", fechaHora, remitente, contenido);
+
+                String adjuntoNombre = mensaje.getAdjuntoNombre();
+                if (adjuntoNombre != null && !adjuntoNombre.isBlank()) {
+                    linea += " [Adjunto: " + adjuntoNombre + "]";
+                }
 
                 bw.write(linea);
                 bw.newLine();
@@ -121,12 +126,17 @@ public class FileManager {
                     continue;
                 }
 
-                String fechaHora = (mensaje.getFecha() != null) ? mensaje.getFecha().format(EXPORT_FORMATTER) : "----";
+                String fechaHora = (mensaje.getFecha() != null) ? mensaje.getFecha().format(FORMATO_FECHA_EXPORTACION) : "----";
                 String remitente = mensaje.getRemitente() == null ? "" : mensaje.getRemitente();
                 String contenido = mensaje.getMensaje() == null ? "" : mensaje.getMensaje();
                 String contenidoLimpio = contenido.replace(SEPARADOR, "").replace('\n', ' ');
 
-                String linea = fechaHora + SEPARADOR + remitente + SEPARADOR + contenidoLimpio;
+                String adjuntoNombre = mensaje.getAdjuntoNombre() == null ? "" : mensaje.getAdjuntoNombre();
+
+                String adjuntoLimpio = adjuntoNombre.replace(SEPARADOR, "").replace('\n', ' ');
+
+                String linea = fechaHora + SEPARADOR + remitente + SEPARADOR + contenidoLimpio + SEPARADOR + adjuntoLimpio;
+
 
                 bw.write(linea);
                 bw.newLine();
