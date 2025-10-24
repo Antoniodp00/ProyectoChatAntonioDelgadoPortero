@@ -48,7 +48,7 @@ La aplicación incluye gestión de **archivos adjuntos** (con validaciones de ta
 
 ---
 
-## Instalación y Ejecución
+## Instalación y Ejecución (Versión Offline - Principal)
 
 1.  **Clonar/Descargar:** Obtén el código fuente del proyecto.
 2.  **Compilar:** Abre una terminal en el directorio raíz del proyecto (donde está `pom.xml`) y ejecuta:
@@ -67,14 +67,14 @@ La aplicación incluye gestión de **archivos adjuntos** (con validaciones de ta
 
 ---
 
-## Versión Online (Opcional)
+## Versión Online (Opcional - Rama `Version-online`)
 
 Este repositorio también contiene una versión experimental del chat que utiliza **Sockets** para comunicación en red (cliente-servidor). Esta versión se encuentra en una rama separada llamada `Version-online`.
 
 **Para acceder y probar la versión online:**
 
-1.  Asegúrate de tener Git instalado.
-2.  Abre una terminal en el directorio raíz de tu copia local del proyecto.
+1.  **Asegúrate de tener Git instalado.**
+2.  **Abre una terminal** en el directorio raíz de tu copia local del proyecto.
 3.  **Actualiza tu repositorio local** para asegurarte de tener la información de todas las ramas remotas:
     ```bash
     git fetch origin
@@ -87,8 +87,10 @@ Este repositorio también contiene una versión experimental del chat que utiliz
     ```bash
     git checkout -b mi-version-online origin/Version-online
     ```
+5.  **Ejecuta el Servidor:** Una vez en la rama `Version-online`, localiza la clase `Servidor.java` (probablemente en un paquete `network` o similar) y ejecuta su método `main`. Esto iniciará el servidor y lo dejará esperando conexiones de clientes.
+6.  **Ejecuta el Cliente (Aplicación Principal):** Después de iniciar el servidor, ejecuta la aplicación JavaFX principal como lo harías normalmente (ej. desde el IDE ejecutando `Launcher.java` o mediante `mvn clean javafx:run` si la configuración de Maven en esa rama lo permite). La lógica del cliente (`Cliente.java`) intentará conectarse al servidor que ya está en ejecución. Puedes lanzar múltiples instancias de la aplicación cliente para simular varios usuarios conectándose al mismo servidor.
 
-Una vez en la rama `Version-online`, encontrarás las clases `ChatServer`, `ClientHandler` y `ChatClient` (o similares) que implementan la lógica de red. *Recuerda que esta versión puede ser experimental y no estar tan pulida como la versión offline principal.*
+*Recuerda que esta versión puede ser experimental y no estar tan pulida como la versión offline principal.*
 
 ---
 
