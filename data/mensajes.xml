@@ -285,4 +285,18 @@
         <fecha>2025-10-22T10:33:00</fecha>
         <adjuntoTamano>0</adjuntoTamano>
     </mensaje>
+    <mensaje>
+        <remitente>Fran</remitente>
+        <destinatario>antoniodp07</destinatario>
+        <mensaje>hola</mensaje>
+        <fecha>2025-10-23T09:59:49</fecha>
+        <adjuntoTamano>0</adjuntoTamano>
+    </mensaje>
+    <mensaje>
+        <remitente>Fran</remitente>
+        <destinatario>antoniodp07</destinatario>
+        <mensaje>como estas</mensaje>
+        <fecha>2025-10-23T09:59:54</fecha>
+        <adjuntoTamano>0</adjuntoTamano>
+    </mensaje>
 </mensajes>

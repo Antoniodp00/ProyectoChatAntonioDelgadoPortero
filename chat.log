@@ -359,3 +359,151 @@ Caused by: java.lang.IllegalArgumentException: Unable to coerce {/* ... Contenid
 2025-10-22 18:05:59 [JavaFX Application Thread] INFO  c.d.a.p.c.LandingPageController - Navegando a Inicio de Sesión desde Landing Page
 2025-10-22 18:06:06 [JavaFX Application Thread] INFO  c.d.a.p.c.InicioSesionController - Login correcto para usuario antoniodp07
 2025-10-22 18:06:06 [JavaFX Application Thread] INFO  c.d.a.p.model.Sesion - Sesión iniciada para usuario: antoniodp07
+2025-10-23 09:58:11 [main] INFO  c.d.a.p.app.Launcher - Lanzando JavaFX Application
+2025-10-23 09:58:12 [JavaFX Application Thread] INFO  c.d.a.p.app.Aplicacion - Iniciando aplicación y cargando Landing Page
+2025-10-23 09:58:12 [JavaFX Application Thread] INFO  c.d.a.p.app.Aplicacion - Aplicación iniciada correctamente
+2025-10-23 09:58:18 [JavaFX Application Thread] INFO  c.d.a.p.c.LandingPageController - Navegando a Inicio de Sesión desde Landing Page
+2025-10-23 09:58:27 [JavaFX Application Thread] INFO  c.d.a.p.c.InicioSesionController - Login correcto para usuario antoniodp07
+2025-10-23 09:58:27 [JavaFX Application Thread] INFO  c.d.a.p.model.Sesion - Sesión iniciada para usuario: antoniodp07
+2025-10-23 09:58:27 [JavaFX Application Thread] ERROR c.d.a.p.network.Cliente - No se pudo conectar al servidor en localhost:12345. Asegúrate de que el servidor está en ejecución.
+java.net.ConnectException: Connection refused: connect
+	at java.base/sun.nio.ch.Net.connect0(Native Method)
+	at java.base/sun.nio.ch.Net.connect(Net.java:535)
+	at java.base/sun.nio.ch.Net.connect(Net.java:524)
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:574)
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:282)
+	at java.base/java.net.Socket.connect(Socket.java:665)
+	at java.base/java.net.Socket.connect(Socket.java:603)
+	at java.base/java.net.Socket.<init>(Socket.java:470)
+	at java.base/java.net.Socket.<init>(Socket.java:276)
+	at com.dam.adp.proyectochatantoniodelgadoportero/com.dam.adp.proyectochatantoniodelgadoportero.network.Cliente.conectar(Cliente.java:58)
+	at com.dam.adp.proyectochatantoniodelgadoportero/com.dam.adp.proyectochatantoniodelgadoportero.controller.MainController.initialize(MainController.java:92)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:72)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at javafx.base@21.0.6/com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:270)
+	at javafx.fxml@21.0.6/com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:84)
+	at javafx.fxml@21.0.6/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2688)
+	at javafx.fxml@21.0.6/javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2563)
+	at javafx.fxml@21.0.6/javafx.fxml.FXMLLoader.load(FXMLLoader.java:2531)
+	at com.dam.adp.proyectochatantoniodelgadoportero/com.dam.adp.proyectochatantoniodelgadoportero.utils.Utils.cambiarEscena(Utils.java:45)
+	at com.dam.adp.proyectochatantoniodelgadoportero/com.dam.adp.proyectochatantoniodelgadoportero.controller.InicioSesionController.iniciarSesion(InicioSesionController.java:45)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at com.sun.javafx.reflect.Trampoline.invoke(MethodUtil.java:72)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at javafx.base@21.0.6/com.sun.javafx.reflect.MethodUtil.invoke(MethodUtil.java:270)
+	at javafx.fxml@21.0.6/com.sun.javafx.fxml.MethodHelper.invoke(MethodHelper.java:84)
+	at javafx.fxml@21.0.6/javafx.fxml.FXMLLoader$MethodHandler.invoke(FXMLLoader.java:1853)
+	at javafx.fxml@21.0.6/javafx.fxml.FXMLLoader$ControllerMethodEventHandler.handle(FXMLLoader.java:1726)
+	at javafx.base@21.0.6/com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
+	at javafx.base@21.0.6/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at javafx.base@21.0.6/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at javafx.base@21.0.6/com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at javafx.base@21.0.6/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at javafx.base@21.0.6/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21.0.6/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21.0.6/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21.0.6/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21.0.6/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21.0.6/com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at javafx.base@21.0.6/com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:49)
+	at javafx.base@21.0.6/javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.graphics@21.0.6/javafx.scene.Node.fireEvent(Node.java:8875)
+	at javafx.controls@21.0.6/javafx.scene.control.Button.fire(Button.java:203)
+	at javafx.controls@21.0.6/com.sun.javafx.scene.control.behavior.ButtonBehavior.mouseReleased(ButtonBehavior.java:207)
+	at javafx.controls@21.0.6/com.sun.javafx.scene.control.inputmap.InputMap.handle(InputMap.java:274)
+	at javafx.base@21.0.6/com.sun.javafx.event.CompositeEventHandler$NormalEventHandlerRecord.handleBubblingEvent(CompositeEventHandler.java:247)
+	at javafx.base@21.0.6/com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:80)
+	at javafx.base@21.0.6/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:232)
+	at javafx.base@21.0.6/com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:189)
+	at javafx.base@21.0.6/com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at javafx.base@21.0.6/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at javafx.base@21.0.6/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21.0.6/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21.0.6/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21.0.6/com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at javafx.base@21.0.6/com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at javafx.base@21.0.6/com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at javafx.base@21.0.6/com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.base@21.0.6/javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.graphics@21.0.6/javafx.scene.Scene$MouseHandler.process(Scene.java:3984)
+	at javafx.graphics@21.0.6/javafx.scene.Scene.processMouseEvent(Scene.java:1890)
+	at javafx.graphics@21.0.6/javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2708)
+	at javafx.graphics@21.0.6/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:411)
+	at javafx.graphics@21.0.6/com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:301)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:138)
+	at javafx.graphics@21.0.6/com.sun.javafx.tk.quantum.GlassViewEventHandler.lambda$handleMouseEvent$2(GlassViewEventHandler.java:450)
+	at javafx.graphics@21.0.6/com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:424)
+	at javafx.graphics@21.0.6/com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:449)
+	at javafx.graphics@21.0.6/com.sun.glass.ui.View.handleMouseEvent(View.java:551)
+	at javafx.graphics@21.0.6/com.sun.glass.ui.View.notifyMouse(View.java:937)
+	at javafx.graphics@21.0.6/com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at javafx.graphics@21.0.6/com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	at java.base/java.lang.Thread.run(Thread.java:1447)
+2025-10-23 09:58:44 [main] INFO  c.d.a.p.network.Servidor - Iniciando el servidor de chat en el puerto 12345...
+2025-10-23 09:58:44 [main] INFO  c.d.a.p.network.Servidor - Servidor escuchando. Esperando conexiones de clientes...
+2025-10-23 09:59:15 [main] INFO  c.d.a.p.app.Launcher - Lanzando JavaFX Application
+2025-10-23 09:59:15 [JavaFX Application Thread] INFO  c.d.a.p.app.Aplicacion - Iniciando aplicación y cargando Landing Page
+2025-10-23 09:59:16 [JavaFX Application Thread] INFO  c.d.a.p.app.Aplicacion - Aplicación iniciada correctamente
+2025-10-23 09:59:21 [main] INFO  c.d.a.p.app.Launcher - Lanzando JavaFX Application
+2025-10-23 09:59:21 [JavaFX Application Thread] INFO  c.d.a.p.app.Aplicacion - Iniciando aplicación y cargando Landing Page
+2025-10-23 09:59:22 [JavaFX Application Thread] INFO  c.d.a.p.app.Aplicacion - Aplicación iniciada correctamente
+2025-10-23 09:59:24 [JavaFX Application Thread] INFO  c.d.a.p.c.LandingPageController - Navegando a Inicio de Sesión desde Landing Page
+2025-10-23 09:59:30 [JavaFX Application Thread] INFO  c.d.a.p.c.InicioSesionController - Login correcto para usuario Fran
+2025-10-23 09:59:30 [JavaFX Application Thread] INFO  c.d.a.p.model.Sesion - Sesión iniciada para usuario: Fran
+2025-10-23 09:59:30 [JavaFX Application Thread] INFO  c.d.a.p.network.Cliente - Cliente conectado al servidor en localhost:12345.
+2025-10-23 09:59:30 [pool-1-thread-1] INFO  c.d.a.p.network.Servidor - Nuevo cliente conectado. Total de clientes: 1
+2025-10-23 09:59:33 [JavaFX Application Thread] INFO  c.d.a.p.c.LandingPageController - Navegando a Inicio de Sesión desde Landing Page
+2025-10-23 09:59:39 [JavaFX Application Thread] INFO  c.d.a.p.c.InicioSesionController - Login correcto para usuario antoniodp07
+2025-10-23 09:59:39 [JavaFX Application Thread] INFO  c.d.a.p.model.Sesion - Sesión iniciada para usuario: antoniodp07
+2025-10-23 09:59:39 [JavaFX Application Thread] INFO  c.d.a.p.network.Cliente - Cliente conectado al servidor en localhost:12345.
+2025-10-23 09:59:39 [pool-1-thread-2] INFO  c.d.a.p.network.Servidor - Nuevo cliente conectado. Total de clientes: 2
+2025-10-23 09:59:49 [pool-1-thread-1] INFO  c.d.a.p.network.Servidor - Retransmitiendo mensaje: <?xml version="1.0" encoding="UTF-8" standalone="yes"?><mensaje><remitente>Fran</remitente><destinatario>antoniodp07</destinatario><mensaje>hola</mensaje><fecha>2025-10-23T09:59:49</fecha><adjuntoTamano>0</adjuntoTamano></mensaje>
+2025-10-23 09:59:49 [JavaFX Application Thread] INFO  c.d.a.p.DAO.MensajeDAO - Mensaje enviado correctamente de Fran a antoniodp07
+2025-10-23 09:59:49 [JavaFX Application Thread] WARN  c.d.a.p.utils.XMLManager - Archivo XML vacío o corrupto, usando objeto vacío.
+2025-10-23 09:59:54 [pool-1-thread-1] INFO  c.d.a.p.network.Servidor - Retransmitiendo mensaje: <?xml version="1.0" encoding="UTF-8" standalone="yes"?><mensaje><remitente>Fran</remitente><destinatario>antoniodp07</destinatario><mensaje>como estas</mensaje><fecha>2025-10-23T09:59:54</fecha><adjuntoTamano>0</adjuntoTamano></mensaje>
+2025-10-23 09:59:54 [JavaFX Application Thread] WARN  c.d.a.p.utils.XMLManager - Archivo XML vacío o corrupto, usando objeto vacío.
+2025-10-23 09:59:54 [JavaFX Application Thread] INFO  c.d.a.p.DAO.MensajeDAO - Mensaje enviado correctamente de Fran a antoniodp07
+2025-10-23 09:59:59 [JavaFX Application Thread] INFO  c.d.a.p.network.Cliente - Cliente desconectado.
+2025-10-23 09:59:59 [pool-1-thread-1] INFO  c.d.a.p.network.Servidor - Cliente desconectado. Clientes restantes: 1
+2025-10-23 09:59:59 [JavaFX Application Thread] INFO  c.d.a.p.model.Sesion - Sesión cerrada para usuario: Fran
+2025-10-23 09:59:59 [Thread-4] WARN  c.d.a.p.network.Cliente - Se perdió la conexión con el servidor.
+java.net.SocketException: Socket closed
+	at java.base/sun.nio.ch.NioSocketImpl.endRead(NioSocketImpl.java:242)
+	at java.base/sun.nio.ch.NioSocketImpl.implRead(NioSocketImpl.java:322)
+	at java.base/sun.nio.ch.NioSocketImpl.read(NioSocketImpl.java:345)
+	at java.base/sun.nio.ch.NioSocketImpl$1.read(NioSocketImpl.java:790)
+	at java.base/java.net.Socket$SocketInputStream.implRead(Socket.java:983)
+	at java.base/java.net.Socket$SocketInputStream.read(Socket.java:970)
+	at java.base/sun.nio.cs.StreamDecoder.readBytes(StreamDecoder.java:279)
+	at java.base/sun.nio.cs.StreamDecoder.implRead(StreamDecoder.java:322)
+	at java.base/sun.nio.cs.StreamDecoder.read(StreamDecoder.java:186)
+	at java.base/java.io.InputStreamReader.read(InputStreamReader.java:175)
+	at java.base/java.io.BufferedReader.fill(BufferedReader.java:166)
+	at java.base/java.io.BufferedReader.readLine(BufferedReader.java:333)
+	at java.base/java.io.BufferedReader.readLine(BufferedReader.java:400)
+	at com.dam.adp.proyectochatantoniodelgadoportero/com.dam.adp.proyectochatantoniodelgadoportero.network.Cliente.escucharMensajes(Cliente.java:80)
+	at java.base/java.lang.Thread.run(Thread.java:1447)
+2025-10-23 10:00:05 [pool-1-thread-2] WARN  c.d.a.p.network.Servidor - El cliente se ha desconectado o ha ocurrido un error de red.
+java.net.SocketException: Connection reset
+	at java.base/sun.nio.ch.NioSocketImpl.implRead(NioSocketImpl.java:317)
+	at java.base/sun.nio.ch.NioSocketImpl.read(NioSocketImpl.java:345)
+	at java.base/sun.nio.ch.NioSocketImpl$1.read(NioSocketImpl.java:790)
+	at java.base/java.net.Socket$SocketInputStream.implRead(Socket.java:983)
+	at java.base/java.net.Socket$SocketInputStream.read(Socket.java:970)
+	at java.base/sun.nio.cs.StreamDecoder.readBytes(StreamDecoder.java:279)
+	at java.base/sun.nio.cs.StreamDecoder.implRead(StreamDecoder.java:322)
+	at java.base/sun.nio.cs.StreamDecoder.read(StreamDecoder.java:186)
+	at java.base/java.io.InputStreamReader.read(InputStreamReader.java:175)
+	at java.base/java.io.BufferedReader.fill(BufferedReader.java:166)
+	at java.base/java.io.BufferedReader.readLine(BufferedReader.java:333)
+	at java.base/java.io.BufferedReader.readLine(BufferedReader.java:400)
+	at com.dam.adp.proyectochatantoniodelgadoportero/com.dam.adp.proyectochatantoniodelgadoportero.network.Servidor$ClientHandler.run(Servidor.java:94)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1095)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:619)
+	at java.base/java.lang.Thread.run(Thread.java:1447)
+2025-10-23 10:00:05 [pool-1-thread-2] INFO  c.d.a.p.network.Servidor - Cliente desconectado. Clientes restantes: 0
