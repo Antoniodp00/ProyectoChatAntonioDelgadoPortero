@@ -398,3 +398,17 @@ Caused by: java.lang.IllegalArgumentException: Unable to coerce {/* ... Contenid
 2025-10-24 09:43:07 [JavaFX Application Thread] INFO  c.d.a.p.c.LandingPageController - Navegando a Inicio de Sesión desde Landing Page
 2025-10-24 09:43:12 [JavaFX Application Thread] INFO  c.d.a.p.c.InicioSesionController - Login correcto para usuario antoniodp07
 2025-10-24 09:43:12 [JavaFX Application Thread] INFO  c.d.a.p.model.Sesion - Sesión iniciada para usuario: antoniodp07
+2025-10-24 10:51:35 [main] INFO  c.d.a.p.app.Launcher - Lanzando JavaFX Application
+2025-10-24 10:51:35 [JavaFX Application Thread] INFO  c.d.a.p.app.Aplicacion - Iniciando aplicación y cargando Landing Page
+2025-10-24 10:51:36 [JavaFX Application Thread] INFO  c.d.a.p.app.Aplicacion - Aplicación iniciada correctamente
+2025-10-24 10:51:37 [JavaFX Application Thread] INFO  c.d.a.p.c.LandingPageController - Navegando a Inicio de Sesión desde Landing Page
+2025-10-24 10:51:42 [JavaFX Application Thread] INFO  c.d.a.p.c.InicioSesionController - Login correcto para usuario antoniodp07
+2025-10-24 10:51:42 [JavaFX Application Thread] INFO  c.d.a.p.model.Sesion - Sesión iniciada para usuario: antoniodp07
+2025-10-24 10:52:44 [JavaFX Application Thread] INFO  c.d.a.p.model.Sesion - Sesión cerrada para usuario: antoniodp07
+2025-10-24 11:07:57 [main] INFO  c.d.a.p.app.Launcher - Lanzando JavaFX Application
+2025-10-24 11:07:57 [JavaFX Application Thread] INFO  c.d.a.p.app.Aplicacion - Iniciando aplicación y cargando Landing Page
+2025-10-24 11:07:57 [JavaFX Application Thread] INFO  c.d.a.p.app.Aplicacion - Aplicación iniciada correctamente
+2025-10-24 11:07:59 [JavaFX Application Thread] INFO  c.d.a.p.c.LandingPageController - Navegando a Inicio de Sesión desde Landing Page
+2025-10-24 11:08:05 [JavaFX Application Thread] INFO  c.d.a.p.c.InicioSesionController - Login correcto para usuario antoniodp07
+2025-10-24 11:08:05 [JavaFX Application Thread] INFO  c.d.a.p.model.Sesion - Sesión iniciada para usuario: antoniodp07
+2025-10-24 11:08:36 [JavaFX Application Thread] INFO  c.d.a.p.DAO.MensajeDAO - Mensaje enviado correctamente de antoniodp07 a Fran

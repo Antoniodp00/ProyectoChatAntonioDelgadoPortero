@@ -27,6 +27,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,25 +75,21 @@ public class MainController {
     @FXML
     public void initialize() {
 
-        // Configurar celdas personalizadas para la lista de mensajes
         if (lvChat != null) {
             lvChat.setCellFactory(list -> new ChatMessageCell(() -> usuarioLogueado != null ? usuarioLogueado.getNombreUsuario() : null, lblEstado));
         }
 
         usuarioLogueado = Sesion.getInstancia().getUsuario();
 
-        ObservableList<Usuario> usuariosObservableList = FXCollections.observableArrayList(UsuarioDAO.leerUsuarios().getLista());
+        // Cargar y filtrar la lista de usuarios para excluir al usuario logueado
+        List<Usuario> otrosUsuarios = UsuarioDAO.leerUsuarios().getLista().stream()
+                .filter(u -> u != null && !u.getNombre().equals(usuarioLogueado.getNombre()))
+                .collect(Collectors.toList());
 
-        for (int i = 0; i < usuariosObservableList.size(); i++) {
-            Usuario u = usuariosObservableList.get(i);
-            if (u != null && u.getNombre().equals(usuarioLogueado.getNombre())) {
-                usuariosObservableList.remove(i);
-                break;
-            }
-        }
-
+        ObservableList<Usuario> usuariosObservableList = FXCollections.observableArrayList(otrosUsuarios);
         listaUsuarios.setItems(usuariosObservableList);
 
+        // Configurar listeners
         listaUsuarios.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
                     if (newValue != null) {
@@ -109,7 +107,6 @@ public class MainController {
         chkSoloAdjuntos.setOnAction(e -> mostrarMensajes());
         btnExportarZip.setOnAction(e -> exportarZip());
 
-        //Pulsar Enter para enviar mensaje
         txtMensaje.setOnKeyPressed(event -> {
             if (event.getCode() == javafx.scene.input.KeyCode.ENTER) {
                 enviarMensaje(null);
@@ -244,12 +241,11 @@ public class MainController {
             lblEstado.setText("Error: No hay usuario seleccionado.");
             lblEstado.setStyle("-fx-text-fill: red;");
         } else {
-            // Obtener todos los mensajes
             Mensajes mensajes = MensajeDAO.listarMensajesEntre(usuarioLogueado.getNombreUsuario(), usuarioSeleccionado.getNombreUsuario());
             if (!mensajes.getMensajeList().isEmpty()) {
 
                 String nombreArchivo = usuarioLogueado.getNombreUsuario() + "-" + usuarioSeleccionado.getNombreUsuario() + "-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmm"));
-                File file = mostrarDialogoExportar("Exportar a TXT",nombreArchivo,new FileChooser.ExtensionFilter("Archivo de Texto (*.txt)", "*.txt"));
+                File file = mostrarDialogoExportar("Exportar a TXT", nombreArchivo, new FileChooser.ExtensionFilter("Archivo de Texto (*.txt)", "*.txt"));
 
                 if (file != null) {
                     boolean exito = FileManager.exportarAArchivoTexto(mensajes.getMensajeList(), file);
@@ -279,30 +275,29 @@ public class MainController {
         if (usuarioSeleccionado == null) {
             lblEstado.setText("Error: No hay usuario seleccionado.");
             lblEstado.setStyle("-fx-text-fill: red;");
-            return;
-        }
-
-        Mensajes mensajes = MensajeDAO.listarMensajesEntre(usuarioLogueado.getNombreUsuario(), usuarioSeleccionado.getNombreUsuario());
-        if (mensajes.getMensajeList().isEmpty()) {
-            lblEstado.setText("No hay mensajes para exportar");
-            return;
-        }
-
-        String nombreArchivo = usuarioLogueado.getNombreUsuario() + "-" + usuarioSeleccionado.getNombreUsuario() + "-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmm"));
-        File file = mostrarDialogoExportar("Exportar a CSV", nombreArchivo,new FileChooser.ExtensionFilter("Archivo de Texto (*.csv)", "*.csv"));
-
-        if (file != null) {
-            boolean exito = FileManager.exportarAArchivoCsv(mensajes.getMensajeList(), file);
-
-            if (exito) {
-                lblEstado.setText("Exportado a: " + file.getAbsolutePath() + " con exito.");
-                lblEstado.setStyle("-fx-text-fill: green;");
-            } else {
-                lblEstado.setText("Error al exportar");
-                lblEstado.setStyle("-fx-text-fill: red;");
-            }
         } else {
-            lblEstado.setText("Operacion cancelada");
+            Mensajes mensajes = MensajeDAO.listarMensajesEntre(usuarioLogueado.getNombreUsuario(), usuarioSeleccionado.getNombreUsuario());
+
+            if (mensajes.getMensajeList().isEmpty()) {
+                lblEstado.setText("No hay mensajes para exportar");
+            } else {
+                String nombreArchivo = usuarioLogueado.getNombreUsuario() + "-" + usuarioSeleccionado.getNombreUsuario() + "-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmm"));
+                File file = mostrarDialogoExportar("Exportar a CSV", nombreArchivo, new FileChooser.ExtensionFilter("Archivo de Texto (*.csv)", "*.csv"));
+
+                if (file != null) {
+                    boolean exito = FileManager.exportarAArchivoCsv(mensajes.getMensajeList(), file);
+
+                    if (exito) {
+                        lblEstado.setText("Exportado a: " + file.getAbsolutePath() + " con exito.");
+                        lblEstado.setStyle("-fx-text-fill: green;");
+                    } else {
+                        lblEstado.setText("Error al exportar");
+                        lblEstado.setStyle("-fx-text-fill: red;");
+                    }
+                } else {
+                    lblEstado.setText("Operacion cancelada");
+                }
+            }
         }
     }
 
@@ -315,27 +310,26 @@ public class MainController {
         if (usuarioSeleccionado == null) {
             lblEstado.setText("Error: No hay usuario seleccionado.");
             lblEstado.setStyle("-fx-text-fill: red;");
-            return;
-        }
-
-        ArrayList<String> estadisticasGeneradas = generaEstadisticasTexto();
-
-        String nombreSugerido = "Stats_" + usuarioLogueado.getNombreUsuario() + usuarioSeleccionado.getNombreUsuario() + "_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmm"));
-        File file = mostrarDialogoExportar("Guardar Estadísticas (TXT)",nombreSugerido,new FileChooser.ExtensionFilter("Archivo de Texto (*.txt)", "*.txt"));
-
-        if (file != null) {
-            boolean exito = FileManager.exportarEstadisticas(estadisticasGeneradas, file);
-
-            if (exito) {
-                lblEstado.setText("Estadísticas exportadas con éxito.");
-                lblEstado.setStyle("-fx-text-fill: green;");
-            } else {
-                lblEstado.setText("Error al exportar estadísticas.");
-                lblEstado.setStyle("-fx-text-fill: red;");
-            }
         } else {
-            lblEstado.setText("Exportación de estadísticas cancelada.");
-            lblEstado.setStyle("-fx-text-fill: gray;");
+            ArrayList<String> estadisticasGeneradas = generaEstadisticasTexto();
+
+            String nombreSugerido = "Stats_" + usuarioLogueado.getNombreUsuario() + usuarioSeleccionado.getNombreUsuario() + "_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmm"));
+            File file = mostrarDialogoExportar("Guardar Estadísticas (TXT)", nombreSugerido, new FileChooser.ExtensionFilter("Archivo de Texto (*.txt)", "*.txt"));
+
+            if (file != null) {
+                boolean exito = FileManager.exportarEstadisticas(estadisticasGeneradas, file);
+
+                if (exito) {
+                    lblEstado.setText("Estadísticas exportadas con éxito.");
+                    lblEstado.setStyle("-fx-text-fill: green;");
+                } else {
+                    lblEstado.setText("Error al exportar estadísticas.");
+                    lblEstado.setStyle("-fx-text-fill: red;");
+                }
+            } else {
+                lblEstado.setText("Exportación de estadísticas cancelada.");
+                lblEstado.setStyle("-fx-text-fill: gray;");
+            }
         }
     }
 
@@ -346,35 +340,31 @@ public class MainController {
      * * @return ArrayList<String> con cada línea de estadística, o una lista vacía si no hay mensajes.
      */
     private ArrayList<String> generaEstadisticasTexto() {
+        ArrayList<String> estadisticasGeneradas = new ArrayList<>();
 
-        // 1. Obtener la conversación
         Mensajes mensajes = MensajeDAO.listarMensajesEntre(usuarioLogueado.getNombreUsuario(), usuarioSeleccionado.getNombreUsuario());
         List<Mensaje> listaMensajes = mensajes.getMensajeList();
 
         if (listaMensajes.isEmpty()) {
             lblEstado.setText("No hay mensajes para generar estadísticas.");
             lblEstado.setStyle("-fx-text-fill: orange;");
-            return new ArrayList<>();
+        } else {
+            estadisticasGeneradas.add("--- Resumen de Conversación ---");
+            estadisticasGeneradas.add("Usuarios: " + usuarioLogueado.getNombreUsuario() + " y " + usuarioSeleccionado.getNombreUsuario());
+            estadisticasGeneradas.add("Fecha de Generación: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            estadisticasGeneradas.add("-------------------------------");
+
+            int totalMensajes = StreamUtils.contarMensajes(listaMensajes);
+            estadisticasGeneradas.add("Total de Mensajes: " + totalMensajes);
+
+            Map<String, Long> porUsuario = StreamUtils.contarMensajesPorUsuario(listaMensajes);
+            estadisticasGeneradas.add("Mensajes por Usuario: " + StreamUtils.formatearConteoUsuario(porUsuario));
+
+            Map<String, Long> topPalabras = StreamUtils.palabraMasComun(listaMensajes, 5);
+            estadisticasGeneradas.add("Top 5 Palabras Comunes: " + StreamUtils.formatearTopPalabras(topPalabras));
+
+            estadisticasGeneradas.add("-------------------------------");
         }
-
-        ArrayList<String> estadisticasGeneradas = new ArrayList<>();
-
-
-        estadisticasGeneradas.add("--- Resumen de Conversación ---");
-        estadisticasGeneradas.add("Usuarios: " + usuarioLogueado.getNombreUsuario() + " y " + usuarioSeleccionado.getNombreUsuario());
-        estadisticasGeneradas.add("Fecha de Generación: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-        estadisticasGeneradas.add("-------------------------------");
-
-        int totalMensajes = StreamUtils.contarMensajes(listaMensajes);
-        estadisticasGeneradas.add("Total de Mensajes: " + totalMensajes);
-
-        Map<String, Long> porUsuario = StreamUtils.contarMensajesPorUsuario(listaMensajes);
-        estadisticasGeneradas.add("Mensajes por Usuario: " + StreamUtils.formatearConteoUsuario(porUsuario));
-
-        Map<String, Long> topPalabras = StreamUtils.palabraMasComun(listaMensajes, 5);
-        estadisticasGeneradas.add("Top 5 Palabras Comunes: " + StreamUtils.formatearTopPalabras(topPalabras));
-
-        estadisticasGeneradas.add("-------------------------------");
 
         return estadisticasGeneradas;
     }
@@ -391,27 +381,25 @@ public class MainController {
                 new FileChooser.ExtensionFilter("Todos los archivos", "*.*")
         );
         File archivoElegido = fileChooser.showOpenDialog(btnAdjuntar.getScene().getWindow());
-        if (archivoElegido == null) {
-            return;
+
+        if (archivoElegido != null) {
+            long tamañoMaximo = FileManager.TAMAÑO_MAXIMO_BYTES;
+            if (FileManager.validarArchivo(archivoElegido, tamañoMaximo, FileManager.EXTENSIONES_PERMITIDAS)) {
+                adjuntoSeleccionado = archivoElegido;
+                listaAdjuntos.getItems().setAll(archivoElegido.getName());
+                lblEstado.setText("Archivo Adjunto: " + archivoElegido.getName());
+            } else {
+                lblEstado.setText("Error: Archivo Adjunto no valido");
+                lblEstado.setStyle("-fx-text-fill: red;");
+            }
         }
-
-        long tamañoMaximo = FileManager.TAMAÑO_MAXIMO_BYTES;
-        if (!FileManager.validarArchivo(archivoElegido, tamañoMaximo, FileManager.EXTENSIONES_PERMITIDAS)) {
-            lblEstado.setText("Error: Archivo Adjunto no valido");
-            lblEstado.setStyle("-fx-text-fill: red;");
-            return;
-        }
-
-        adjuntoSeleccionado = archivoElegido;
-
-        listaAdjuntos.getItems().setAll(archivoElegido.getName());
-        lblEstado.setText("Archivo Adjunto: " + archivoElegido.getName());
     }
 
     /**
      * Localiza el archivo físico correspondiente al nombre de adjunto seleccionado.
      * Busca primero en los mensajes (carpeta media/ mediante adjuntoRuta) y, si no lo encuentra,
      * comprueba si coincide con el archivo pendiente de envío (adjuntoSeleccionado).
+     *
      * @param nombreAdjunto nombre del adjunto seleccionado en la lista
      * @return File encontrado o null si no existe/localiza
      */
@@ -448,21 +436,23 @@ public class MainController {
      */
     private void abrirAdjunto() {
         String seleccionado = (listaAdjuntos != null) ? listaAdjuntos.getSelectionModel().getSelectedItem() : null;
+
         if (seleccionado == null) {
             lblEstado.setText("No hay adjunto seleccionado.");
             lblEstado.setStyle("-fx-text-fill: red;");
-            return;
-        }
-        File archivoOrigen = localizarArchivoAdjunto(seleccionado);
-        if (archivoOrigen == null || !archivoOrigen.exists()) {
-            lblEstado.setText("No se pudo localizar el adjunto seleccionado.");
-            lblEstado.setStyle("-fx-text-fill: red;");
-            return;
-        }
-        boolean exitoso = FileManager.abrirArchivo(archivoOrigen);
-        if (!exitoso) {
-            lblEstado.setText("No se pudo abrir el adjunto seleccionado.");
-            lblEstado.setStyle("-fx-text-fill: red;");
+        } else {
+            File archivoOrigen = localizarArchivoAdjunto(seleccionado);
+
+            if (archivoOrigen == null || !archivoOrigen.exists()) {
+                lblEstado.setText("No se pudo localizar el adjunto seleccionado.");
+                lblEstado.setStyle("-fx-text-fill: red;");
+            } else {
+                boolean exitoso = FileManager.abrirArchivo(archivoOrigen);
+                if (!exitoso) {
+                    lblEstado.setText("No se pudo abrir el adjunto seleccionado.");
+                    lblEstado.setStyle("-fx-text-fill: red;");
+                }
+            }
         }
     }
 
@@ -478,35 +468,33 @@ public class MainController {
         if (seleccionado == null) {
             lblEstado.setText("Error: Selecciona un adjunto de la lista.");
             lblEstado.setStyle("-fx-text-fill: red;");
-            return;
-        }
-
-        File archivoOrigen = localizarArchivoAdjunto(seleccionado);
-
-        if (archivoOrigen == null || !archivoOrigen.exists()) {
-            lblEstado.setText("Error: Archivo de origen no encontrado.");
-            lblEstado.setStyle("-fx-text-fill: red;");
-            return;
-        }
-
-        DirectoryChooser directoryChooser = new DirectoryChooser();
-        directoryChooser.setTitle("Seleccionar Carpeta de Destino para Exportar Adjunto");
-
-        File destino = directoryChooser.showDialog(getStage());
-
-        if (destino != null) {
-            boolean exito = FileManager.exportarArchivo(archivoOrigen, destino);
-
-            if (exito) {
-                lblEstado.setText("Adjunto exportado con éxito a: " + destino.getAbsolutePath());
-                lblEstado.setStyle("-fx-text-fill: green;");
-            } else {
-                lblEstado.setText("Error al exportar adjunto.");
-                lblEstado.setStyle("-fx-text-fill: red;");
-            }
         } else {
-            lblEstado.setText("Exportación cancelada.");
-            lblEstado.setStyle("-fx-text-fill: gray;");
+            File archivoOrigen = localizarArchivoAdjunto(seleccionado);
+
+            if (archivoOrigen == null || !archivoOrigen.exists()) {
+                lblEstado.setText("Error: Archivo de origen no encontrado.");
+                lblEstado.setStyle("-fx-text-fill: red;");
+            } else {
+                DirectoryChooser directoryChooser = new DirectoryChooser();
+                directoryChooser.setTitle("Seleccionar Carpeta de Destino para Exportar Adjunto");
+
+                File destino = directoryChooser.showDialog(getStage());
+
+                if (destino != null) {
+                    boolean exito = FileManager.exportarArchivo(archivoOrigen, destino);
+
+                    if (exito) {
+                        lblEstado.setText("Adjunto exportado con éxito a: " + destino.getAbsolutePath());
+                        lblEstado.setStyle("-fx-text-fill: green;");
+                    } else {
+                        lblEstado.setText("Error al exportar adjunto.");
+                        lblEstado.setStyle("-fx-text-fill: red;");
+                    }
+                } else {
+                    lblEstado.setText("Exportación cancelada.");
+                    lblEstado.setStyle("-fx-text-fill: gray;");
+                }
+            }
         }
     }
 
@@ -516,41 +504,40 @@ public class MainController {
      * Valida que haya un usuario seleccionado y que existan mensajes antes de mostrar el diálogo de guardado.
      */
     private void exportarZip() {
-        if (usuarioSeleccionado == null){
+        if (usuarioSeleccionado == null) {
             lblEstado.setText("Error: No hay usuario seleccionado.");
             lblEstado.setStyle("-fx-text-fill: red;");
-            return;
-        }
+        } else {
+            Mensajes mensajes = MensajeDAO.listarMensajesEntre(usuarioLogueado.getNombreUsuario(), usuarioSeleccionado.getNombreUsuario());
 
-        Mensajes mensajes = MensajeDAO.listarMensajesEntre(usuarioLogueado.getNombreUsuario(), usuarioSeleccionado.getNombreUsuario());
-        if (mensajes.getMensajeList().isEmpty()) {
-            lblEstado.setText("No hay mensajes para exportar");
-            return;
-        }
+            if (mensajes.getMensajeList().isEmpty()) {
+                lblEstado.setText("No hay mensajes para exportar");
+            } else {
+                String nombreArchivo = usuarioLogueado.getNombreUsuario() + "-" + usuarioSeleccionado.getNombreUsuario() + "-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmm"));
+                File zipFile = mostrarDialogoExportar("Exportar conversacion a ZIP", nombreArchivo, new FileChooser.ExtensionFilter("Archivo ZIP (*.zip)", "*.zip"));
 
-        String nombreArchivo = usuarioLogueado.getNombreUsuario() +"-"+usuarioSeleccionado.getNombreUsuario()+ "-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmm"));
-        File zipFile = mostrarDialogoExportar("Exportar conversacion a ZIP", nombreArchivo, new FileChooser.ExtensionFilter("Archivo ZIP (*.zip)", "*.zip"));
-
-        if (zipFile == null) {
-            lblEstado.setText("Operacion cancelada");
-            lblEstado.setStyle("-fx-text-fill: red;");
-            return;
-        }
-
-        try {
-            String conversacionTexto = generarTextoConversacion(mensajes.getMensajeList());
-            FileManager.crearArchivoZip(zipFile, conversacionTexto, mensajes.getMensajeList());
-            lblEstado.setText("Exportado a ZIP con éxito: " + zipFile.getName());
-            lblEstado.setStyle("-fx-text-fill: green;");
-        } catch (IOException e) {
-            lblEstado.setText("Error al crear el archivo ZIP.");
-            lblEstado.setStyle("-fx-text-fill: red;");
-            log.error("Error al crear el archivo ZIP: {}", zipFile, e);
+                if (zipFile == null) {
+                    lblEstado.setText("Operacion cancelada");
+                    lblEstado.setStyle("-fx-text-fill: red;");
+                } else {
+                    try {
+                        String conversacionTexto = generarTextoConversacion(mensajes.getMensajeList());
+                        FileManager.crearArchivoZip(zipFile, conversacionTexto, mensajes.getMensajeList());
+                        lblEstado.setText("Exportado a ZIP con éxito: " + zipFile.getName());
+                        lblEstado.setStyle("-fx-text-fill: green;");
+                    } catch (IOException e) {
+                        lblEstado.setText("Error al crear el archivo ZIP.");
+                        lblEstado.setStyle("-fx-text-fill: red;");
+                        log.error("Error al crear el archivo ZIP: {}", zipFile, e);
+                    }
+                }
+            }
         }
     }
 
     /**
      * Genera un único String con el contenido de la conversación. (Este método auxiliar no cambia)
+     *
      * @param mensajes Lista de mensajes de la conversación.
      * @return String formateado con la conversación.
      */
@@ -574,19 +561,19 @@ public class MainController {
      * Crea y muestra un diálogo de guardado para exportar archivos.
      * Configura el título, el nombre de archivo sugerido y aplica el filtro de extensión indicado.
      *
-     * @param titulo título del cuadro de diálogo.
+     * @param titulo        título del cuadro de diálogo.
      * @param nombreArchivo nombre de archivo sugerido (sin extensión o con ella).
-     * @param filtro filtro de extensión (por ejemplo, "Archivo de Texto (*.txt)"). Puede ser null.
+     * @param filtro        filtro de extensión (por ejemplo, "Archivo de Texto (*.txt)"). Puede ser null.
      * @return el archivo elegido por el usuario o null si se cancela.
      */
-    private File mostrarDialogoExportar(String titulo,String nombreArchivo,FileChooser.ExtensionFilter filtro) {
+    private File mostrarDialogoExportar(String titulo, String nombreArchivo, FileChooser.ExtensionFilter filtro) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(titulo);
-        fileChooser.setInitialFileName(nombreArchivo+".extension");
+        fileChooser.setInitialFileName(nombreArchivo + ".extension");
         if (filtro != null) {
             fileChooser.getExtensionFilters().add(filtro);
         }
-        return fileChooser.showSaveDialog( getStage());
+        return fileChooser.showSaveDialog(getStage());
     }
-    
+
 }

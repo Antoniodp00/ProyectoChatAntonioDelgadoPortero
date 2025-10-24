@@ -319,4 +319,11 @@
         <adjuntoTamano>189748</adjuntoTamano>
         <adjuntoTipo>png</adjuntoTipo>
     </mensaje>
+    <mensaje>
+        <remitente>antoniodp07</remitente>
+        <destinatario>Fran</destinatario>
+        <mensaje>Hola</mensaje>
+        <fecha>2025-10-24T11:08:36</fecha>
+        <adjuntoTamano>0</adjuntoTamano>
+    </mensaje>
 </mensajes>
