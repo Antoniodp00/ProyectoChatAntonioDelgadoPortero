@@ -113,7 +113,7 @@ public class MensajeDAO {
      *
      * @param mensajes objeto Mensajes a guardar
      */
-    private static synchronized void guardarMensajes(Mensajes mensajes) {
+    private static void guardarMensajes(Mensajes mensajes) {
         try {
             XMLManager.writeXML(mensajes, RUTA_XML.toString());
         } catch (Exception e) {
