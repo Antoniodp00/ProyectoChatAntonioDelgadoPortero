@@ -569,7 +569,7 @@ public class MainController {
     private File mostrarDialogoExportar(String titulo, String nombreArchivo, FileChooser.ExtensionFilter filtro) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(titulo);
-        fileChooser.setInitialFileName(nombreArchivo + ".extension");
+        fileChooser.setInitialFileName(nombreArchivo);
         if (filtro != null) {
             fileChooser.getExtensionFilters().add(filtro);
         }

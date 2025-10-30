@@ -84,4 +84,18 @@
         <nombre>Pablo</nombre>
         <nombreUsuario>pablov</nombreUsuario>
     </usuario>
+    <usuario>
+        <apellido>Ariza</apellido>
+        <contraseña>$2a$12$waKyApwGqiaeV2vhb2XZBuwbxqCc5datzArc7IwncbXGSoK41nNou</contraseña>
+        <email>fransi@gmail.com</email>
+        <nombre>Francisco</nombre>
+        <nombreUsuario>fran1234</nombreUsuario>
+    </usuario>
+    <usuario>
+        <apellido>Ariza</apellido>
+        <contraseña>$2a$12$3tyiG0buKcnYJW9I963nr.cpuKGsgkcvlOZ5MGHdjdfjfpxDQgxUK</contraseña>
+        <email>pablo@gmail.com</email>
+        <nombre>Pablo</nombre>
+        <nombreUsuario>pablo12</nombreUsuario>
+    </usuario>
 </usuarios>

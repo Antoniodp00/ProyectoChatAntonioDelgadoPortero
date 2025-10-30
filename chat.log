@@ -412,3 +412,43 @@ Caused by: java.lang.IllegalArgumentException: Unable to coerce {/* ... Contenid
 2025-10-24 11:08:05 [JavaFX Application Thread] INFO  c.d.a.p.c.InicioSesionController - Login correcto para usuario antoniodp07
 2025-10-24 11:08:05 [JavaFX Application Thread] INFO  c.d.a.p.model.Sesion - Sesión iniciada para usuario: antoniodp07
 2025-10-24 11:08:36 [JavaFX Application Thread] INFO  c.d.a.p.DAO.MensajeDAO - Mensaje enviado correctamente de antoniodp07 a Fran
+2025-10-29 13:26:59 [main] INFO  c.d.a.p.app.Launcher - Lanzando JavaFX Application
+2025-10-29 13:27:00 [JavaFX Application Thread] INFO  c.d.a.p.app.Aplicacion - Iniciando aplicación y cargando Landing Page
+2025-10-29 13:27:00 [JavaFX Application Thread] INFO  c.d.a.p.app.Aplicacion - Aplicación iniciada correctamente
+2025-10-29 13:27:07 [JavaFX Application Thread] INFO  c.d.a.p.c.LandingPageController - Navegando a Inicio de Sesión desde Landing Page
+2025-10-29 13:27:13 [JavaFX Application Thread] INFO  c.d.a.p.c.InicioSesionController - Login correcto para usuario antoniodp07
+2025-10-29 13:27:13 [JavaFX Application Thread] INFO  c.d.a.p.model.Sesion - Sesión iniciada para usuario: antoniodp07
+2025-10-29 13:34:26 [JavaFX Application Thread] INFO  c.d.a.p.model.Sesion - Sesión cerrada para usuario: antoniodp07
+2025-10-29 13:34:27 [JavaFX Application Thread] INFO  c.d.a.p.c.LandingPageController - Navegando a Registro desde Landing Page
+2025-10-29 13:34:55 [JavaFX Application Thread] INFO  c.d.a.p.c.RegistroController - Navegando a Landing Page desde Registro
+2025-10-29 13:34:56 [JavaFX Application Thread] INFO  c.d.a.p.c.LandingPageController - Navegando a Inicio de Sesión desde Landing Page
+2025-10-29 18:08:23 [main] INFO  c.d.a.p.app.Launcher - Lanzando JavaFX Application
+2025-10-29 18:08:23 [JavaFX Application Thread] INFO  c.d.a.p.app.Aplicacion - Iniciando aplicación y cargando Landing Page
+2025-10-29 18:08:24 [JavaFX Application Thread] INFO  c.d.a.p.app.Aplicacion - Aplicación iniciada correctamente
+2025-10-29 18:08:25 [JavaFX Application Thread] INFO  c.d.a.p.c.LandingPageController - Navegando a Registro desde Landing Page
+2025-10-29 18:08:53 [JavaFX Application Thread] INFO  c.d.a.p.DAO.UsuarioDAO - Usuario registrado correctamente: fran1234
+2025-10-29 18:08:53 [JavaFX Application Thread] INFO  c.d.a.p.c.RegistroController - Usuario registrado: fran1234 (fransi@gmail.com)
+2025-10-29 18:08:55 [JavaFX Application Thread] INFO  c.d.a.p.c.RegistroController - Navegando a Landing Page desde Registro
+2025-10-29 18:08:57 [JavaFX Application Thread] INFO  c.d.a.p.c.LandingPageController - Navegando a Inicio de Sesión desde Landing Page
+2025-10-29 18:09:04 [JavaFX Application Thread] INFO  c.d.a.p.c.InicioSesionController - Login correcto para usuario fran1234
+2025-10-29 18:09:05 [JavaFX Application Thread] INFO  c.d.a.p.model.Sesion - Sesión iniciada para usuario: fran1234
+2025-10-29 18:09:39 [JavaFX Application Thread] INFO  c.d.a.p.DAO.MensajeDAO - Mensaje enviado correctamente de fran1234 a antoniodp07
+2025-10-29 18:11:53 [JavaFX Application Thread] INFO  c.d.a.p.DAO.MensajeDAO - Mensaje enviado correctamente de fran1234 a laurag
+2025-10-29 18:12:13 [JavaFX Application Thread] INFO  c.d.a.p.model.Sesion - Sesión cerrada para usuario: fran1234
+2025-10-30 09:15:34 [main] INFO  c.d.a.p.app.Launcher - Lanzando JavaFX Application
+2025-10-30 09:15:35 [JavaFX Application Thread] INFO  c.d.a.p.app.Aplicacion - Iniciando aplicación y cargando Landing Page
+2025-10-30 09:15:35 [JavaFX Application Thread] INFO  c.d.a.p.app.Aplicacion - Aplicación iniciada correctamente
+2025-10-30 09:15:36 [JavaFX Application Thread] INFO  c.d.a.p.c.LandingPageController - Navegando a Inicio de Sesión desde Landing Page
+2025-10-30 09:15:42 [JavaFX Application Thread] INFO  c.d.a.p.c.InicioSesionController - Login correcto para usuario antoniodp07
+2025-10-30 09:15:42 [JavaFX Application Thread] INFO  c.d.a.p.model.Sesion - Sesión iniciada para usuario: antoniodp07
+2025-10-30 09:42:25 [main] INFO  c.d.a.p.app.Launcher - Lanzando JavaFX Application
+2025-10-30 09:42:25 [JavaFX Application Thread] INFO  c.d.a.p.app.Aplicacion - Iniciando aplicación y cargando Landing Page
+2025-10-30 09:42:26 [JavaFX Application Thread] INFO  c.d.a.p.app.Aplicacion - Aplicación iniciada correctamente
+2025-10-30 09:42:28 [JavaFX Application Thread] INFO  c.d.a.p.c.LandingPageController - Navegando a Registro desde Landing Page
+2025-10-30 09:42:49 [JavaFX Application Thread] INFO  c.d.a.p.DAO.UsuarioDAO - Usuario registrado correctamente: pablo12
+2025-10-30 09:42:49 [JavaFX Application Thread] INFO  c.d.a.p.c.RegistroController - Usuario registrado: pablo12 (pablo@gmail.com)
+2025-10-30 09:43:50 [JavaFX Application Thread] INFO  c.d.a.p.c.RegistroController - Navegando a Landing Page desde Registro
+2025-10-30 09:43:51 [JavaFX Application Thread] INFO  c.d.a.p.c.LandingPageController - Navegando a Inicio de Sesión desde Landing Page
+2025-10-30 09:43:57 [JavaFX Application Thread] INFO  c.d.a.p.c.InicioSesionController - Login correcto para usuario antoniodp07
+2025-10-30 09:43:57 [JavaFX Application Thread] INFO  c.d.a.p.model.Sesion - Sesión iniciada para usuario: antoniodp07
+2025-10-30 09:51:21 [JavaFX Application Thread] INFO  c.d.a.p.model.Sesion - Sesión cerrada para usuario: antoniodp07

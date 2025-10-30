@@ -326,4 +326,38 @@
         <fecha>2025-10-24T11:08:36</fecha>
         <adjuntoTamano>0</adjuntoTamano>
     </mensaje>
+    <mensaje>
+        <remitente>fran1234</remitente>
+        <destinatario>antoniodp07</destinatario>
+        <mensaje>Hola como estas?</mensaje>
+        <fecha>2025-10-29T18:09:39</fecha>
+        <adjuntoTamano>0</adjuntoTamano>
+    </mensaje>
+    <mensaje>
+        <remitente>fran1234</remitente>
+        <destinatario>antoniodp07</destinatario>
+        <mensaje>MIra este tio</mensaje>
+        <fecha>2025-10-29T18:10:00</fecha>
+        <adjuntoNombre>Vinicius Junior - FootyRenders.png</adjuntoNombre>
+        <adjuntoRuta>Vinicius Junior - FootyRenders_8f3f3407-6e31-46ea-98e0-8ff94446baa0.png</adjuntoRuta>
+        <adjuntoTamano>985841</adjuntoTamano>
+        <adjuntoTipo>png</adjuntoTipo>
+    </mensaje>
+    <mensaje>
+        <remitente>fran1234</remitente>
+        <destinatario>laurag</destinatario>
+        <mensaje>Hola laura</mensaje>
+        <fecha>2025-10-29T18:11:53</fecha>
+        <adjuntoTamano>0</adjuntoTamano>
+    </mensaje>
+    <mensaje>
+        <remitente>antoniodp07</remitente>
+        <destinatario>Fran</destinatario>
+        <mensaje>MIra esto</mensaje>
+        <fecha>2025-10-30T09:46:03</fecha>
+        <adjuntoNombre>Gemini_Generated_Image_t6ike1t6ike1t6ik.png</adjuntoNombre>
+        <adjuntoRuta>Gemini_Generated_Image_t6ike1t6ike1t6ik_d6e88cbb-bb24-429e-a046-8d386d79a8d6.png</adjuntoRuta>
+        <adjuntoTamano>816760</adjuntoTamano>
+        <adjuntoTipo>png</adjuntoTipo>
+    </mensaje>
 </mensajes>
