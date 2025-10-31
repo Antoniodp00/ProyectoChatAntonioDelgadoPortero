@@ -14,15 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Enumeración para representar los posibles estados de la conexión de red.
- */
-enum EstadoRed {
-    CONECTADO,
-    DESCONECTADO,
-    ERROR
-}
-
-/**
  * Cliente de red para la aplicación de chat.
  * Se conecta a un servidor, envía mensajes y escucha los mensajes entrantes en un hilo separado.
  */
